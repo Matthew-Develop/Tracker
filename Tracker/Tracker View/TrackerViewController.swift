@@ -23,8 +23,9 @@ final class TrackerViewController: UIViewController {
     var categories: [TrackerCategory] = MockData().categories
     var completedTrackers: [TrackerRecord] = []
     var visibleTrackers: [TrackerCategory] = []
+    var currentDayTrackers: [TrackerCategory] = []
     
-    //MARK: -Override Functions
+    //MARK: - Override
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -34,7 +35,7 @@ final class TrackerViewController: UIViewController {
         setVisibleTrackers()
     }
     
-    //MARK: Private Functions
+    //MARK: - Private Functions
     @objc private func addTrackerButtonTapped(_ sender: UIButton) {
         let navigationController = UINavigationController(rootViewController: AddTrackerViewController())
         
@@ -61,6 +62,19 @@ final class TrackerViewController: UIViewController {
         collectionView.reloadData()
     }
     
+    @objc private func searchFieldTextChanged(_ sender: UISearchTextField) {
+        guard let searchText = sender.text else { return }
+        
+        if !searchText.isEmpty {
+            searchgedTrackers(for: searchText)
+        } else {
+            visibleTrackers = currentDayTrackers
+            collectionView.reloadData()
+        }
+    }
+    
+    @objc private func searchFieldCancelled(_ sender: UISearchTextField) { }
+    
     private func configureCell(cell: TrackerCollectionCell, indexPath: IndexPath) {
         let tracker = visibleTrackers[indexPath.section].trackers[indexPath.row]
         let count = completedTrackers.filter { $0.trackerId == tracker.id }.count
@@ -74,7 +88,8 @@ final class TrackerViewController: UIViewController {
             title: tracker.title,
             count: count,
             isCompleted: isCompleted,
-            id: tracker.id
+            id: tracker.id,
+            date: currentDate
         )
     }
     
@@ -113,12 +128,49 @@ final class TrackerViewController: UIViewController {
         }
         
         if !visible.isEmpty {
-            visibleTrackers = visible
+            currentDayTrackers = visible
+            visibleTrackers = currentDayTrackers
             
             emptyImageView.removeFromSuperview()
             emptyTextLabel.removeFromSuperview()
             
             setupCollectionView()
+        } else {
+            collectionView.removeFromSuperview()
+            setupIfEmptyTrackers()
+        }
+    }
+    
+    private func searchgedTrackers(for searchText: String) {
+        var searchedTrackers: [TrackerCategory] = []
+        
+        visibleTrackers = currentDayTrackers
+        for category in visibleTrackers {
+            var trackers: [Tracker] = []
+            
+            for tracker in category.trackers {
+                if tracker.title.lowercased().contains(searchText.lowercased()) {
+                    trackers.append(tracker)
+                }
+            }
+            
+            if !trackers.isEmpty {
+                let tempCat = TrackerCategory(title: category.title, trackers: trackers)
+                searchedTrackers.append(tempCat)
+            }
+        }
+        
+        if !searchedTrackers.isEmpty {
+            visibleTrackers = searchedTrackers
+            
+            if view.subviews.contains(emptyImageView) {
+                emptyImageView.removeFromSuperview()
+                emptyTextLabel.removeFromSuperview()
+                
+                setupCollectionView()
+            }
+            
+            collectionView.reloadData()
         } else {
             collectionView.removeFromSuperview()
             setupIfEmptyTrackers()
@@ -188,6 +240,7 @@ extension TrackerViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
+//Cell Delegate
 extension TrackerViewController: TrackerCollectionCellDelegate {
     func addTrackerRecord(to id: UUID, at date: Date) {
         completedTrackers.append(TrackerRecord(
@@ -249,6 +302,10 @@ extension TrackerViewController {
     private func setupSearchField() {
         
         searchField.autoResizeOff()
+        
+        searchField.addTarget(self, action: #selector(searchFieldTextChanged), for: .editingDidEndOnExit)
+        searchField.addTarget(self, action: #selector(searchFieldCancelled), for: .touchCancel)
+
         
         searchField.backgroundColor = .ypSearchField
         searchField.textColor = .ypGray

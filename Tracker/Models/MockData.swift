@@ -11,7 +11,7 @@ final class MockData {
     let categories: [TrackerCategory]
     
     init() {
-        let categoryOne = TrackerCategory(title: "Здоровье", trackers: [MockTrackers.tracker1, MockTrackers.tracker4])
+        let categoryOne = TrackerCategory(title: "Здоровье", trackers: [MockTrackers.tracker1, MockTrackers.tracker4, MockTrackers.tracker6])
         let categoryTwo = TrackerCategory(title: "Бизнес", trackers: [MockTrackers.tracker2])
         let categoryThree = TrackerCategory(title: "Образование", trackers: [MockTrackers.tracker3])
         let categoryFour = TrackerCategory(title: "Питание", trackers: [MockTrackers.tracker5])
@@ -50,9 +50,16 @@ fileprivate enum MockTrackers {
     )
     
     static let tracker5 = Tracker(
-        title: "Orange Salad",
+        title: "Protein Shake",
         color: .orange,
         emoji: "🍑",
         schedule: ["Пн", "Ср"]
+    )
+    
+    static let tracker6 = Tracker(
+        title: "Gym",
+        color: .systemCyan,
+        emoji: "🏋",
+        schedule: ["Пн", "Ср","Вт", "Чт"]
     )
 }

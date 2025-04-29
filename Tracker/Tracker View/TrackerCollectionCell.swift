@@ -13,7 +13,7 @@ protocol TrackerCollectionCellDelegate: AnyObject {
 }
 
 final class TrackerCollectionCell: UICollectionViewCell {
-    //Views
+    //MARK: Views
     private var cardView = UIView()
     private var emojiView = UIView()
     private var emojiLabel = UILabel()
@@ -21,7 +21,7 @@ final class TrackerCollectionCell: UICollectionViewCell {
     private var countLabel = UILabel()
     private var completeTrackerButton = UIButton(type: .system)
     
-    //MARK: Properties
+    //MARK: - Properties
     static let reuseIdentifier: String = "TrackerCollectionCell"
     weak var delegate: TrackerCollectionCellDelegate?
     
@@ -30,63 +30,80 @@ final class TrackerCollectionCell: UICollectionViewCell {
     var currentCount: Int = 0
     var currentDate: Date = Date()
 
-    
+    //MARK: - Override
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         setupView()
-        
-        NotificationCenter.default
-            .addObserver(
-                forName: NSNotification.Name("DateChanged"),
-                object: nil,
-                queue: .main ) { [weak self] result in
-                    guard let self else { return }
-                    self.currentDateChanged(result.userInfo)
-                }
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //MARK: Public Functions
+    //MARK: - Public Functions
     func setTrackerData(
         color: UIColor,
         emoji: String,
         title: String,
         count: Int,
         isCompleted: Bool,
-        id: UUID
-    ) {
-        
-        cardView.backgroundColor = color
-        emojiLabel.text = emoji
-        titleLabel.text = title
-        countLabel.text = counterDayCorrection(count)
-        completeTrackerButton.backgroundColor = color
-        self.isCompleted = isCompleted
-        currentCount = count
-        self.id = id
-        
-        
-        let buttonImage = isCompleted ? UIImage(named: "DoneTrackerButton") : UIImage(named: "CompleteTrackerButton")
-        
-        if isCompleted {
-            completeTrackerButton.backgroundOff()
-        } else {
-            completeTrackerButton.backgroundOn()
+        id: UUID,
+        date: Date ) {
+            cardView.backgroundColor = color
+            emojiLabel.text = emoji
+            titleLabel.text = title
+            countLabel.text = counterDayCorrection(count)
+            completeTrackerButton.backgroundColor = color
+            
+            self.isCompleted = isCompleted
+            self.currentCount = count
+            self.id = id
+            self.currentDate = date
+            
+            changeButtonEnabled()
+            changeButtonStatus(toComplete: isCompleted)
         }
-        
-        completeTrackerButton.setImage(buttonImage, for: .normal)
-    }
-    
     
     //MARK: Private Functions
     @objc private func completeTrackerButtonTapped(_ sender: UIButton) {
         changeButtonStatus(toComplete: !isCompleted)
         updateCount(toAdd: !isCompleted)
         isCompleted = !isCompleted
+    }
+    
+    private func changeButtonStatus(toComplete: Bool) {
+        if toComplete {
+            completeTrackerButton.setImage(UIImage(named: "DoneTrackerButton"), for: .normal)
+            completeTrackerButton.backgroundOff()
+            
+        } else {
+            completeTrackerButton.setImage(UIImage(named: "CompleteTrackerButton"), for: .normal)
+            completeTrackerButton.backgroundOn()
+        }
+    }
+    
+    private func changeButtonEnabled() {
+        if currentDate > Date() {
+            completeTrackerButton.isEnabled = false
+            if !isCompleted { completeTrackerButton.backgroundOff() }
+        } else {
+            completeTrackerButton.isEnabled = true
+        }
+    }
+    
+    private func updateCount(toAdd: Bool) {
+        if toAdd {
+            countLabel.text = counterDayCorrection(currentCount + 1)
+            currentCount += 1
+            
+            delegate?.addTrackerRecord(to: id, at: currentDate)
+        } else if currentCount > 0 {
+            countLabel.text = counterDayCorrection(currentCount - 1)
+            currentCount -= 1
+            
+            delegate?.removeTrackerRecord(to: id, at: currentDate)
+        }
     }
     
     private func counterDayCorrection(_ count: Int) -> String {
@@ -113,49 +130,9 @@ final class TrackerCollectionCell: UICollectionViewCell {
         
         return countString
     }
-    
-    private func changeButtonStatus(toComplete: Bool) {
-        if toComplete {
-            completeTrackerButton.setImage(UIImage(named: "DoneTrackerButton"), for: .normal)
-            completeTrackerButton.backgroundOff()
-            
-        } else {
-            completeTrackerButton.setImage(UIImage(named: "CompleteTrackerButton"), for: .normal)
-            completeTrackerButton.backgroundOn()
-        }
-    }
-    
-    private func updateCount(toAdd: Bool) {
-        guard let correctDate = currentDate.correctedDate() else { return }
-        currentDate = correctDate
-        
-        if toAdd {
-            countLabel.text = counterDayCorrection(currentCount + 1)
-            currentCount += 1
-            
-            delegate?.addTrackerRecord(to: id, at: currentDate)
-        } else if currentCount > 0 {
-            countLabel.text = counterDayCorrection(currentCount - 1)
-            currentCount -= 1
-            
-            delegate?.removeTrackerRecord(to: id, at: currentDate)
-        }
-    }
-    
-    private func currentDateChanged(_ userInfo: [AnyHashable : Any]? ) {
-        guard let currentDate = userInfo?["currentDate"] as? Date else { return}
-        self.currentDate = currentDate
-        
-        if currentDate > Date() {
-            completeTrackerButton.isEnabled = false
-            if !isCompleted { completeTrackerButton.backgroundOff() }
-        } else {
-            completeTrackerButton.isEnabled = true
-            if !isCompleted { completeTrackerButton.backgroundOn() }
-        }
-    }
 }
 
+//Setup View
 private extension TrackerCollectionCell {
     func setupView() {
         setupCardView()
