@@ -25,14 +25,14 @@ fileprivate enum MockTrackers {
         title: "5am wake up",
         color: .brown,
         emoji: "🔥",
-        schedule: []
+        schedule: ["Пн", "Ср"]
     )
     
     static let tracker2 = Tracker(
         title: "Coding",
         color: .gray,
         emoji: "❤️",
-        schedule: []
+        schedule: ["Пн", "Ср"]
     )
     
     static let tracker3 = Tracker(
@@ -53,6 +53,6 @@ fileprivate enum MockTrackers {
         title: "Orange Salad",
         color: .orange,
         emoji: "🍑",
-        schedule: []
+        schedule: ["Пн", "Ср"]
     )
 }

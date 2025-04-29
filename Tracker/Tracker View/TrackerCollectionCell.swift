@@ -126,6 +126,9 @@ final class TrackerCollectionCell: UICollectionViewCell {
     }
     
     private func updateCount(toAdd: Bool) {
+        guard let correctDate = currentDate.correctedDate() else { return }
+        currentDate = correctDate
+        
         if toAdd {
             countLabel.text = counterDayCorrection(currentCount + 1)
             currentCount += 1

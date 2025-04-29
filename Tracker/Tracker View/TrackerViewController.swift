@@ -14,6 +14,8 @@ final class TrackerViewController: UIViewController {
     private var topBarTitle = UILabel()
     private var searchField = UISearchTextField()
     private var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+    private var emptyTextLabel = UILabel()
+    private var emptyImageView = UIImageView()
     
     //MARK: - Properties
     var currentDate: Date = Date()
@@ -27,6 +29,7 @@ final class TrackerViewController: UIViewController {
         super.viewDidLoad()
         
         setupView()
+        setCurrentDate()
         setDayOfWeek()
         setVisibleTrackers()
     }
@@ -43,13 +46,10 @@ final class TrackerViewController: UIViewController {
         let selectedDate = sender.date
         currentDate = selectedDate
         
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd.MM.yyyy"
-        let formattedDate = dateFormatter.string(from: selectedDate)
-        
+        setCurrentDate()
         setDayOfWeek()
         setVisibleTrackers()
-        print("Выбранная дата: \(formattedDate). Это \(currentDayOfWeek)")
+        print("Выбранная дата: \(currentDate). Это \(currentDayOfWeek)")
         
         NotificationCenter.default
             .post(
@@ -76,6 +76,11 @@ final class TrackerViewController: UIViewController {
             isCompleted: isCompleted,
             id: tracker.id
         )
+    }
+    
+    private func setCurrentDate() {
+        guard let correctedDate = currentDate.correctedDate() else { return }
+        currentDate = correctedDate
     }
     
     private func setDayOfWeek() {
@@ -109,120 +114,15 @@ final class TrackerViewController: UIViewController {
         
         if !visible.isEmpty {
             visibleTrackers = visible
+            
+            emptyImageView.removeFromSuperview()
+            emptyTextLabel.removeFromSuperview()
+            
+            setupCollectionView()
+        } else {
+            collectionView.removeFromSuperview()
+            setupIfEmptyTrackers()
         }
-    }
-}
-
-//Setup View
-extension TrackerViewController {
-    private func setupView() {
-        view.backgroundColor = .ypWhite
-        
-        setupAddTrackerButton()
-        setupDatePicker()
-        setupSearchField()
-//        setupIfEmptyTrackers()
-        setupNavigationBar()
-        setupCollectionView()
-    }
-    
-    private func setupNavigationBar() {
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: addTrackerButton)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: datePicker)
-        navigationItem.title = "Трекеры"
-        
-        navigationController?.navigationBar.prefersLargeTitles = true
-        navigationController?.navigationBar.backgroundColor = .ypWhite
-        navigationController?.navigationBar.largeTitleTextAttributes = [.foregroundColor: UIColor.ypBlack]
-    }
-    
-    private func setupAddTrackerButton() {
-        let configuration = UIImage.SymbolConfiguration(weight: .semibold)
-
-        addTrackerButton.addTarget(self, action: #selector(addTrackerButtonTapped), for: .touchUpInside)
-        addTrackerButton.setImage(UIImage(systemName: "plus", withConfiguration: configuration), for: .normal)
-        addTrackerButton.tintColor = .ypBlack
-    }
-    
-    private func setupDatePicker() {
-        datePicker.addTarget(self, action: #selector(dateValueChanged), for: .valueChanged)
-        datePicker.datePickerMode = .date
-        datePicker.preferredDatePickerStyle = .compact
-        datePicker.tintColor = .ypBlue
-        datePicker.date = Date()
-        
-        let currentDate = Date()
-        let calendar = Calendar.current
-        let minDate = calendar.date(byAdding: .year, value: -10, to: currentDate)
-        let maxDate = calendar.date(byAdding: .year, value: 10, to: currentDate)
-        datePicker.minimumDate = minDate
-        datePicker.maximumDate = maxDate
-    }
-    
-    private func setupSearchField() {
-        
-        searchField.autoResizeOff()
-        
-        searchField.backgroundColor = .ypSearchField
-        searchField.textColor = .ypGray
-        searchField.placeholder = "Поиск"
-        searchField.font = .systemFont(ofSize: 17, weight: .regular)
-        searchField.layer.cornerRadius = 10
-        searchField.layer.masksToBounds = true
-        
-        view.addSubview(searchField)
-        NSLayoutConstraint.activate([
-            searchField.heightAnchor.constraint(equalToConstant: 36),
-            
-            searchField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            searchField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            searchField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0)
-        ])
-    }
-    
-    private func setupIfEmptyTrackers() {
-        let image = UIImageView()
-        image.autoResizeOff()
-        image.image = UIImage(named: "IfEmptyTrackers")
-        
-        let textLabel = UILabel()
-        textLabel.autoResizeOff()
-        textLabel.text = "Что будем отслеживать?"
-        textLabel.font = .systemFont(ofSize: 12, weight: .medium)
-        textLabel.textColor = .ypBlack
-        
-        view.addSubview(image)
-        view.addSubview(textLabel)
-        NSLayoutConstraint.activate([
-            image.widthAnchor.constraint(equalToConstant: 80),
-            image.heightAnchor.constraint(equalToConstant: 80),
-            
-            image.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            image.topAnchor.constraint(equalTo: searchField.bottomAnchor, constant: view.bounds.height * 0.25),
-            
-            textLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            textLabel.topAnchor.constraint(equalTo: image.bottomAnchor, constant: 8)
-        ])
-    }
-    
-    private func setupCollectionView() {
-        collectionView.autoResizeOff()
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        
-        collectionView.register(TrackerCollectionCell.self, forCellWithReuseIdentifier: TrackerCollectionCell.reuseIdentifier)
-        collectionView.register(SectionHeaderCollectionView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
-        collectionView.backgroundColor = .clear
-        collectionView.showsVerticalScrollIndicator = false
-        collectionView.contentInset.top = 24
-        
-        view.addSubview(collectionView)
-        NSLayoutConstraint.activate([
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            collectionView.topAnchor.constraint(equalTo: searchField.bottomAnchor, constant: 10),
-            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-        ])
     }
 }
 
@@ -299,5 +199,114 @@ extension TrackerViewController: TrackerCollectionCellDelegate {
         var records = completedTrackers
         records.removeAll { $0.trackerId == id && $0.completeDate == date }
         completedTrackers = records
+    }
+}
+
+//Setup View
+extension TrackerViewController {
+    private func setupView() {
+        view.backgroundColor = .ypWhite
+        
+        setupAddTrackerButton()
+        setupDatePicker()
+        setupSearchField()
+        setupNavigationBar()
+    }
+    
+    private func setupNavigationBar() {
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: addTrackerButton)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: datePicker)
+        navigationItem.title = "Трекеры"
+        
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationController?.navigationBar.backgroundColor = .ypWhite
+        navigationController?.navigationBar.largeTitleTextAttributes = [.foregroundColor: UIColor.ypBlack]
+    }
+    
+    private func setupAddTrackerButton() {
+        let configuration = UIImage.SymbolConfiguration(weight: .semibold)
+
+        addTrackerButton.addTarget(self, action: #selector(addTrackerButtonTapped), for: .touchUpInside)
+        addTrackerButton.setImage(UIImage(systemName: "plus", withConfiguration: configuration), for: .normal)
+        addTrackerButton.tintColor = .ypBlack
+    }
+    
+    private func setupDatePicker() {
+        datePicker.addTarget(self, action: #selector(dateValueChanged), for: .valueChanged)
+        datePicker.datePickerMode = .date
+        datePicker.preferredDatePickerStyle = .compact
+        datePicker.tintColor = .ypBlue
+        datePicker.date = Date()
+        
+        let currentDate = Date()
+        let calendar = Calendar.current
+        let minDate = calendar.date(byAdding: .year, value: -10, to: currentDate)
+        let maxDate = calendar.date(byAdding: .year, value: 10, to: currentDate)
+        datePicker.minimumDate = minDate
+        datePicker.maximumDate = maxDate
+    }
+    
+    private func setupSearchField() {
+        
+        searchField.autoResizeOff()
+        
+        searchField.backgroundColor = .ypSearchField
+        searchField.textColor = .ypGray
+        searchField.placeholder = "Поиск"
+        searchField.font = .systemFont(ofSize: 17, weight: .regular)
+        searchField.layer.cornerRadius = 10
+        searchField.layer.masksToBounds = true
+        
+        view.addSubview(searchField)
+        NSLayoutConstraint.activate([
+            searchField.heightAnchor.constraint(equalToConstant: 36),
+            
+            searchField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            searchField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            searchField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0)
+        ])
+    }
+    
+    private func setupIfEmptyTrackers() {
+        emptyImageView.autoResizeOff()
+        emptyImageView.image = UIImage(named: "IfEmptyTrackers")
+        
+        emptyTextLabel.autoResizeOff()
+        emptyTextLabel.text = "Что будем отслеживать?"
+        emptyTextLabel.font = .systemFont(ofSize: 12, weight: .medium)
+        emptyTextLabel.textColor = .ypBlack
+        
+        view.addSubview(emptyImageView)
+        view.addSubview(emptyTextLabel)
+        NSLayoutConstraint.activate([
+            emptyImageView.widthAnchor.constraint(equalToConstant: 80),
+            emptyImageView.heightAnchor.constraint(equalToConstant: 80),
+            
+            emptyImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emptyImageView.topAnchor.constraint(equalTo: searchField.bottomAnchor, constant: view.bounds.height * 0.25),
+            
+            emptyTextLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emptyTextLabel.topAnchor.constraint(equalTo: emptyImageView.bottomAnchor, constant: 8)
+        ])
+    }
+    
+    private func setupCollectionView() {
+        collectionView.autoResizeOff()
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        
+        collectionView.register(TrackerCollectionCell.self, forCellWithReuseIdentifier: TrackerCollectionCell.reuseIdentifier)
+        collectionView.register(SectionHeaderCollectionView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
+        collectionView.backgroundColor = .clear
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.contentInset.top = 24
+        
+        view.addSubview(collectionView)
+        NSLayoutConstraint.activate([
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            collectionView.topAnchor.constraint(equalTo: searchField.bottomAnchor, constant: 10),
+            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        ])
     }
 }

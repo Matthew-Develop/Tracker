@@ -20,4 +20,13 @@ extension Date {
         
         return dayNumberOfWeekRU
     }
+    
+    func correctedDate() -> Date? {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd.MM.yyyy"
+        dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+        let formattedDate = dateFormatter.string(from: self)
+        let correctedDate = dateFormatter.date(from: formattedDate)
+        return correctedDate
+    }
 }
