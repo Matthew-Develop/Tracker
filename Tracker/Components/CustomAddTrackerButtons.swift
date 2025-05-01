@@ -8,11 +8,9 @@
 import UIKit
 
 final class CustomAddTrackerButtons: UIStackView {
-    
+    //Views
     private let cancelButton = UIButton(type: .system)
     private let createButton = UIButton(type: .system)
-    
-    var isCreateButtonActive: Bool = true
     
 
     override init(frame: CGRect) {
@@ -24,8 +22,24 @@ final class CustomAddTrackerButtons: UIStackView {
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    //MARK: Public Functions
+    func disableCreateButton() {
+        UIView.animate(withDuration: 0.1) {
+            self.createButton.backgroundColor = .ypGray
+        }
+        createButton.isEnabled = false
+    }
+    
+    func enableCreateButton() {
+        UIView.animate(withDuration: 0.1) {
+            self.createButton.backgroundColor = .ypBlack
+        }
+        createButton.isEnabled = true
+    }
 }
 
+//Setup View
 extension CustomAddTrackerButtons {
     private func setupView() {
         self.autoResizeOff()
@@ -66,18 +80,15 @@ extension CustomAddTrackerButtons {
     private func addCreateButton() {
         createButton.autoResizeOff()
         
+        createButton.isEnabled = false
         createButton.setTitle("Создать", for: .normal)
-        createButton.setTitleColor(isCreateButtonActive ? .ypWhite : .ypWhite, for: .normal)
+        createButton.setTitleColor(.ypWhite, for: .normal)
         createButton.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         
-        createButton.backgroundColor = isCreateButtonActive ? .ypBlack : .ypGray
+        createButton.backgroundColor = .ypGray
         
         createButton.layer.cornerRadius = 16
         createButton.layer.masksToBounds = true
-        
-        if !isCreateButtonActive {
-            createButton.isEnabled = false
-        }
         
         NSLayoutConstraint.activate([
             createButton.heightAnchor.constraint(equalToConstant: 60),

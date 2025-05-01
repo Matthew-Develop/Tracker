@@ -7,10 +7,18 @@
 
 import UIKit
 
-final class AddTrackerViewController: UIViewController {
-    //Views
-    private let titleLabel = UILabel()
+protocol AddTrackerDelegate: AnyObject {
+    
+}
 
+final class AddTrackerViewController: UIViewController {
+    //MARK: Views
+    private let titleLabel = UILabel()
+    
+    //MARK: - Properties
+    weak var delegate: AddTrackerDelegate?
+
+    //MARK: - Override
     override func viewDidLoad() {
         super.viewDidLoad()
         

@@ -255,6 +255,10 @@ extension TrackerViewController: TrackerCollectionCellDelegate {
     }
 }
 
+//AddTrackerDelegate
+extension TrackerViewController{
+}
+
 //Setup View
 extension TrackerViewController {
     private func setupView() {

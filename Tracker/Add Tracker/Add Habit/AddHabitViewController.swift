@@ -7,27 +7,85 @@
 
 import UIKit
 
+protocol AddHabitViewControllerDelegate: AnyObject {
+    func addNewHabit()
+}
+
 final class AddHabitViewController: UIViewController {
-    //Views
+    //MARK: Views
     private let titleLabel = UILabel()
+    private let vStackNameTextField = UIStackView()
+    private let nameTextField = CustomTextField()
+    private let symbolLimitWarningLabel = UILabel()
+    private let buttons = CustomAddTrackerButtons()
+    private let categoryScheduleSelection = CustomCategoryAndScheduleSelection()
     
+    //MARK: - Properties
+    weak var delegate: AddHabitViewControllerDelegate?
+    private var selectedCategory: String = ""
+
     
+    //MARK: - Override
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupView()
     }
+    
+    //MARK: - Private Functions
+    @objc private func cancelButtonTapped() {
+        self.dismiss(animated: true)
+    }
+    
+    @objc private func createButtonTapped() {
+        
+    }
+    
+    @objc private func textFieldDidChange(_ sender: UITextField) {
+        guard let text = sender.text else { return }
+        
+        if !text.isEmpty {
+            if text.count > 38 {
+                buttons.disableCreateButton()
+                showSymbolLimitWarning()
+            } else {
+                buttons.enableCreateButton()
+                hideSymbolLimitWarning()
+            }
+        } else {
+            buttons.disableCreateButton()
+        }
+    }
+    
+    @objc private func showCategorySelection(_ sender: UIView ) {
+        let categorySelectorViewController = CategorySelectionViewController()
+        
+        present(categorySelectorViewController, animated: true)
+    }
+    
+    private func showSymbolLimitWarning() {
+        symbolLimitWarningLabel.isHidden = false
+    }
+    
+    private func hideSymbolLimitWarning() {
+        symbolLimitWarningLabel.isHidden = true
+    }
 }
 
-extension AddHabitViewController {
-    private func setupView() {
+//Setup View
+private extension AddHabitViewController {
+    func setupView() {
         view.backgroundColor = .ypWhite
         
         addViewTitle()
+        addVStackNameTextField()
+        addCategoryScheduleSelection()
         addActionButtons()
+        
+        vStackNameTextField.addArrangedSubview(symbolLimitWarningLabel)
     }
     
-    private func addViewTitle() {
+    func addViewTitle() {
         titleLabel.autoResizeOff()
         
         titleLabel.text = "Новая привычка"
@@ -41,8 +99,54 @@ extension AddHabitViewController {
         ])
     }
     
-    private func addActionButtons() {
-        let buttons = CustomAddTrackerButtons()
+    func addVStackNameTextField() {
+        addSymbolLimitWarning()
+
+        vStackNameTextField.autoResizeOff()
+        vStackNameTextField.axis = .vertical
+        vStackNameTextField.spacing = 8
+        vStackNameTextField.alignment = .center
+        
+        nameTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+        
+        vStackNameTextField.addArrangedSubview(nameTextField)
+        view.addSubview(vStackNameTextField)
+        NSLayoutConstraint.activate([
+            vStackNameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            vStackNameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            vStackNameTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 38),
+            
+            nameTextField.heightAnchor.constraint(equalToConstant: 75),
+            
+            nameTextField.leadingAnchor.constraint(equalTo: vStackNameTextField.leadingAnchor),
+            nameTextField.trailingAnchor.constraint(equalTo: vStackNameTextField.trailingAnchor),
+            nameTextField.topAnchor.constraint(equalTo: vStackNameTextField.topAnchor)
+        ])
+    }
+    
+    func addCategoryScheduleSelection() {
+        categoryScheduleSelection.setSelectedCategory("Важное")
+        categoryScheduleSelection.setSelectedSchedule("Пт, Вт")
+        
+        let category = categoryScheduleSelection.subviews.first
+        category?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showCategorySelection)))
+        
+        view.addSubview(categoryScheduleSelection)
+        NSLayoutConstraint.activate([
+            categoryScheduleSelection.heightAnchor.constraint(equalToConstant: 150),
+
+            categoryScheduleSelection.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            categoryScheduleSelection.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            categoryScheduleSelection.topAnchor.constraint(equalTo: vStackNameTextField.bottomAnchor, constant: 24)
+        ])
+    }
+    
+    func addActionButtons() {
+        let cancelButton = buttons.arrangedSubviews[0] as? UIButton
+        let createButton = buttons.arrangedSubviews[1] as? UIButton
+        
+        cancelButton?.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
+        createButton?.addTarget(self, action: #selector(createButtonTapped), for: .touchUpInside)
         
         view.addSubview(buttons)
         NSLayoutConstraint.activate([
@@ -50,5 +154,15 @@ extension AddHabitViewController {
             buttons.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             buttons.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
         ])
+    }
+    
+    func addSymbolLimitWarning() {
+        symbolLimitWarningLabel.autoResizeOff()
+        
+        symbolLimitWarningLabel.text = "Ограничение  38 символов"
+        symbolLimitWarningLabel.font = .systemFont(ofSize: 17, weight: .regular)
+        symbolLimitWarningLabel.textColor = .ypRed
+        
+        symbolLimitWarningLabel.isHidden = true
     }
 }
