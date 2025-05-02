@@ -53,7 +53,7 @@ fileprivate enum MockTrackers {
         title: "Protein Shake",
         color: .orange,
         emoji: "🍑",
-        schedule: ["Пн", "Ср"]
+        schedule: []
     )
     
     static let tracker6 = Tracker(

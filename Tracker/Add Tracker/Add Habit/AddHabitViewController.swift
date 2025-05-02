@@ -57,10 +57,17 @@ final class AddHabitViewController: UIViewController {
         }
     }
     
-    @objc private func showCategorySelection(_ sender: UIView ) {
+    @objc private func showCategorySelection(_ sender: UIGestureRecognizer ) {
         let categorySelectorViewController = CategorySelectionViewController()
         
         present(categorySelectorViewController, animated: true)
+        
+        UIView.animate(withDuration: 0.05) {
+            sender.view?.alpha = 0.5
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                sender.view?.alpha = 1
+            }
+        }
     }
     
     private func showSymbolLimitWarning() {

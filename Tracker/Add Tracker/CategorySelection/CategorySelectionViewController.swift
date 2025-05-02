@@ -39,7 +39,7 @@ private extension CategorySelectionViewController {
         addIfEmpty()
     }
     
-    private func addViewTitle() {
+     func addViewTitle() {
         titleLabel.autoResizeOff()
         
         titleLabel.text = "Категория"
@@ -53,7 +53,7 @@ private extension CategorySelectionViewController {
         ])
     }
     
-    private func addIfEmpty() {
+    func addIfEmpty() {
         let image = UIImageView()
         image.autoResizeOff()
         
@@ -81,7 +81,7 @@ private extension CategorySelectionViewController {
         ])
     }
     
-    private func addCreateCategoryButton() {
+     func addCreateCategoryButton() {
         let button = UIButton(type: .system)
         button.autoResizeOff()
         
