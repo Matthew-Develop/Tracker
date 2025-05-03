@@ -33,7 +33,7 @@ private extension CustomTextField {
         
         placeholder = "Введите название трекера"
         backgroundColor = .ypBackground
-        textColor = .ypGray
+        textColor = .ypBlack
         leftView = UIView.init(frame: CGRect(x: 0, y: 0, width: 16, height: 75))
         leftViewMode = .always
         rightView = UIView.init(frame: CGRect(x: 0, y: 0, width: 16, height: 75))

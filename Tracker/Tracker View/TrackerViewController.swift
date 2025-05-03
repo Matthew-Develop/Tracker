@@ -20,6 +20,7 @@ final class TrackerViewController: UIViewController {
     //MARK: - Properties
     var currentDate: Date = Date()
     var currentDayOfWeek: String = "unknown"
+    
     var categories: [TrackerCategory] = []
     var completedTrackers: [TrackerRecord] = []
     var visibleTrackers: [TrackerCategory] = []
@@ -261,7 +262,7 @@ extension TrackerViewController {
         searchField.autoResizeOff()
         
         searchField.backgroundColor = .ypSearchField
-        searchField.textColor = .ypGray
+        searchField.textColor = .ypBlack
         searchField.placeholder = "Поиск"
         searchField.font = .systemFont(ofSize: 17, weight: .regular)
         searchField.layer.cornerRadius = 10

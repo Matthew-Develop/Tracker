@@ -60,6 +60,7 @@ final class AddHabitViewController: UIViewController {
     @objc private func showCategorySelection(_ sender: UIGestureRecognizer ) {
         let categorySelectorViewController = CategorySelectionViewController()
         
+        categorySelectorViewController.delegate = self
         present(categorySelectorViewController, animated: true)
         
         UIView.animate(withDuration: 0.05) {
@@ -76,6 +77,13 @@ final class AddHabitViewController: UIViewController {
     
     private func hideSymbolLimitWarning() {
         symbolLimitWarningLabel.isHidden = true
+    }
+}
+
+//CategorySelectionDelegate
+extension AddHabitViewController: CategorySelectionViewControllerDelegate {
+    func selectCategory(_ category: String) {
+        selectedCategory = category
     }
 }
 
@@ -155,9 +163,12 @@ private extension AddHabitViewController {
         cancelButton?.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
         createButton?.addTarget(self, action: #selector(createButtonTapped), for: .touchUpInside)
         
+        let bottomConstraint = CGFloat(view.bounds.height < 812 ? -24 : -34)
+        
         view.addSubview(buttons)
         NSLayoutConstraint.activate([
-            buttons.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            
+            buttons.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: bottomConstraint),
             buttons.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             buttons.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
         ])
