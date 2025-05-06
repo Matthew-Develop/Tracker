@@ -26,6 +26,7 @@ final class CreateNewCategoryViewController: UIViewController {
     //MARK: - Override
     override func viewDidLoad() {
         super.viewDidLoad()
+        addTapGestureToHideKeyboard()
         
         setupView()
     }
@@ -89,6 +90,15 @@ final class CreateNewCategoryViewController: UIViewController {
     }
 }
 
+//TextField Delegate
+extension CreateNewCategoryViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+}
+
+//Setup View
 private extension CreateNewCategoryViewController {
     func setupView() {
         view.backgroundColor = .ypWhite
@@ -124,6 +134,7 @@ private extension CreateNewCategoryViewController {
         
         categoryNameTextField.changePlaceholder(to: "Введите название категории")
         categoryNameTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+        categoryNameTextField.delegate = self
         
         vStackNameTextField.addArrangedSubview(categoryNameTextField)
         view.addSubview(vStackNameTextField)

@@ -28,6 +28,7 @@ final class TrackerViewController: UIViewController {
     //MARK: - Override
     override func viewDidLoad() {
         super.viewDidLoad()
+        addTapGestureToHideKeyboard()
         
         categories = MockData().categories
         

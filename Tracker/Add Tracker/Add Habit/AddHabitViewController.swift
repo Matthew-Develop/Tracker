@@ -29,6 +29,7 @@ final class AddHabitViewController: UIViewController {
     //MARK: - Override
     override func viewDidLoad() {
         super.viewDidLoad()
+        addTapGestureToHideKeyboard()
         
         setupView()
     }
@@ -161,6 +162,14 @@ extension AddHabitViewController: ScheduleSelectionViewControllerDelegate {
     }
 }
 
+//TextField Delegate
+extension AddHabitViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+}
+
 //Setup View
 private extension AddHabitViewController {
     func setupView() {
@@ -197,6 +206,7 @@ private extension AddHabitViewController {
         vStackNameTextField.alignment = .center
         
         nameTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+        nameTextField.delegate = self
         
         vStackNameTextField.addArrangedSubview(nameTextField)
         view.addSubview(vStackNameTextField)

@@ -11,6 +11,7 @@
 		342C70FE2DB64D2100FBB71C /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 342C70FD2DB64D2100FBB71C /* UIView+Extension.swift */; };
 		342C71022DB64E2300FBB71C /* TrackerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 342C71012DB64E2300FBB71C /* TrackerViewController.swift */; };
 		342C71042DB64E2B00FBB71C /* StatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 342C71032DB64E2B00FBB71C /* StatisticsViewController.swift */; };
+		342EB63C2DCA14D300526962 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 342EB63B2DCA14D300526962 /* UIViewController+Extension.swift */; };
 		3432B03E2DBB73B400AAE9BC /* AddTrackerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3432B03D2DBB73B400AAE9BC /* AddTrackerViewController.swift */; };
 		3432B0412DBB796C00AAE9BC /* AddHabitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3432B0402DBB796C00AAE9BC /* AddHabitViewController.swift */; };
 		3432B0442DBB821500AAE9BC /* AddUnregularViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3432B0432DBB821500AAE9BC /* AddUnregularViewController.swift */; };
@@ -43,6 +44,7 @@
 		342C70FD2DB64D2100FBB71C /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		342C71012DB64E2300FBB71C /* TrackerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerViewController.swift; sourceTree = "<group>"; };
 		342C71032DB64E2B00FBB71C /* StatisticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewController.swift; sourceTree = "<group>"; };
+		342EB63B2DCA14D300526962 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 		3432B03D2DBB73B400AAE9BC /* AddTrackerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTrackerViewController.swift; sourceTree = "<group>"; };
 		3432B0402DBB796C00AAE9BC /* AddHabitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddHabitViewController.swift; sourceTree = "<group>"; };
 		3432B0432DBB821500AAE9BC /* AddUnregularViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddUnregularViewController.swift; sourceTree = "<group>"; };
@@ -99,6 +101,7 @@
 				34F643122DC09B8E005253EB /* Date+Extension.swift */,
 				34F643142DC09DEC005253EB /* Int+Extension.swift */,
 				3495A1D92DC8AE3F00962D02 /* Array+Extension.swift */,
+				342EB63B2DCA14D300526962 /* UIViewController+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -301,6 +304,7 @@
 				349CBEA82DC3705F0043787B /* CategorySelectionViewController.swift in Sources */,
 				34F643152DC09DEC005253EB /* Int+Extension.swift in Sources */,
 				345E38912DC38EDE006CE659 /* CreateNewCategoryViewController.swift in Sources */,
+				342EB63C2DCA14D300526962 /* UIViewController+Extension.swift in Sources */,
 				3477E6B92DBCF48000996948 /* TrackerRecord.swift in Sources */,
 				342C70FB2DB64C8C00FBB71C /* TabBarController.swift in Sources */,
 				34E3A01A2DB60B05005E6FD6 /* AppDelegate.swift in Sources */,
