@@ -16,6 +16,8 @@ final class CategorySelectionViewController: UIViewController {
     private let titleLabel = UILabel()
     private let addCategoryButton = UIButton(type: .system)
     private let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+    private let ifEmptyImage = UIImageView()
+    private let ifEmptyTextLabel = UILabel()
     
     
     //MARK: - Properties
@@ -30,11 +32,13 @@ final class CategorySelectionViewController: UIViewController {
         
         setupView()
         categories = MockData().categories
+        reloadData()
     }
     
     @objc private func createCategoryButtonTapped(_ sender: UIButton) {
         let createNewCategoryViewController = CreateNewCategoryViewController()
         
+        createNewCategoryViewController.delegate = self
         present(createNewCategoryViewController, animated: true)
     }
     
@@ -43,15 +47,52 @@ final class CategorySelectionViewController: UIViewController {
         
         if indexPath.row == categories.count - 1 {
             cell.bottomLine.isHidden = true
-            
-            cell.layer.masksToBounds = true
-            cell.layer.cornerRadius = 16
-            cell.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+            cell.setDownCellCorners()
         } else if indexPath.row == 0 {
-            cell.layer.masksToBounds = true
-            cell.layer.cornerRadius = 16
-            cell.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+            cell.setUpCellCorners()
         }
+        
+        if cell.categoryTitle.text == selectedCategory {
+            self.collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
+            cell.toggleCategory()
+        }
+    }
+    
+    private func reloadData() {
+        collectionView.reloadData()
+        
+        if categories.isEmpty {
+            collectionView.isHidden = true
+            ifEmptyImage.isHidden = false
+            ifEmptyTextLabel.isHidden = false
+        } else {
+            collectionView.isHidden = false
+            ifEmptyImage.isHidden = true
+            ifEmptyTextLabel.isHidden = true
+        }
+    }
+}
+
+//Create New Category Delegate
+extension CategorySelectionViewController: CreateNewCategoryViewControllerDelegate {
+    func addNewCategory(with title: String) {
+        
+        let newCategory = TrackerCategory(title: title, trackers: [])
+        let tempCategories = categories
+        let updatedCategories = tempCategories + [newCategory]
+        let index = IndexPath(row: tempCategories.count, section: 0)
+        
+        categories = updatedCategories
+    
+        collectionView.performBatchUpdates {
+            collectionView.insertItems(at: [index])
+        }
+        
+        let preLastCell = collectionView.cellForItem(at: IndexPath(row: index.row - 1, section: 0)) as? CategoryCollectionCell
+        let lastCell = collectionView.cellForItem(at: index) as? CategoryCollectionCell
+        
+        preLastCell?.resetCellDownCornersBottomLine()
+        lastCell?.setDownCellCorners()
     }
 }
 
@@ -80,6 +121,30 @@ extension CategorySelectionViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         0
     }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        0
+    }
+}
+
+extension CategorySelectionViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let cell = collectionView.cellForItem(at: indexPath) as? CategoryCollectionCell
+        else { return }
+        
+        selectedCategory = categories[indexPath.row].title
+        cell.toggleCategory()
+        cell.animateTap()
+        delegate?.selectCategory(selectedCategory)
+        dismiss(animated: true)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        guard let cell = collectionView.cellForItem(at: indexPath) as? CategoryCollectionCell
+        else { return }
+        
+        cell.toggleCategory()
+    }
 }
 
 //Setup View
@@ -89,7 +154,7 @@ private extension CategorySelectionViewController {
         
         addViewTitle()
         addCreateCategoryButton()
-//        addIfEmpty()
+        addIfEmpty()
         addCategoriesCollectionView()
     }
     
@@ -108,31 +173,29 @@ private extension CategorySelectionViewController {
     }
     
     func addIfEmpty() {
-        let image = UIImageView()
-        image.autoResizeOff()
+        ifEmptyImage.autoResizeOff()
         
-        image.image = UIImage(named: "IfEmptyTrackers")
+        ifEmptyImage.image = UIImage(named: "IfEmptyTrackers")
         
-        let textLabel = UILabel()
-        textLabel.autoResizeOff()
+        ifEmptyTextLabel.autoResizeOff()
         
-        textLabel.text = "Привычки и события можно\nобъеденить по смыслу"
-        textLabel.font = .systemFont(ofSize: 12, weight: .medium)
-        textLabel.textColor = .ypBlack
-        textLabel.numberOfLines = 2
-        textLabel.textAlignment = .center
+        ifEmptyTextLabel.text = "Привычки и события можно\nобъеденить по смыслу"
+        ifEmptyTextLabel.font = .systemFont(ofSize: 12, weight: .medium)
+        ifEmptyTextLabel.textColor = .ypBlack
+        ifEmptyTextLabel.numberOfLines = 2
+        ifEmptyTextLabel.textAlignment = .center
         
-        view.addSubview(image)
-        view.addSubview(textLabel)
+        view.addSubview(ifEmptyImage)
+        view.addSubview(ifEmptyTextLabel)
         NSLayoutConstraint.activate([
-            image.widthAnchor.constraint(equalToConstant: 80),
-            image.heightAnchor.constraint(equalToConstant: 80),
+            ifEmptyImage.widthAnchor.constraint(equalToConstant: 80),
+            ifEmptyImage.heightAnchor.constraint(equalToConstant: 80),
             
-            image.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            image.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor, constant: -30),
+            ifEmptyImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            ifEmptyImage.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor, constant: -30),
             
-            textLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            textLabel.topAnchor.constraint(equalTo: image.bottomAnchor, constant: 8)
+            ifEmptyTextLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            ifEmptyTextLabel.topAnchor.constraint(equalTo: ifEmptyImage.bottomAnchor, constant: 8)
         ])
     }
     

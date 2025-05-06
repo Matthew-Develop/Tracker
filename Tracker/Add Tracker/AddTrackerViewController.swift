@@ -7,16 +7,12 @@
 
 import UIKit
 
-protocol AddTrackerDelegate: AnyObject {
-    
-}
-
 final class AddTrackerViewController: UIViewController {
     //MARK: Views
     private let titleLabel = UILabel()
     
     //MARK: - Properties
-    weak var delegate: AddTrackerDelegate?
+    var mainVC = UIViewController()
 
     //MARK: - Override
     override func viewDidLoad() {
@@ -25,9 +21,11 @@ final class AddTrackerViewController: UIViewController {
         setupView()
     }
     
-    //MARK: Private Functions
+    //MARK: - Private Functions
     @objc private func addHabitButtonTapped(_ sender: UIButton) {
         let addHabitViewController = AddHabitViewController()
+        
+        addHabitViewController.delegate = mainVC as? TrackerViewController
         
         navigationController?.isNavigationBarHidden = true
         navigationController?.pushViewController(addHabitViewController, animated: false)

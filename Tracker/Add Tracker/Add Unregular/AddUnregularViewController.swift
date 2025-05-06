@@ -8,7 +8,7 @@
 import UIKit
 
 final class AddUnregularViewController: UIViewController {
-    //Views
+    //MARK: Views
     private let titleLabel = UILabel()
     private let nameTextField = CustomTextField()
     private let buttons = CustomAddTrackerButtons()

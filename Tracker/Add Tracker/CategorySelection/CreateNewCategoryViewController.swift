@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol CreateNewCategoryViewControllerDelegate: AnyObject {
+    func addNewCategory(with title: String)
+}
+
 final class CreateNewCategoryViewController: UIViewController {
     //MARK: Views
     private let titleLabel = UILabel()
@@ -14,7 +18,10 @@ final class CreateNewCategoryViewController: UIViewController {
     private let categoryNameTextField = CustomTextField()
     private let vStackNameTextField = UIStackView()
     private let symbolLimitWarningLabel = UILabel()
-
+    
+    //MARK: - Properties
+    weak var delegate: CreateNewCategoryViewControllerDelegate?
+    private var newCategory: String = ""
     
     //MARK: - Override
     override func viewDidLoad() {
@@ -25,22 +32,17 @@ final class CreateNewCategoryViewController: UIViewController {
     
     @objc private func doneButtonTapped(_ sender: UIButton) {
         dismiss(animated: true)
+        
+        if newCategory.isEmpty {
+            print("ERROR Creating new category")
+            return
+        }
+        delegate?.addNewCategory(with: newCategory)
     }
     
     @objc private func textFieldDidChange(_ sender: UITextField) {
-        guard let text = sender.text else { return }
-        
-        if !text.isEmpty {
-            if text.count > 38 {
-                disableDoneButton()
-                showSymbolLimitWarning()
-            } else {
-                enableDoneButton()
-                hideSymbolLimitWarning()
-            }
-        } else {
-            disableDoneButton()
-        }
+        toggleAddButton()
+        newCategory = sender.text ?? ""
     }
     
     private func disableDoneButton() {
@@ -57,12 +59,33 @@ final class CreateNewCategoryViewController: UIViewController {
         doneButton.isEnabled = true
     }
     
-    private func showSymbolLimitWarning() {
+    private func showWarning(with message: String) {
         symbolLimitWarningLabel.isHidden = false
+        symbolLimitWarningLabel.text = message
     }
     
-    private func hideSymbolLimitWarning() {
+    private func hideWarning() {
         symbolLimitWarningLabel.isHidden = true
+    }
+    
+    private func toggleAddButton() {
+        guard let categoryTitle = categoryNameTextField.text
+        else { return }
+        
+        let isValidName = categoryTitle.count < 38 && categoryTitle.count != 0
+        
+        if isValidName  {
+            enableDoneButton()
+        } else {
+            disableDoneButton()
+        }
+        
+        if !isValidName && categoryTitle.count != 0 {
+            showWarning(with: "Ограничение  38 символов")
+            return
+        } else {
+            hideWarning()
+        }
     }
 }
 

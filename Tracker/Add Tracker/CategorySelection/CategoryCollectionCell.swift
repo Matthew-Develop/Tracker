@@ -8,9 +8,10 @@
 import UIKit
 
 final class CategoryCollectionCell: UICollectionViewCell {
-    //Views
+    //MARK: Views
     let categoryTitle = UILabel()
     let bottomLine = UIView()
+    var checkmark = UIImageView()
     
     //MARK: - Properties
     static let reuseIdentifier = "CategoryCollectionCell"
@@ -26,14 +27,37 @@ final class CategoryCollectionCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //MARK: Private Functions
-    @objc private func categoryTapped(_ sender: UITapGestureRecognizer) {
-        UIView.animate(withDuration: 0.2) {
-            sender.view?.alpha = 0.5
+    //MARK: - Public Functions
+    func toggleCategory() {
+        checkmark.isHidden = !checkmark.isHidden
+    }
+    
+    func animateTap() {
+        UIView.animate(withDuration: 0.05) {
+            self.alpha = 0.5
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                sender.view?.alpha = 1
+                self.alpha = 1
             }
         }
+    }
+    
+    func setUpCellCorners() {
+        layer.masksToBounds = true
+        layer.cornerRadius = 16
+        layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+    }
+    
+    func setDownCellCorners() {
+        layer.masksToBounds = true
+        layer.cornerRadius = 16
+        layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+    }
+    
+    func resetCellDownCornersBottomLine() {
+        layer.masksToBounds = true
+        layer.cornerRadius = 0
+        layer.maskedCorners = []
+        bottomLine.isHidden = false
     }
 }
 
@@ -43,9 +67,8 @@ private extension CategoryCollectionCell {
         contentView.backgroundColor = .ypBackground
         
         addCategoryTitle()
+        addCheckmark()
         addBottomLine()
-        
-        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(categoryTapped)))
     }
     
     func addCategoryTitle() {
@@ -58,6 +81,23 @@ private extension CategoryCollectionCell {
         NSLayoutConstraint.activate([
             categoryTitle.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             categoryTitle.centerYAnchor.constraint(equalTo: centerYAnchor)
+        ])
+    }
+    
+    func addCheckmark() {
+        checkmark.autoResizeOff()
+        
+        checkmark.image = UIImage(named: "CheckmarkCategorySelected")
+        checkmark.tintColor = .ypBlue
+        checkmark.isHidden = true
+        
+        addSubview(checkmark)
+        NSLayoutConstraint.activate([
+            checkmark.heightAnchor.constraint(equalToConstant: 24),
+            checkmark.widthAnchor.constraint(equalToConstant: 24),
+            
+            checkmark.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            checkmark.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
     }
     

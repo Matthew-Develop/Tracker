@@ -8,7 +8,7 @@
 import UIKit
 
 protocol AddHabitViewControllerDelegate: AnyObject {
-    func addNewHabit()
+    func addNewHabit(category: TrackerCategory)
 }
 
 final class AddHabitViewController: UIViewController {
@@ -23,6 +23,7 @@ final class AddHabitViewController: UIViewController {
     //MARK: - Properties
     weak var delegate: AddHabitViewControllerDelegate?
     private var selectedCategory: String = ""
+    private var selectedSchedule: [String] = []
 
     
     //MARK: - Override
@@ -38,52 +39,125 @@ final class AddHabitViewController: UIViewController {
     }
     
     @objc private func createButtonTapped() {
-        
+        guard let categoryToAdd = configureCategoryToAdd()
+        else {
+            print("ERROR configuring category to add")
+            return
+        }
+        delegate?.addNewHabit(category: categoryToAdd)
+        dismiss(animated: true)
     }
     
     @objc private func textFieldDidChange(_ sender: UITextField) {
-        guard let text = sender.text else { return }
-        
-        if !text.isEmpty {
-            if text.count > 38 {
-                buttons.disableCreateButton()
-                showSymbolLimitWarning()
-            } else {
-                buttons.enableCreateButton()
-                hideSymbolLimitWarning()
-            }
-        } else {
-            buttons.disableCreateButton()
-        }
+        toggleAddButton()
     }
     
     @objc private func showCategorySelection(_ sender: UIGestureRecognizer ) {
-        let categorySelectorViewController = CategorySelectionViewController()
+        let categorySelectionViewController = CategorySelectionViewController()
         
-        categorySelectorViewController.delegate = self
-        present(categorySelectorViewController, animated: true)
+        categorySelectionViewController.delegate = self
+        categorySelectionViewController.selectedCategory = selectedCategory
+        present(categorySelectionViewController, animated: true)
         
         UIView.animate(withDuration: 0.05) {
             sender.view?.alpha = 0.5
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                 sender.view?.alpha = 1
             }
         }
     }
     
-    private func showSymbolLimitWarning() {
-        symbolLimitWarningLabel.isHidden = false
+    @objc private func showScheduleSelection(_ sender: UITapGestureRecognizer) {
+        let scheduleSelectionViewController = ScheduleSelectionViewController()
+        
+        scheduleSelectionViewController.delegate = self
+        for day in selectedSchedule {
+            scheduleSelectionViewController.selectedSchedule[day] = true
+        }
+        present(scheduleSelectionViewController, animated: true)
+        
+        UIView.animate(withDuration: 0.05) {
+            sender.view?.alpha = 0.5
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                sender.view?.alpha = 1
+            }
+        }
     }
     
-    private func hideSymbolLimitWarning() {
+    private func showWarning(with message: String) {
+        symbolLimitWarningLabel.isHidden = false
+        symbolLimitWarningLabel.text = message
+    }
+    
+    private func hideWarning() {
         symbolLimitWarningLabel.isHidden = true
+    }
+    
+    private func configureCategoryToAdd() -> TrackerCategory? {
+        guard let trackerTitle = nameTextField.text
+        else {
+            print("Title text field is empty")
+            dismiss(animated: true)
+            return nil
+        }
+        
+        let newTracker = Tracker(
+            title: trackerTitle,
+            color: .brown,
+            emoji: "🔥",
+            schedule: selectedSchedule
+        )
+        
+        let categoryToAdd = TrackerCategory(
+            title: selectedCategory,
+            trackers: [newTracker]
+        )
+        
+        return categoryToAdd
+    }
+    
+    private func toggleAddButton() {
+        guard let trackerTitle = nameTextField.text
+        else { return }
+        
+        let isValidName = trackerTitle.count < 38 && trackerTitle.count != 0
+        let isCategorySelected = selectedCategory != ""
+        let isScheduleSelected = selectedSchedule.count != 0
+        
+        if isValidName && isCategorySelected && isScheduleSelected {
+            buttons.enableCreateButton()
+        } else {
+            buttons.disableCreateButton()
+        }
+        
+        if !isValidName && trackerTitle.count != 0 {
+            showWarning(with: "Ограничение  38 символов")
+            return
+        } else {
+            hideWarning()
+        }
     }
 }
 
-//CategorySelectionDelegate
+//Category Selection Delegate
 extension AddHabitViewController: CategorySelectionViewControllerDelegate {
     func selectCategory(_ category: String) {
         selectedCategory = category
+        categoryScheduleSelection.setSelectedCategory(selectedCategory)
+        toggleAddButton()
+    }
+}
+
+//Schedule Selection Delegate
+extension AddHabitViewController: ScheduleSelectionViewControllerDelegate {
+    func selectSchedule(_ schedule: [String]) {
+        selectedSchedule = schedule
+        if schedule.count == 7 {
+            categoryScheduleSelection.setSelectedSchedule(["Каждый день"])
+        } else {
+            categoryScheduleSelection.setSelectedSchedule(selectedSchedule)
+        }
+        toggleAddButton()
     }
 }
 
@@ -140,11 +214,10 @@ private extension AddHabitViewController {
     }
     
     func addCategoryScheduleSelection() {
-        categoryScheduleSelection.setSelectedCategory("Важное")
-        categoryScheduleSelection.setSelectedSchedule("Пт, Вт")
-        
         let category = categoryScheduleSelection.subviews.first
+        let schedule = categoryScheduleSelection.subviews.last
         category?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showCategorySelection)))
+        schedule?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showScheduleSelection)))
         
         view.addSubview(categoryScheduleSelection)
         NSLayoutConstraint.activate([
@@ -177,7 +250,6 @@ private extension AddHabitViewController {
     func addSymbolLimitWarning() {
         symbolLimitWarningLabel.autoResizeOff()
         
-        symbolLimitWarningLabel.text = "Ограничение  38 символов"
         symbolLimitWarningLabel.font = .systemFont(ofSize: 17, weight: .regular)
         symbolLimitWarningLabel.textColor = .ypRed
         

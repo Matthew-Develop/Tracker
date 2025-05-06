@@ -39,7 +39,10 @@ final class TrackerViewController: UIViewController {
     
     //MARK: - Private Functions
     @objc private func addTrackerButtonTapped(_ sender: UIButton) {
-        let navigationController = UINavigationController(rootViewController: AddTrackerViewController())
+        let addTrackerViewController = AddTrackerViewController()
+        addTrackerViewController.mainVC = self
+        
+        let navigationController = UINavigationController(rootViewController: addTrackerViewController)
         
         navigationController.modalPresentationStyle = .pageSheet
         present(navigationController, animated: true)
@@ -94,8 +97,7 @@ final class TrackerViewController: UIViewController {
         
         visibleTrackers = categories.compactMap { category in
             let trackers = category.trackers.filter { tracker in
-                let dateCondition = tracker.schedule.contains(currentDayOfWeek) ||
-                tracker.schedule.isEmpty
+                let dateCondition = tracker.schedule.contains(currentDayOfWeek)
                 let searchCondition = searchText.isEmpty || tracker.title.lowercased().contains(searchText)
                 
                 return dateCondition && searchCondition
@@ -120,17 +122,36 @@ final class TrackerViewController: UIViewController {
     }
 }
 
-//Search Field delegate
-extension TrackerViewController: UITextFieldDelegate {
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        reloadVisibleTrackers()
-        return true
-    }
-}
-
 //AddTrackerDelegate
-extension TrackerViewController{
+extension TrackerViewController: AddHabitViewControllerDelegate {
+    func addNewHabit(category: TrackerCategory) {
+        
+        let tempCategories = categories
+        var tempCategoryTrackers = category.trackers
+        var result: [TrackerCategory] = []
+        
+        if tempCategories.filter({ $0.title == category.title }).isEmpty  {
+            
+            let newCategory = TrackerCategory(title: category.title, trackers: tempCategoryTrackers)
+            
+            result = [newCategory] + tempCategories
+        } else {
+            for item in tempCategories {
+                if item.title == category.title {
+                    tempCategoryTrackers += item.trackers
+                    
+                    let updatedCategory = TrackerCategory(title: item.title, trackers: tempCategoryTrackers)
+                    
+                    result.append(updatedCategory)
+                } else {
+                    result.append(item)
+                }
+            }
+        }
+        
+        categories = result
+        reloadVisibleTrackers()
+    }
 }
 
 //Cell Delegate
@@ -145,6 +166,15 @@ extension TrackerViewController: TrackerCollectionCellDelegate {
         var records = completedTrackers
         records.removeAll { $0.trackerId == id && $0.completeDate == date }
         completedTrackers = records
+    }
+}
+
+//Search Field delegate
+extension TrackerViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        reloadVisibleTrackers()
+        return true
     }
 }
 

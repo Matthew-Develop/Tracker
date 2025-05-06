@@ -50,10 +50,10 @@ fileprivate enum MockTrackers {
     )
     
     static let tracker5 = Tracker(
-        title: "Protein Shake",
+        title: "Фруктовый салат",
         color: .orange,
         emoji: "🍑",
-        schedule: []
+        schedule: ["Чт"]
     )
     
     static let tracker6 = Tracker(

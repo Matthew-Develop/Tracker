@@ -65,7 +65,7 @@ final class TrackerCollectionCell: UICollectionViewCell {
             changeButtonStatus(toComplete: isCompleted)
         }
     
-    //MARK: Private Functions
+    //MARK: - Private Functions
     @objc private func completeTrackerButtonTapped(_ sender: UIButton) {
         changeButtonStatus(toComplete: !isCompleted)
         updateCount(toAdd: !isCompleted)

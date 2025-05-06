@@ -8,7 +8,7 @@
 import UIKit
 
 final class CustomAddTrackerButtons: UIStackView {
-    //Views
+    //MARK: Views
     private let cancelButton = UIButton(type: .system)
     private let createButton = UIButton(type: .system)
     
@@ -23,7 +23,7 @@ final class CustomAddTrackerButtons: UIStackView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //MARK: Public Functions
+    //MARK: - Public Functions
     func disableCreateButton() {
         UIView.animate(withDuration: 0.1) {
             self.createButton.backgroundColor = .ypGray

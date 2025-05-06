@@ -8,7 +8,7 @@
 import UIKit
 
 final class CustomCategoryAndScheduleSelection: UIStackView {
-    //Views
+    //MARK: Views
     let categorySelectorView = UIView()
     let scheduleSelectorView = UIView()
     let selectedCategoryLabel = UILabel()
@@ -25,18 +25,19 @@ final class CustomCategoryAndScheduleSelection: UIStackView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //MARK: Public Functions
+    //MARK: - Public Functions
     func setSelectedCategory(_ text: String) {
         selectedCategoryLabel.isHidden = false
         selectedCategoryLabel.text = text
     }
     
-    func setSelectedSchedule(_ text: String) {
+    func setSelectedSchedule(_ text: [String]) {        
         selectedScheduleLabel.isHidden = false
-        selectedScheduleLabel.text = text
+        selectedScheduleLabel.text = text.joined(separator: ", ")
     }
 }
 
+//Setup View
 private extension CustomCategoryAndScheduleSelection {
     func setupView() {
         
