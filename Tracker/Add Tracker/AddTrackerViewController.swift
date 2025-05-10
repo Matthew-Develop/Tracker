@@ -14,7 +14,7 @@ final class AddTrackerViewController: UIViewController {
     //MARK: - Properties
     var mainVC = UIViewController()
 
-    //MARK: - Override
+    //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         

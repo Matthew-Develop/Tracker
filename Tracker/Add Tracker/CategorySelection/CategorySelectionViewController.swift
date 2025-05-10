@@ -26,7 +26,7 @@ final class CategorySelectionViewController: UIViewController {
     var selectedCategory: String = ""
     
     
-    //MARK: - Override
+    //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -61,15 +61,10 @@ final class CategorySelectionViewController: UIViewController {
     private func reloadData() {
         collectionView.reloadData()
         
-        if categories.isEmpty {
-            collectionView.isHidden = true
-            ifEmptyImage.isHidden = false
-            ifEmptyTextLabel.isHidden = false
-        } else {
-            collectionView.isHidden = false
-            ifEmptyImage.isHidden = true
-            ifEmptyTextLabel.isHidden = true
-        }
+        let isEmpty = categories.isEmpty
+        collectionView.isHidden = isEmpty
+        ifEmptyImage.isHidden = !isEmpty
+        ifEmptyTextLabel.isHidden = !isEmpty
     }
 }
 
@@ -115,7 +110,7 @@ extension CategorySelectionViewController: UICollectionViewDataSource {
 //UICollectionViewDelegateFlowLayout
 extension CategorySelectionViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.width - 32, height: 75)
+        CGSize(width: view.frame.width - 32, height: 75)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {

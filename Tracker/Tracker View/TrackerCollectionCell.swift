@@ -30,7 +30,7 @@ final class TrackerCollectionCell: UICollectionViewCell {
     var currentCount: Int = 0
     var currentDate: Date = Date()
 
-    //MARK: - Override
+    //MARK: - Lifecycle
     override init(frame: CGRect) {
         super.init(frame: frame)
         

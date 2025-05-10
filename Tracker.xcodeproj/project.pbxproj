@@ -25,6 +25,7 @@
 		349CBEA82DC3705F0043787B /* CategorySelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 349CBEA72DC3705F0043787B /* CategorySelectionViewController.swift */; };
 		34A9FF762DBF87BF00690069 /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A9FF752DBF87BF00690069 /* UIButton+Extension.swift */; };
 		34A9FF782DBF89FF00690069 /* MockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A9FF772DBF89FF00690069 /* MockData.swift */; };
+		34AE39122DCF8AC700506557 /* UIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34AE39112DCF8AC700506557 /* UIConstants.swift */; };
 		34C0ECEF2DC789C500FD8A3D /* ScheduleSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34C0ECEE2DC789C500FD8A3D /* ScheduleSelectionViewController.swift */; };
 		34C0ECF12DC7990200FD8A3D /* ScheduleSelectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34C0ECF02DC7990200FD8A3D /* ScheduleSelectionCell.swift */; };
 		34E3A0162DB60B05005E6FD6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 34E3A00D2DB60B05005E6FD6 /* Assets.xcassets */; };
@@ -58,6 +59,7 @@
 		349CBEA72DC3705F0043787B /* CategorySelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySelectionViewController.swift; sourceTree = "<group>"; };
 		34A9FF752DBF87BF00690069 /* UIButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
 		34A9FF772DBF89FF00690069 /* MockData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockData.swift; sourceTree = "<group>"; };
+		34AE39112DCF8AC700506557 /* UIConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIConstants.swift; sourceTree = "<group>"; };
 		34C0ECEE2DC789C500FD8A3D /* ScheduleSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleSelectionViewController.swift; sourceTree = "<group>"; };
 		34C0ECF02DC7990200FD8A3D /* ScheduleSelectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleSelectionCell.swift; sourceTree = "<group>"; };
 		34E39FF42DB60B01005E6FD6 /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -183,6 +185,14 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		34AE39102DCF8AB400506557 /* Constants */ = {
+			isa = PBXGroup;
+			children = (
+				34AE39112DCF8AC700506557 /* UIConstants.swift */,
+			);
+			path = Constants;
+			sourceTree = "<group>";
+		};
 		34C0ECED2DC789B000FD8A3D /* ScheduleSelection */ = {
 			isa = PBXGroup;
 			children = (
@@ -217,9 +227,10 @@
 				3432B03C2DBB72DF00AAE9BC /* Add Tracker */,
 				3477E6B32DBCEFDD00996948 /* Models */,
 				3432B0452DBB843A00AAE9BC /* Components */,
+				34AE39102DCF8AB400506557 /* Constants */,
+				342C70FC2DB64D0700FBB71C /* Extensions */,
 				34E3A00C2DB60B05005E6FD6 /* AppDelegate.swift */,
 				34E3A0132DB60B05005E6FD6 /* SceneDelegate.swift */,
-				342C70FC2DB64D0700FBB71C /* Extensions */,
 				34E3A00D2DB60B05005E6FD6 /* Assets.xcassets */,
 				34E3A00E2DB60B05005E6FD6 /* Info.plist */,
 				34E3A0102DB60B05005E6FD6 /* LaunchScreen.storyboard */,
@@ -300,6 +311,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				34AE39122DCF8AC700506557 /* UIConstants.swift in Sources */,
 				34F95D5E2DC1DD7C00B3D2DC /* CustomTextField.swift in Sources */,
 				349CBEA82DC3705F0043787B /* CategorySelectionViewController.swift in Sources */,
 				34F643152DC09DEC005253EB /* Int+Extension.swift in Sources */,

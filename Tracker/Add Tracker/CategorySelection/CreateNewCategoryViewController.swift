@@ -23,7 +23,7 @@ final class CreateNewCategoryViewController: UIViewController {
     weak var delegate: CreateNewCategoryViewControllerDelegate?
     private var newCategory: String = ""
     
-    //MARK: - Override
+    //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         addTapGestureToHideKeyboard()
@@ -34,7 +34,8 @@ final class CreateNewCategoryViewController: UIViewController {
     @objc private func doneButtonTapped(_ sender: UIButton) {
         dismiss(animated: true)
         
-        if newCategory.isEmpty {
+        guard !newCategory.isEmpty
+        else {
             print("ERROR Creating new category")
             return
         }

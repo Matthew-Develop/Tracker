@@ -22,7 +22,7 @@ final class ScheduleSelectionViewController: UIViewController {
     var selectedSchedule: [String: Bool] = [ "Пн": false, "Вт": false, "Ср": false, "Чт": false, "Пт": false, "Сб": false, "Вс": false ]
 
     
-    //MARK: - Override
+    //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         

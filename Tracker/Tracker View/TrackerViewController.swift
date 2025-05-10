@@ -25,7 +25,7 @@ final class TrackerViewController: UIViewController {
     var completedTrackers: [TrackerRecord] = []
     var visibleTrackers: [TrackerCategory] = []
     
-    //MARK: - Override
+    //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         addTapGestureToHideKeyboard()

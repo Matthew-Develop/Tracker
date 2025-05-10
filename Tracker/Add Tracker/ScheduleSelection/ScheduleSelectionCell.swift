@@ -23,7 +23,7 @@ final class ScheduleSelectionCell: UITableViewCell {
     weak var delegate: ScheduleSelectionCellDelegate?
     var day: String?
     
-    //MARK: - Override
+    //MARK: - Lifecycle
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -38,11 +38,9 @@ final class ScheduleSelectionCell: UITableViewCell {
     @objc private func switchToggled(_ sender: UISwitch) {
         guard let day else { return }
         
-        if sender.isOn {
-            delegate?.addDayToSchedule(day)
-        } else {
-            delegate?.removeDayFromSchedule(day)
-        }
+        sender.isOn
+            ? delegate?.addDayToSchedule(day)
+            : delegate?.removeDayFromSchedule(day)
     }
     
     //MARK: - Public Functions

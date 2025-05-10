@@ -10,7 +10,8 @@ import UIKit
 extension UIView {
     @discardableResult func edgesToSuperview() -> Self {
         guard let superview = superview else {
-            fatalError("View не в иерархии!")
+            assertionFailure("View не в иерархии!")
+            return self
         }
         translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -24,5 +25,12 @@ extension UIView {
     
     func autoResizeOff() {
         self.translatesAutoresizingMaskIntoConstraints = false
+    }
+    
+    func addSubviews(_ views: UIView...) {
+        views.forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            addSubview($0)
+        }
     }
 }

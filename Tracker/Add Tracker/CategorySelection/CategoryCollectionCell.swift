@@ -11,12 +11,12 @@ final class CategoryCollectionCell: UICollectionViewCell {
     //MARK: Views
     let categoryTitle = UILabel()
     let bottomLine = UIView()
-    var checkmark = UIImageView()
+    let checkmark = UIImageView()
     
     //MARK: - Properties
     static let reuseIdentifier = "CategoryCollectionCell"
     
-    //MARK: - Override
+    //MARK: - Lifecycle
     override init(frame: CGRect) {
         super.init(frame: frame)
         

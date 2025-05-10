@@ -22,11 +22,15 @@ extension Date {
     }
     
     func correctedDate() -> Date? {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd.MM.yyyy"
-        dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
-        let formattedDate = dateFormatter.string(from: self)
-        let correctedDate = dateFormatter.date(from: formattedDate)
+        let formattedDate = Date.formatter.string(from: self)
+        let correctedDate = Date.formatter.date(from: formattedDate)
         return correctedDate
     }
+    
+    private static let formatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd.MM.yyyy"
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        return formatter
+    }()
 }

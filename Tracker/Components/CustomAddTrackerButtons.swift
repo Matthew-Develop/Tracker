@@ -40,8 +40,8 @@ final class CustomAddTrackerButtons: UIStackView {
 }
 
 //Setup View
-extension CustomAddTrackerButtons {
-    private func setupView() {
+private extension CustomAddTrackerButtons {
+    func setupView() {
         self.autoResizeOff()
         
         self.backgroundColor = .ypWhite
@@ -55,7 +55,7 @@ extension CustomAddTrackerButtons {
         addCreateButton()
     }
     
-    private func addCancelButton() {
+    func addCancelButton() {
         cancelButton.autoResizeOff()
         
         cancelButton.setTitle("Отменить", for: .normal)
@@ -77,7 +77,7 @@ extension CustomAddTrackerButtons {
         ])
     }
     
-    private func addCreateButton() {
+    func addCreateButton() {
         createButton.autoResizeOff()
         
         createButton.isEnabled = false

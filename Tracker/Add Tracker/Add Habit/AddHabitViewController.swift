@@ -13,7 +13,13 @@ protocol AddHabitViewControllerDelegate: AnyObject {
 
 final class AddHabitViewController: UIViewController {
     //MARK: Views
-    private let titleLabel = UILabel()
+    private lazy var titleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Новая привычка"
+        label.font = .systemFont(ofSize: 16, weight: .medium)
+        label.textColor = .ypBlack
+        return label
+    }()
     private let vStackNameTextField = UIStackView()
     private let nameTextField = CustomTextField()
     private let symbolLimitWarningLabel = UILabel()
@@ -24,13 +30,11 @@ final class AddHabitViewController: UIViewController {
     weak var delegate: AddHabitViewControllerDelegate?
     private var selectedCategory: String = ""
     private var selectedSchedule: [String] = []
-
     
-    //MARK: - Override
+    //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         addTapGestureToHideKeyboard()
-        
         setupView()
     }
     
@@ -41,10 +45,8 @@ final class AddHabitViewController: UIViewController {
     
     @objc private func createButtonTapped() {
         guard let categoryToAdd = configureCategoryToAdd()
-        else {
-            print("ERROR configuring category to add")
-            return
-        }
+        else { return }
+        
         delegate?.addNewHabit(category: categoryToAdd)
         dismiss(animated: true)
     }
@@ -125,11 +127,7 @@ final class AddHabitViewController: UIViewController {
         let isCategorySelected = selectedCategory != ""
         let isScheduleSelected = selectedSchedule.count != 0
         
-        if isValidName && isCategorySelected && isScheduleSelected {
-            buttons.enableCreateButton()
-        } else {
-            buttons.disableCreateButton()
-        }
+        updateCreateButtonState(name: isValidName, category: isCategorySelected, schedule: isScheduleSelected)
         
         if !isValidName && trackerTitle.count != 0 {
             showWarning(with: "Ограничение  38 символов")
@@ -137,6 +135,11 @@ final class AddHabitViewController: UIViewController {
         } else {
             hideWarning()
         }
+    }
+    
+    private func updateCreateButtonState(name isValidName: Bool, category isCategorySelected: Bool, schedule isScheduleSelected: Bool) {
+        let canEnableButton = isValidName && isCategorySelected && isScheduleSelected
+        canEnableButton ? buttons.enableCreateButton() : buttons.disableCreateButton()
     }
 }
 
@@ -185,11 +188,6 @@ private extension AddHabitViewController {
     
     func addViewTitle() {
         titleLabel.autoResizeOff()
-        
-        titleLabel.text = "Новая привычка"
-        titleLabel.font = .systemFont(ofSize: 16, weight: .medium)
-        titleLabel.textColor = .ypBlack
-        
         view.addSubview(titleLabel)
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 27),
@@ -259,10 +257,8 @@ private extension AddHabitViewController {
     
     func addSymbolLimitWarning() {
         symbolLimitWarningLabel.autoResizeOff()
-        
         symbolLimitWarningLabel.font = .systemFont(ofSize: 17, weight: .regular)
         symbolLimitWarningLabel.textColor = .ypRed
-        
         symbolLimitWarningLabel.isHidden = true
     }
 }
