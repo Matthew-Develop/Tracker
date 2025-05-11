@@ -13,6 +13,7 @@ final class CustomCategoryAndScheduleSelection: UIStackView {
     let scheduleSelectorView = UIView()
     let selectedCategoryLabel = UILabel()
     let selectedScheduleLabel = UILabel()
+    let dividerView = UIView()
     
     
     override init(frame: CGRect) {
@@ -73,7 +74,6 @@ private extension CustomCategoryAndScheduleSelection {
         title.textColor = .ypBlack
         title.font = .systemFont(ofSize: 17, weight: .regular)
         
-        let dividerView = UIView()
         dividerView.autoResizeOff()
         dividerView.backgroundColor = .ypGray
         

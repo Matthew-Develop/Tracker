@@ -87,15 +87,6 @@ final class AddHabitViewController: UIViewController {
         }
     }
     
-    private func showWarning(with message: String) {
-        symbolLimitWarningLabel.isHidden = false
-        symbolLimitWarningLabel.text = message
-    }
-    
-    private func hideWarning() {
-        symbolLimitWarningLabel.isHidden = true
-    }
-    
     private func configureCategoryToAdd() -> TrackerCategory? {
         guard let trackerTitle = nameTextField.text
         else {
@@ -117,6 +108,16 @@ final class AddHabitViewController: UIViewController {
         )
         
         return categoryToAdd
+    }
+
+    //MARK: - UI Updates
+    private func showWarning(with message: String) {
+        symbolLimitWarningLabel.isHidden = false
+        symbolLimitWarningLabel.text = message
+    }
+    
+    private func hideWarning() {
+        symbolLimitWarningLabel.isHidden = true
     }
     
     private func toggleAddButton() {
