@@ -25,6 +25,29 @@ final class AddHabitViewController: UIViewController {
     private let symbolLimitWarningLabel = UILabel()
     private let buttons = CustomAddTrackerButtons()
     private let categoryScheduleSelection = CustomCategoryAndScheduleSelection()
+    private var emojiTitle: UILabel = {
+        let label = UILabel()
+        label.text = "Emoji"
+        label.textColor = .ypBlack
+        label.font = .systemFont(ofSize: 19, weight: .bold)
+        return label
+    }()
+    private var colorTitle: UILabel = {
+        let label = UILabel()
+        label.text = "Цвет"
+        label.textColor = .ypBlack
+        label.font = .systemFont(ofSize: 19, weight: .bold)
+        return label
+    }()
+    private lazy var emojiCollectionView: UICollectionView = {
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+        collectionView.backgroundColor = .clear
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.register(EmojiCollectionCell.self, forCellWithReuseIdentifier: EmojiCollectionCell.reuseIdentifier)
+        return collectionView
+    }()
     
     //MARK: - Properties
     weak var delegate: AddHabitViewControllerDelegate?
@@ -166,6 +189,49 @@ extension AddHabitViewController: ScheduleSelectionViewControllerDelegate {
     }
 }
 
+extension AddHabitViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        18
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EmojiCollectionCell.reuseIdentifier, for: indexPath) as? EmojiCollectionCell
+        else { return UICollectionViewCell() }
+        
+        cell.emojiImageView.image = SelectionArrays.emojiArray[indexPath.row]
+        return cell
+    }
+}
+
+extension AddHabitViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let side = UIConstants.emojiCellSizeBig
+        return CGSize(width: side, height: side)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        5
+    }
+}
+
+extension AddHabitViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let cell = collectionView.cellForItem(at: indexPath) as? EmojiCollectionCell
+        else { return }
+        cell.selectCell()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        guard let cell = collectionView.cellForItem(at: indexPath) as? EmojiCollectionCell
+        else { return }
+        cell.deselectCell()
+    }
+}
+
 //TextField Delegate
 extension AddHabitViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -182,6 +248,7 @@ private extension AddHabitViewController {
         addViewTitle()
         addVStackNameTextField()
         addCategoryScheduleSelection()
+        setupEmojiCollectionView()
         addActionButtons()
         
         vStackNameTextField.addArrangedSubview(symbolLimitWarningLabel)
@@ -261,5 +328,18 @@ private extension AddHabitViewController {
         symbolLimitWarningLabel.font = .systemFont(ofSize: 17, weight: .regular)
         symbolLimitWarningLabel.textColor = .ypRed
         symbolLimitWarningLabel.isHidden = true
+    }
+    
+    func setupEmojiCollectionView() {
+        view.addSubviews(emojiTitle, emojiCollectionView)
+        NSLayoutConstraint.activate([
+            emojiTitle.topAnchor.constraint(equalTo: categoryScheduleSelection.bottomAnchor, constant: 32),
+            emojiTitle.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 28),
+            
+            emojiCollectionView.topAnchor.constraint(equalTo: emojiTitle.bottomAnchor, constant: 24),
+            emojiCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            emojiCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            emojiCollectionView.heightAnchor.constraint(equalToConstant: UIConstants.emojiCellSizeBig * 3)
+        ])
     }
 }

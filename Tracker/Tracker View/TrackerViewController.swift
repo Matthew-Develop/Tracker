@@ -212,7 +212,7 @@ extension TrackerViewController: UICollectionViewDataSource {
 }
 extension TrackerViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: (view.frame.width - 32 - 9) / 2, height: 148)
+        CGSize(width: (view.frame.width - 32 - 9) / 2, height: 148)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {

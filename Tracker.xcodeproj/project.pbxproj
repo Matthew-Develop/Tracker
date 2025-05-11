@@ -27,6 +27,8 @@
 		34A9FF782DBF89FF00690069 /* MockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A9FF772DBF89FF00690069 /* MockData.swift */; };
 		34AE39122DCF8AC700506557 /* UIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34AE39112DCF8AC700506557 /* UIConstants.swift */; };
 		34AE39142DD08ADC00506557 /* StackView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34AE39132DD08ADC00506557 /* StackView+Extension.swift */; };
+		34AE39182DD0964600506557 /* SelectionArrays.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34AE39172DD0964600506557 /* SelectionArrays.swift */; };
+		34AE39242DD0B19900506557 /* EmojiCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34AE39232DD0B19900506557 /* EmojiCollectionCell.swift */; };
 		34C0ECEF2DC789C500FD8A3D /* ScheduleSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34C0ECEE2DC789C500FD8A3D /* ScheduleSelectionViewController.swift */; };
 		34C0ECF12DC7990200FD8A3D /* ScheduleSelectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34C0ECF02DC7990200FD8A3D /* ScheduleSelectionCell.swift */; };
 		34E3A0162DB60B05005E6FD6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 34E3A00D2DB60B05005E6FD6 /* Assets.xcassets */; };
@@ -62,6 +64,8 @@
 		34A9FF772DBF89FF00690069 /* MockData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockData.swift; sourceTree = "<group>"; };
 		34AE39112DCF8AC700506557 /* UIConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIConstants.swift; sourceTree = "<group>"; };
 		34AE39132DD08ADC00506557 /* StackView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StackView+Extension.swift"; sourceTree = "<group>"; };
+		34AE39172DD0964600506557 /* SelectionArrays.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionArrays.swift; sourceTree = "<group>"; };
+		34AE39232DD0B19900506557 /* EmojiCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiCollectionCell.swift; sourceTree = "<group>"; };
 		34C0ECEE2DC789C500FD8A3D /* ScheduleSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleSelectionViewController.swift; sourceTree = "<group>"; };
 		34C0ECF02DC7990200FD8A3D /* ScheduleSelectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleSelectionCell.swift; sourceTree = "<group>"; };
 		34E39FF42DB60B01005E6FD6 /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -137,6 +141,8 @@
 				3432B0422DBB81F200AAE9BC /* Add Unregular */,
 				345E388F2DC38EBE006CE659 /* CategorySelection */,
 				34C0ECED2DC789B000FD8A3D /* ScheduleSelection */,
+				34AE39192DD098CE00506557 /* EmojiSelection */,
+				34AE391A2DD098E100506557 /* ColorSelection */,
 			);
 			path = "Add Tracker";
 			sourceTree = "<group>";
@@ -192,8 +198,24 @@
 			isa = PBXGroup;
 			children = (
 				34AE39112DCF8AC700506557 /* UIConstants.swift */,
+				34AE39172DD0964600506557 /* SelectionArrays.swift */,
 			);
 			path = Constants;
+			sourceTree = "<group>";
+		};
+		34AE39192DD098CE00506557 /* EmojiSelection */ = {
+			isa = PBXGroup;
+			children = (
+				34AE39232DD0B19900506557 /* EmojiCollectionCell.swift */,
+			);
+			path = EmojiSelection;
+			sourceTree = "<group>";
+		};
+		34AE391A2DD098E100506557 /* ColorSelection */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ColorSelection;
 			sourceTree = "<group>";
 		};
 		34C0ECED2DC789B000FD8A3D /* ScheduleSelection */ = {
@@ -334,6 +356,7 @@
 				34A9FF762DBF87BF00690069 /* UIButton+Extension.swift in Sources */,
 				3477E6B72DBCF27000996948 /* TrackerCategory.swift in Sources */,
 				3495A1DA2DC8AE3F00962D02 /* Array+Extension.swift in Sources */,
+				34AE39242DD0B19900506557 /* EmojiCollectionCell.swift in Sources */,
 				3477E6B52DBCF03400996948 /* Tracker.swift in Sources */,
 				3432B0442DBB821500AAE9BC /* AddUnregularViewController.swift in Sources */,
 				342C71042DB64E2B00FBB71C /* StatisticsViewController.swift in Sources */,
@@ -342,6 +365,7 @@
 				3432B03E2DBB73B400AAE9BC /* AddTrackerViewController.swift in Sources */,
 				3432B0412DBB796C00AAE9BC /* AddHabitViewController.swift in Sources */,
 				34C0ECEF2DC789C500FD8A3D /* ScheduleSelectionViewController.swift in Sources */,
+				34AE39182DD0964600506557 /* SelectionArrays.swift in Sources */,
 				34F643132DC09B8E005253EB /* Date+Extension.swift in Sources */,
 				34AE39142DD08ADC00506557 /* StackView+Extension.swift in Sources */,
 			);
