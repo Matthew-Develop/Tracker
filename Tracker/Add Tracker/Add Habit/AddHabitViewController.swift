@@ -13,6 +13,19 @@ protocol AddHabitViewControllerDelegate: AnyObject {
 
 final class AddHabitViewController: UIViewController {
     //MARK: Views
+    private lazy var scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.showsVerticalScrollIndicator = false
+        scrollView.showsHorizontalScrollIndicator = false
+        scrollView.contentInset.top = 24
+        return scrollView
+    }()
+    private lazy var stackContentView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 24
+        return stackView
+    }()
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Новая привычка"
@@ -57,7 +70,7 @@ final class AddHabitViewController: UIViewController {
         collectionView.bounces = false
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "colorCell")
+        collectionView.register(ColorSelectionCell.self, forCellWithReuseIdentifier: ColorSelectionCell.reuseIdentifier)
         collectionView.accessibilityIdentifier = "colorCollectionView"
         return collectionView
     }()
@@ -126,7 +139,8 @@ final class AddHabitViewController: UIViewController {
     }
     
     private func configureCategoryToAdd() -> TrackerCategory? {
-        guard let trackerTitle = nameTextField.text
+        guard let trackerTitle = nameTextField.text,
+              let color = selectedColor
         else {
             print("Title text field is empty")
             dismiss(animated: true)
@@ -135,7 +149,7 @@ final class AddHabitViewController: UIViewController {
         
         let newTracker = Tracker(
             title: trackerTitle,
-            color: .brown,
+            color: color,
             emoji: "🔥",
             schedule: selectedSchedule
         )
@@ -146,6 +160,22 @@ final class AddHabitViewController: UIViewController {
         )
         
         return categoryToAdd
+    }
+    
+    private func configureCell(in collectionView: UICollectionView, at indexPath: IndexPath) -> UICollectionViewCell{
+        if collectionView.accessibilityIdentifier == "emojiCollectionView" {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EmojiCollectionCell.reuseIdentifier, for: indexPath) as? EmojiCollectionCell
+            else { return UICollectionViewCell() }
+            
+            cell.emojiImageView.image = SelectionArrays.emojiArray[indexPath.row]
+            return cell
+        } else {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ColorSelectionCell.reuseIdentifier, for: indexPath) as? ColorSelectionCell
+            else { return UICollectionViewCell() }
+            
+            cell.colorView.backgroundColor = SelectionArrays.colorArray[indexPath.row]
+            return cell
+        }
     }
 
     //MARK: - UI Updates
@@ -166,8 +196,15 @@ final class AddHabitViewController: UIViewController {
         let isCategorySelected = selectedCategory != ""
         let isScheduleSelected = selectedSchedule.count != 0
         let isEmojiSelected = selectedEmoji != nil
+        let isColorSelected = selectedColor != nil
         
-        updateCreateButtonState(name: isValidName, category: isCategorySelected, schedule: isScheduleSelected, emoji: isEmojiSelected)
+        updateCreateButtonState(
+            name: isValidName,
+            category: isCategorySelected,
+            schedule: isScheduleSelected,
+            emoji: isEmojiSelected,
+            color: isColorSelected
+        )
         
         if !isValidName && trackerTitle.count != 0 {
             showWarning(with: "Ограничение  38 символов")
@@ -177,12 +214,40 @@ final class AddHabitViewController: UIViewController {
         }
     }
     
-    private func updateCreateButtonState(name isValidName: Bool, category isCategorySelected: Bool, schedule isScheduleSelected: Bool, emoji isEmojiSelected: Bool) {
-        let canEnableButton = isValidName && isCategorySelected && isScheduleSelected && isEmojiSelected
+    private func updateCreateButtonState(
+        name isValidName: Bool,
+        category isCategorySelected: Bool,
+        schedule isScheduleSelected: Bool,
+        emoji isEmojiSelected: Bool,
+        color isColorSelected: Bool) {
+        let canEnableButton = isValidName && isCategorySelected && isScheduleSelected && isEmojiSelected && isColorSelected
         canEnableButton ? buttons.enableCreateButton() : buttons.disableCreateButton()
+    }
+    
+    private func cellToggle(toSelect: Bool, _ collectionView: UICollectionView, at indexPath: IndexPath) {
+        if collectionView.accessibilityIdentifier == "emojiCollectionView" {
+            guard let cell = collectionView.cellForItem(at: indexPath) as? EmojiCollectionCell
+            else { return }
+            if toSelect {
+                cell.selectCell()
+                selectedEmoji = cell.emojiImageView.image
+            } else {
+                cell.deselectCell()
+            }
+        } else {
+            guard let cell = collectionView.cellForItem(at: indexPath) as? ColorSelectionCell
+            else { return }
+            if toSelect {
+                cell.selectCell()
+                selectedColor = cell.colorView.backgroundColor
+            } else {
+                cell.deselectCell()
+            }
+        }
     }
 }
 
+//MARK: - Extensions
 //Category Selection Delegate
 extension AddHabitViewController: CategorySelectionViewControllerDelegate {
     func selectCategory(_ category: String) {
@@ -205,30 +270,20 @@ extension AddHabitViewController: ScheduleSelectionViewControllerDelegate {
     }
 }
 
+//Collection View DataSource and Delegate
 extension AddHabitViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         18
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if collectionView.accessibilityIdentifier == "emojiCollectionView" {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EmojiCollectionCell.reuseIdentifier, for: indexPath) as? EmojiCollectionCell
-            else { return UICollectionViewCell() }
-            
-            cell.emojiImageView.image = SelectionArrays.emojiArray[indexPath.row]
-            return cell
-        } else {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "colorCell", for: indexPath)
-            cell.backgroundColor = SelectionArrays.colorArray[indexPath.row]
-            
-            return cell
-        }
+        configureCell(in: collectionView, at: indexPath)
     }
 }
-
 extension AddHabitViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let side = UIConstants.emojiColorCellSizeBig
+
+        let side = CGFloat(view.bounds.height < 600 ? UIConstants.emojiColorCellSizeSmall : UIConstants.emojiColorCellSizeBig)
         return CGSize(width: side, height: side)
     }
     
@@ -237,23 +292,17 @@ extension AddHabitViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        5
+        view.bounds.height < 600 ? 0 : 5
     }
 }
-
 extension AddHabitViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let cell = collectionView.cellForItem(at: indexPath) as? EmojiCollectionCell
-        else { return }
-        cell.selectCell()
-        selectedEmoji = cell.emojiImageView.image
+        cellToggle(toSelect: true, collectionView, at: indexPath)
         toggleAddButton()
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        guard let cell = collectionView.cellForItem(at: indexPath) as? EmojiCollectionCell
-        else { return }
-        cell.deselectCell()
+        cellToggle(toSelect: false, collectionView, at: indexPath)
     }
 }
 
@@ -271,13 +320,15 @@ private extension AddHabitViewController {
         view.backgroundColor = .ypWhite
         
         addViewTitle()
+        addActionButtons()
+        
+        setupScrollView()
         addVStackNameTextField()
         addCategoryScheduleSelection()
         setupEmojiCollectionView()
         setupColorCollectionView()
-        addActionButtons()
         
-        vStackNameTextField.addArrangedSubview(symbolLimitWarningLabel)
+        vStackNameTextField.addArrangedSubviews(symbolLimitWarningLabel)
     }
     
     func addViewTitle() {
@@ -292,7 +343,6 @@ private extension AddHabitViewController {
     func addVStackNameTextField() {
         addSymbolLimitWarning()
 
-        vStackNameTextField.autoResizeOff()
         vStackNameTextField.axis = .vertical
         vStackNameTextField.spacing = 8
         vStackNameTextField.alignment = .center
@@ -300,18 +350,18 @@ private extension AddHabitViewController {
         nameTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         nameTextField.delegate = self
         
-        vStackNameTextField.addArrangedSubview(nameTextField)
-        view.addSubview(vStackNameTextField)
+        vStackNameTextField.addArrangedSubviews(nameTextField)
+        stackContentView.addArrangedSubviews(vStackNameTextField)
         NSLayoutConstraint.activate([
-            vStackNameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            vStackNameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            vStackNameTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 38),
-            
             nameTextField.heightAnchor.constraint(equalToConstant: 75),
-            
             nameTextField.leadingAnchor.constraint(equalTo: vStackNameTextField.leadingAnchor),
             nameTextField.trailingAnchor.constraint(equalTo: vStackNameTextField.trailingAnchor),
-            nameTextField.topAnchor.constraint(equalTo: vStackNameTextField.topAnchor)
+            nameTextField.topAnchor.constraint(equalTo: vStackNameTextField.topAnchor),
+            
+            vStackNameTextField.topAnchor.constraint(equalTo: stackContentView.topAnchor),
+            vStackNameTextField.leadingAnchor.constraint(equalTo: stackContentView.leadingAnchor),
+            vStackNameTextField.trailingAnchor.constraint(equalTo: stackContentView.trailingAnchor),
+            vStackNameTextField.trailingAnchor.constraint(equalTo: stackContentView.trailingAnchor)
         ])
     }
     
@@ -321,12 +371,11 @@ private extension AddHabitViewController {
         category?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showCategorySelection)))
         schedule?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showScheduleSelection)))
         
-        view.addSubview(categoryScheduleSelection)
+        stackContentView.addArrangedSubviews(categoryScheduleSelection)
         NSLayoutConstraint.activate([
             categoryScheduleSelection.heightAnchor.constraint(equalToConstant: 150),
-
-            categoryScheduleSelection.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            categoryScheduleSelection.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            categoryScheduleSelection.leadingAnchor.constraint(equalTo: stackContentView.leadingAnchor),
+            categoryScheduleSelection.trailingAnchor.constraint(equalTo: stackContentView.trailingAnchor),
             categoryScheduleSelection.topAnchor.constraint(equalTo: vStackNameTextField.bottomAnchor, constant: 24)
         ])
     }
@@ -350,35 +399,55 @@ private extension AddHabitViewController {
     }
     
     func addSymbolLimitWarning() {
-        symbolLimitWarningLabel.autoResizeOff()
         symbolLimitWarningLabel.font = .systemFont(ofSize: 17, weight: .regular)
         symbolLimitWarningLabel.textColor = .ypRed
         symbolLimitWarningLabel.isHidden = true
     }
     
     func setupEmojiCollectionView() {
-        view.addSubviews(emojiTitle, emojiCollectionView)
+//        view.addSubviews(emojiTitle, emojiCollectionView)
+        stackContentView.setCustomSpacing(32, after: categoryScheduleSelection)
+        stackContentView.addArrangedSubviews(emojiTitle, emojiCollectionView)
         NSLayoutConstraint.activate([
-            emojiTitle.topAnchor.constraint(equalTo: categoryScheduleSelection.bottomAnchor, constant: 32),
-            emojiTitle.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 28),
+            emojiTitle.topAnchor.constraint(equalTo: categoryScheduleSelection.bottomAnchor, constant: 60),
+            emojiTitle.leadingAnchor.constraint(equalTo: stackContentView.leadingAnchor, constant: 12),
             
-            emojiCollectionView.topAnchor.constraint(equalTo: emojiTitle.bottomAnchor, constant: 24),
-            emojiCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            emojiCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            emojiCollectionView.leadingAnchor.constraint(equalTo: stackContentView.leadingAnchor),
+            emojiCollectionView.trailingAnchor.constraint(equalTo: stackContentView.trailingAnchor),
             emojiCollectionView.heightAnchor.constraint(equalToConstant: UIConstants.emojiColorCellSizeBig * 3)
         ])
     }
     
     func setupColorCollectionView() {
-        view.addSubviews(colorTitle, colorCollectionView)
+//        view.addSubviews(colorTitle, colorCollectionView)
+        stackContentView.setCustomSpacing(40, after: emojiCollectionView)
+        stackContentView.addArrangedSubviews(colorTitle, colorCollectionView)
         NSLayoutConstraint.activate([
             colorTitle.topAnchor.constraint(equalTo: emojiCollectionView.bottomAnchor, constant: 40),
-            colorTitle.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 28),
+            colorTitle.leadingAnchor.constraint(equalTo: stackContentView.leadingAnchor, constant: 12),
             
             colorCollectionView.topAnchor.constraint(equalTo: colorTitle.bottomAnchor, constant: 24),
-            colorCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            colorCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            colorCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            colorCollectionView.heightAnchor.constraint(equalToConstant: UIConstants.emojiColorCellSizeBig * 3),
+
+            colorCollectionView.leadingAnchor.constraint(equalTo: stackContentView.leadingAnchor),
+            colorCollectionView.trailingAnchor.constraint(equalTo: stackContentView.trailingAnchor),
+        ])
+    }
+    
+    func setupScrollView() {
+        scrollView.addSubviews(stackContentView)
+        view.addSubviews(scrollView)
+        NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 14),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: buttons.topAnchor),
+            
+            stackContentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            stackContentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 16),
+            stackContentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -16),
+            stackContentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            stackContentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -32)
         ])
     }
 }
