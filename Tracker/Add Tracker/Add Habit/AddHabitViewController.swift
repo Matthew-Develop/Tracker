@@ -43,9 +43,22 @@ final class AddHabitViewController: UIViewController {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         collectionView.backgroundColor = .clear
         collectionView.showsVerticalScrollIndicator = false
+        collectionView.bounces = false
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.register(EmojiCollectionCell.self, forCellWithReuseIdentifier: EmojiCollectionCell.reuseIdentifier)
+        collectionView.accessibilityIdentifier = "emojiCollectionView"
+        return collectionView
+    }()
+    private lazy var colorCollectionView: UICollectionView = {
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+        collectionView.backgroundColor = .clear
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.bounces = false
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "colorCell")
+        collectionView.accessibilityIdentifier = "colorCollectionView"
         return collectionView
     }()
     
@@ -198,17 +211,24 @@ extension AddHabitViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EmojiCollectionCell.reuseIdentifier, for: indexPath) as? EmojiCollectionCell
-        else { return UICollectionViewCell() }
-        
-        cell.emojiImageView.image = SelectionArrays.emojiArray[indexPath.row]
-        return cell
+        if collectionView.accessibilityIdentifier == "emojiCollectionView" {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EmojiCollectionCell.reuseIdentifier, for: indexPath) as? EmojiCollectionCell
+            else { return UICollectionViewCell() }
+            
+            cell.emojiImageView.image = SelectionArrays.emojiArray[indexPath.row]
+            return cell
+        } else {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "colorCell", for: indexPath)
+            cell.backgroundColor = SelectionArrays.colorArray[indexPath.row]
+            
+            return cell
+        }
     }
 }
 
 extension AddHabitViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let side = UIConstants.emojiCellSizeBig
+        let side = UIConstants.emojiColorCellSizeBig
         return CGSize(width: side, height: side)
     }
     
@@ -254,6 +274,7 @@ private extension AddHabitViewController {
         addVStackNameTextField()
         addCategoryScheduleSelection()
         setupEmojiCollectionView()
+        setupColorCollectionView()
         addActionButtons()
         
         vStackNameTextField.addArrangedSubview(symbolLimitWarningLabel)
@@ -319,7 +340,7 @@ private extension AddHabitViewController {
         
         let bottomConstraint = CGFloat(view.bounds.height < 812 ? -24 : -34)
         
-        view.addSubview(buttons)
+        view.addSubviews(buttons)
         NSLayoutConstraint.activate([
             
             buttons.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: bottomConstraint),
@@ -344,7 +365,20 @@ private extension AddHabitViewController {
             emojiCollectionView.topAnchor.constraint(equalTo: emojiTitle.bottomAnchor, constant: 24),
             emojiCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             emojiCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            emojiCollectionView.heightAnchor.constraint(equalToConstant: UIConstants.emojiCellSizeBig * 3)
+            emojiCollectionView.heightAnchor.constraint(equalToConstant: UIConstants.emojiColorCellSizeBig * 3)
+        ])
+    }
+    
+    func setupColorCollectionView() {
+        view.addSubviews(colorTitle, colorCollectionView)
+        NSLayoutConstraint.activate([
+            colorTitle.topAnchor.constraint(equalTo: emojiCollectionView.bottomAnchor, constant: 40),
+            colorTitle.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 28),
+            
+            colorCollectionView.topAnchor.constraint(equalTo: colorTitle.bottomAnchor, constant: 24),
+            colorCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            colorCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            colorCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
 }
