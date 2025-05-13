@@ -27,17 +27,24 @@ final class EmojiCollectionCell: UICollectionViewCell {
     
     //MARK: - UI Updates
     func selectCell() {
-        backgroundColor = .ypLightGray
+        UIView.animate(withDuration: 0.1) {
+            self.backgroundColor = .ypLightGray
+            self.emojiImageView.bounds.size.width += 10
+        }
     }
     
     func deselectCell() {
-        backgroundColor = .clear
+        UIView.animate(withDuration: 0.1) {
+            self.backgroundColor = .clear
+        }
     }
 }
 
 private extension EmojiCollectionCell {
     func setupView() {
         backgroundColor = .clear
+        layer.cornerRadius = UIConstants.cornerRadius
+        layer.masksToBounds = true
         isUserInteractionEnabled = true
         emojiImageView.isUserInteractionEnabled = true
         addSubviews(emojiImageView)

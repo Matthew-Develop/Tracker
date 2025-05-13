@@ -25,14 +25,14 @@ final class AddHabitViewController: UIViewController {
     private let symbolLimitWarningLabel = UILabel()
     private let buttons = CustomAddTrackerButtons()
     private let categoryScheduleSelection = CustomCategoryAndScheduleSelection()
-    private var emojiTitle: UILabel = {
+    private lazy var emojiTitle: UILabel = {
         let label = UILabel()
         label.text = "Emoji"
         label.textColor = .ypBlack
         label.font = .systemFont(ofSize: 19, weight: .bold)
         return label
     }()
-    private var colorTitle: UILabel = {
+    private lazy var colorTitle: UILabel = {
         let label = UILabel()
         label.text = "Цвет"
         label.textColor = .ypBlack
@@ -53,6 +53,8 @@ final class AddHabitViewController: UIViewController {
     weak var delegate: AddHabitViewControllerDelegate?
     private var selectedCategory: String = ""
     private var selectedSchedule: [String] = []
+    private var selectedEmoji: UIImage?
+    private var selectedColor: UIColor?
     
     //MARK: - Lifecycle
     override func viewDidLoad() {
@@ -150,8 +152,9 @@ final class AddHabitViewController: UIViewController {
         let isValidName = trackerTitle.count < 38 && trackerTitle.count != 0
         let isCategorySelected = selectedCategory != ""
         let isScheduleSelected = selectedSchedule.count != 0
+        let isEmojiSelected = selectedEmoji != nil
         
-        updateCreateButtonState(name: isValidName, category: isCategorySelected, schedule: isScheduleSelected)
+        updateCreateButtonState(name: isValidName, category: isCategorySelected, schedule: isScheduleSelected, emoji: isEmojiSelected)
         
         if !isValidName && trackerTitle.count != 0 {
             showWarning(with: "Ограничение  38 символов")
@@ -161,8 +164,8 @@ final class AddHabitViewController: UIViewController {
         }
     }
     
-    private func updateCreateButtonState(name isValidName: Bool, category isCategorySelected: Bool, schedule isScheduleSelected: Bool) {
-        let canEnableButton = isValidName && isCategorySelected && isScheduleSelected
+    private func updateCreateButtonState(name isValidName: Bool, category isCategorySelected: Bool, schedule isScheduleSelected: Bool, emoji isEmojiSelected: Bool) {
+        let canEnableButton = isValidName && isCategorySelected && isScheduleSelected && isEmojiSelected
         canEnableButton ? buttons.enableCreateButton() : buttons.disableCreateButton()
     }
 }
@@ -223,6 +226,8 @@ extension AddHabitViewController: UICollectionViewDelegate {
         guard let cell = collectionView.cellForItem(at: indexPath) as? EmojiCollectionCell
         else { return }
         cell.selectCell()
+        selectedEmoji = cell.emojiImageView.image
+        toggleAddButton()
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
