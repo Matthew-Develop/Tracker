@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreData
 
 protocol CreateNewCategoryViewControllerDelegate: AnyObject {
     func addNewCategory(with title: String)

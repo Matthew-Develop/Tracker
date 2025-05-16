@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreData
 
 protocol CategorySelectionViewControllerDelegate: AnyObject {
     func selectCategory(_ category: String)
@@ -23,8 +24,16 @@ final class CategorySelectionViewController: UIViewController {
     //MARK: - Properties
     weak var delegate: CategorySelectionViewControllerDelegate?
     private var categories: [TrackerCategory] = []
-    var selectedCategory: String = ""
+    private var selectedCategory: String
     
+    //MARK: - Initializers
+    init(selectedCategory: String) {
+        self.selectedCategory = selectedCategory
+        super.init(nibName: nil, bundle: nil)
+    }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     //MARK: - Lifecycle
     override func viewDidLoad() {
@@ -35,6 +44,7 @@ final class CategorySelectionViewController: UIViewController {
         reloadData()
     }
     
+    //MARK: - Private Functions
     @objc private func createCategoryButtonTapped(_ sender: UIButton) {
         let createNewCategoryViewController = CreateNewCategoryViewController()
         

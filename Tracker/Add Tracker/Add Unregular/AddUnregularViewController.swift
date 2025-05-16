@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreData
 
 final class AddUnregularViewController: UIViewController {
     //MARK: Views
@@ -86,10 +87,8 @@ final class AddUnregularViewController: UIViewController {
     }
     
     @objc private func showCategorySelection(_ sender: UIGestureRecognizer ) {
-        let categorySelectionViewController = CategorySelectionViewController()
-        
+        let categorySelectionViewController = CategorySelectionViewController(selectedCategory: selectedCategory)
         categorySelectionViewController.delegate = self
-        categorySelectionViewController.selectedCategory = selectedCategory
         present(categorySelectionViewController, animated: true)
         
         UIView.animate(withDuration: 0.05) {

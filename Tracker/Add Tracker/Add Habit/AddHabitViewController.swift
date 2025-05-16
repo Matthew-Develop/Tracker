@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreData
 
 protocol AddHabitViewControllerDelegate: AnyObject {
     func addNewHabit(category: TrackerCategory)
@@ -107,10 +108,8 @@ final class AddHabitViewController: UIViewController {
     }
     
     @objc private func showCategorySelection(_ sender: UIGestureRecognizer ) {
-        let categorySelectionViewController = CategorySelectionViewController()
-        
+        let categorySelectionViewController = CategorySelectionViewController(selectedCategory: selectedCategory)
         categorySelectionViewController.delegate = self
-        categorySelectionViewController.selectedCategory = selectedCategory
         present(categorySelectionViewController, animated: true)
         
         UIView.animate(withDuration: 0.05) {
@@ -122,12 +121,8 @@ final class AddHabitViewController: UIViewController {
     }
     
     @objc private func showScheduleSelection(_ sender: UITapGestureRecognizer) {
-        let scheduleSelectionViewController = ScheduleSelectionViewController()
-        
+        let scheduleSelectionViewController = ScheduleSelectionViewController(selectedSchedule: selectedSchedule)
         scheduleSelectionViewController.delegate = self
-        for day in selectedSchedule {
-            scheduleSelectionViewController.selectedSchedule[day] = true
-        }
         present(scheduleSelectionViewController, animated: true)
         
         UIView.animate(withDuration: 0.05) {

@@ -19,13 +19,23 @@ final class ScheduleSelectionViewController: UIViewController {
     
     //MARK: - Properties
     weak var delegate: ScheduleSelectionViewControllerDelegate?
-    var selectedSchedule: [String: Bool] = [ "Пн": false, "Вт": false, "Ср": false, "Чт": false, "Пт": false, "Сб": false, "Вс": false ]
-
+    private var stringSelectedSchedule: [String]
+    private var selectedSchedule: [String: Bool] = [ "Пн": false, "Вт": false, "Ср": false, "Чт": false, "Пт": false, "Сб": false, "Вс": false ]
+    
+    //MARK: - Initializers
+    init(selectedSchedule: [String]) {
+        self.stringSelectedSchedule = selectedSchedule
+        super.init(nibName: nil, bundle: nil)
+    }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        reloadSelectedDays()
         setupView()
     }
     
@@ -58,6 +68,12 @@ final class ScheduleSelectionViewController: UIViewController {
         }
         
         return arrayOfDays.sortedDays()
+    }
+    
+    private func reloadSelectedDays() {
+        for day in stringSelectedSchedule {
+            selectedSchedule[day] = true
+        }
     }
 }
 
