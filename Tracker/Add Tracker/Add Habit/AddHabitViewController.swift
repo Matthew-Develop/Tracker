@@ -140,7 +140,8 @@ final class AddHabitViewController: UIViewController {
     
     private func configureCategoryToAdd() -> TrackerCategory? {
         guard let trackerTitle = nameTextField.text,
-              let color = selectedColor
+              let color = selectedColor,
+              let emoji = selectedEmoji
         else {
             print("Title text field is empty")
             dismiss(animated: true)
@@ -150,7 +151,7 @@ final class AddHabitViewController: UIViewController {
         let newTracker = Tracker(
             title: trackerTitle,
             color: color,
-            emoji: "🔥",
+            emoji: emoji,
             schedule: selectedSchedule
         )
         

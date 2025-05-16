@@ -5,7 +5,7 @@
 //  Created by Matthew on 28.04.2025.
 //
 
-import Foundation
+import UIKit
 
 final class MockData {
     let categories: [TrackerCategory]
@@ -24,42 +24,42 @@ fileprivate enum MockTrackers {
     static let tracker1 = Tracker(
         title: "5am wake up",
         color: .brown,
-        emoji: "🔥",
+        emoji: UIImage(named: "Emoji-2")!,
         schedule: ["Пн", "Ср"]
     )
     
     static let tracker2 = Tracker(
         title: "Coding",
         color: .gray,
-        emoji: "❤️",
+        emoji: UIImage(named: "Emoji-3")!,
         schedule: ["Пн", "Ср"]
     )
     
     static let tracker3 = Tracker(
         title: "Diploma continue",
         color: .lightGray,
-        emoji: "✍🏽",
+        emoji: UIImage(named: "Emoji-4")!,
         schedule: ["Пн", "Ср"]
     )
     
     static let tracker4 = Tracker(
         title: "Daily Pull ups",
         color: .purple,
-        emoji: "💪🏽",
+        emoji: UIImage(named: "Emoji-7")!,
         schedule: ["Вт", "Чт"]
     )
     
     static let tracker5 = Tracker(
         title: "Фруктовый салат",
         color: .orange,
-        emoji: "🍑",
+        emoji: UIImage(named: "Emoji-9")!,
         schedule: ["Чт"]
     )
     
     static let tracker6 = Tracker(
         title: "Gym",
         color: .systemCyan,
-        emoji: "🏋",
+        emoji: UIImage(named: "Emoji-11")!,
         schedule: ["Пн", "Ср","Вт", "Чт"]
     )
 }

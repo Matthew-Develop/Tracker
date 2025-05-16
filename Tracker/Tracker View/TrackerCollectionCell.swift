@@ -15,8 +15,7 @@ protocol TrackerCollectionCellDelegate: AnyObject {
 final class TrackerCollectionCell: UICollectionViewCell {
     //MARK: Views
     private var cardView = UIView()
-    private var emojiView = UIView()
-    private var emojiLabel = UILabel()
+    private var emojiView = UIImageView()
     private var titleLabel = UILabel()
     private var countLabel = UILabel()
     private var completeTrackerButton = UIButton(type: .system)
@@ -44,14 +43,14 @@ final class TrackerCollectionCell: UICollectionViewCell {
     //MARK: - Public Functions
     func setTrackerData(
         color: UIColor,
-        emoji: String,
+        emoji: UIImage,
         title: String,
         count: Int,
         isCompleted: Bool,
         id: UUID,
         date: Date ) {
             cardView.backgroundColor = color
-            emojiLabel.text = emoji
+            emojiView.image = emoji
             titleLabel.text = title
             countLabel.text = counterDayCorrection(count)
             completeTrackerButton.backgroundColor = color
@@ -160,26 +159,17 @@ private extension TrackerCollectionCell {
     }
     
     func setupEmojiView() {
-        emojiView.autoResizeOff()
-
-        emojiLabel.autoResizeOff()
-        
-        emojiLabel.font = .systemFont(ofSize: 14, weight: .medium)
         emojiView.backgroundColor = .white.withAlphaComponent(0.3)
         emojiView.layer.cornerRadius = 12
         emojiView.layer.masksToBounds = true
         
-        emojiView.addSubview(emojiLabel)
-        cardView.addSubview(emojiView)
+        cardView.addSubviews(emojiView)
         NSLayoutConstraint.activate([
             emojiView.widthAnchor.constraint(equalToConstant: 24),
             emojiView.heightAnchor.constraint(equalToConstant: 24),
             
             emojiView.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 12),
             emojiView.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 12),
-
-            emojiLabel.centerXAnchor.constraint(equalTo: emojiView.centerXAnchor),
-            emojiLabel.centerYAnchor.constraint(equalTo: emojiView.centerYAnchor)
         ])
     }
     
