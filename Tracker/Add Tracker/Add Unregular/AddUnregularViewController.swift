@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import CoreData
 
 final class AddUnregularViewController: UIViewController {
     //MARK: Views

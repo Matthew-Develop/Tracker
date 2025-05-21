@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import CoreData
 
 protocol CategorySelectionViewControllerDelegate: AnyObject {
     func selectCategory(_ category: String)

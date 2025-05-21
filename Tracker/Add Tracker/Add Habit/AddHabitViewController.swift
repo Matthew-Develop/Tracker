@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import CoreData
 
 protocol AddHabitViewControllerDelegate: AnyObject {
     func addNewHabit(category: TrackerCategory)
