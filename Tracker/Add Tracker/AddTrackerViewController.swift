@@ -24,16 +24,12 @@ final class AddTrackerViewController: UIViewController {
     //MARK: - Private Functions
     @objc private func addHabitButtonTapped(_ sender: UIButton) {
         let addHabitViewController = AddHabitViewController()
-        
-        addHabitViewController.delegate = mainVC as? TrackerViewController
-        
         navigationController?.isNavigationBarHidden = true
         navigationController?.pushViewController(addHabitViewController, animated: false)
     }
     
     @objc private func addUnregularButtonTapped(_ sender: UIButton) {
         let addUnregularViewController = AddUnregularViewController()
-        
         navigationController?.isNavigationBarHidden = true
         navigationController?.pushViewController(addUnregularViewController, animated: false)
     }

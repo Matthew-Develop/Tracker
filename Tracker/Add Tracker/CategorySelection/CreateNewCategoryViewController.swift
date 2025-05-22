@@ -40,7 +40,7 @@ final class CreateNewCategoryViewController: UIViewController {
         
         guard !newCategory.isEmpty
         else {
-            print("ERROR Creating new category")
+            assertionFailure("ERROR Creating new category")
             return
         }
         delegate?.addNewCategory(with: newCategory)

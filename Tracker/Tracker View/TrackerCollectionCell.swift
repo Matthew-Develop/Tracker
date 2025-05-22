@@ -10,6 +10,7 @@ import UIKit
 protocol TrackerCollectionCellDelegate: AnyObject {
     func addTrackerRecord(to id: UUID, at date: Date)
     func removeTrackerRecord(to id: UUID, at date: Date)
+    func updateTrackerRecord()
 }
 
 final class TrackerCollectionCell: UICollectionViewCell {
@@ -23,6 +24,7 @@ final class TrackerCollectionCell: UICollectionViewCell {
     //MARK: - Properties
     static let reuseIdentifier: String = "TrackerCollectionCell"
     weak var delegate: TrackerCollectionCellDelegate?
+    private let trackerRecordStore = TrackerRecordStore()
     
     var id: UUID = UUID()
     var isCompleted: Bool = false
@@ -96,12 +98,15 @@ final class TrackerCollectionCell: UICollectionViewCell {
             countLabel.text = counterDayCorrection(currentCount + 1)
             currentCount += 1
             
-            delegate?.addTrackerRecord(to: id, at: currentDate)
+            trackerRecordStore.addNewRecord(to: id, at: currentDate)
+            delegate?.updateTrackerRecord()
+
         } else if currentCount > 0 {
             countLabel.text = counterDayCorrection(currentCount - 1)
             currentCount -= 1
             
-            delegate?.removeTrackerRecord(to: id, at: currentDate)
+            trackerRecordStore.deleteRecord(to: id, at: currentDate)
+            delegate?.updateTrackerRecord()
         }
     }
     

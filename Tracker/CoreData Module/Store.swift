@@ -11,6 +11,7 @@ import CoreData
 enum StoreErrors: Error {
     case trackersFetchFailed
     case newTrackerSaveFailed
+    case trackerFetchFromIDFailed
     case convertionTrackerFromCoreDataFailed
     case categoriesFetchFailed
 }
@@ -31,7 +32,8 @@ class Store: NSObject {
     
     //MARK: - Public Functions
     func getTracker(from trackerCoreData: TrackerCoreData) -> Tracker? {
-        guard let colorHex = trackerCoreData.colorHex,
+        guard let id = trackerCoreData.trackerID,
+              let colorHex = trackerCoreData.colorHex,
               let color = UIColor(hex: colorHex),
               let title = trackerCoreData.title,
               let emojiImageAssetName = trackerCoreData.emoji,
@@ -43,6 +45,7 @@ class Store: NSObject {
         }
         
         let convertedTracker = Tracker(
+            id: id,
             title: title,
             color: color,
             emoji: emoji,
@@ -55,7 +58,7 @@ class Store: NSObject {
         let emojiImageAssetName = tracker.emoji.imageAsset?.value(forKey: "assetName") as? String
         
         let trackerCoreData = TrackerCoreData(context: context)
-        trackerCoreData.id = UUID()
+        trackerCoreData.trackerID = tracker.id
         trackerCoreData.title = tracker.title
         trackerCoreData.colorHex = tracker.color.toHex()
         trackerCoreData.schedule = tracker.schedule.joined(separator: ", ")
@@ -88,5 +91,15 @@ class Store: NSObject {
         trackerCategoryCoreData.title = trackerCategory.title
         
         return trackerCategoryCoreData
+    }
+    
+    func getTrackerRecord(from trackerRecordCoreData: TrackerRecordCoreData) -> TrackerRecord? {
+        guard let date = trackerRecordCoreData.completedDate,
+              let id = trackerRecordCoreData.tracker?.trackerID
+        else {
+            return nil
+        }
+        
+        return TrackerRecord(trackerId: id, completeDate: date)
     }
 }

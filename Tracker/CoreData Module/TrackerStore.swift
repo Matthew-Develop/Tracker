@@ -18,9 +18,10 @@ protocol TrackerStoreDelegate: AnyObject {
 }
 
 final class TrackerStore: Store {
+    weak var delegate: TrackerStoreDelegate?
     private lazy var fetchedResultsController: NSFetchedResultsController<TrackerCoreData> = {
         let request = TrackerCoreData.fetchRequest()
-        request.sortDescriptors = [NSSortDescriptor(key: "id", ascending: true)]
+        request.sortDescriptors = [NSSortDescriptor(key: "trackerID", ascending: true)]
         let controller = NSFetchedResultsController(
             fetchRequest: request,
             managedObjectContext: context,
@@ -33,7 +34,6 @@ final class TrackerStore: Store {
         return controller
     }()
     
-    weak var delegate: TrackerStoreDelegate?
     private var insertedIndex: IndexPath?
     private var deletedIndex: IndexPath?
     
@@ -63,7 +63,26 @@ final class TrackerStore: Store {
         
         newTracker.category = trackerCategory
         
-        try? context.save()
+        do {
+            try context.save()
+        } catch {
+            assertionFailure("ERROR: saving new tracker to context")
+        }
+    }
+    
+    func getTracker(from trackerId: UUID) -> TrackerCoreData? {
+        let trackerIdString = trackerId.description
+        print(trackerIdString)
+        
+        let request = TrackerCoreData.fetchRequest()
+        request.returnsObjectsAsFaults = false
+        
+        guard let result = try? context.fetch(request) else {
+            assertionFailure("ERROR: could not fetch tracker from trackerID: \(StoreErrors.trackerFetchFromIDFailed.localizedDescription)")
+            return nil
+        }
+        
+        return result.filter({ $0.trackerID?.description == trackerIdString }).first
     }
     
     func eraseAllData() {

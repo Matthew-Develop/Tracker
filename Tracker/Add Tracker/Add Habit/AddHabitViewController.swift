@@ -7,10 +7,6 @@
 
 import UIKit
 
-protocol AddHabitViewControllerDelegate: AnyObject {
-    func addNewHabit(category: TrackerCategory)
-}
-
 final class AddHabitViewController: UIViewController {
     //MARK: Views
     private lazy var scrollView: UIScrollView = {
@@ -76,7 +72,8 @@ final class AddHabitViewController: UIViewController {
     }()
     
     //MARK: - Properties
-    weak var delegate: AddHabitViewControllerDelegate?
+    private let trackerStore = TrackerStore()
+    
     private var selectedCategory: String = ""
     private var selectedSchedule: [String] = []
     private var selectedEmoji: UIImage?
@@ -98,7 +95,7 @@ final class AddHabitViewController: UIViewController {
         guard let categoryToAdd = configureCategoryToAdd()
         else { return }
         
-        delegate?.addNewHabit(category: categoryToAdd)
+        try? trackerStore.addNewTracker(categoryToAdd.trackers[0], to: categoryToAdd.title)
         dismiss(animated: true)
     }
     
@@ -143,6 +140,7 @@ final class AddHabitViewController: UIViewController {
         }
         
         let newTracker = Tracker(
+            id: UUID(),
             title: trackerTitle,
             color: color,
             emoji: emoji,
@@ -242,8 +240,7 @@ final class AddHabitViewController: UIViewController {
     }
 }
 
-//MARK: - Extensions
-//Category Selection Delegate
+//MARK: - Category Selection Delegate
 extension AddHabitViewController: CategorySelectionViewControllerDelegate {
     func selectCategory(_ category: String) {
         selectedCategory = category
@@ -252,7 +249,7 @@ extension AddHabitViewController: CategorySelectionViewControllerDelegate {
     }
 }
 
-//Schedule Selection Delegate
+//MARK: - Schedule Selection Delegate
 extension AddHabitViewController: ScheduleSelectionViewControllerDelegate {
     func selectSchedule(_ schedule: [String]) {
         selectedSchedule = schedule
@@ -265,7 +262,7 @@ extension AddHabitViewController: ScheduleSelectionViewControllerDelegate {
     }
 }
 
-//Collection View DataSource and Delegate
+//MARK: - Collection View DataSource and Delegate
 extension AddHabitViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         18
@@ -301,7 +298,7 @@ extension AddHabitViewController: UICollectionViewDelegate {
     }
 }
 
-//TextField Delegate
+//MARK: - TextField Delegate
 extension AddHabitViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
@@ -309,7 +306,7 @@ extension AddHabitViewController: UITextFieldDelegate {
     }
 }
 
-//Setup View
+//MARK: - Setup View
 private extension AddHabitViewController {
     func setupView() {
         view.backgroundColor = .ypWhite

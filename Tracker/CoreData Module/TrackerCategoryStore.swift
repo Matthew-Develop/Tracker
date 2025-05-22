@@ -22,7 +22,7 @@ final class TrackerCategoryStore: Store {
             cacheName: nil
         )
         
-        controller.delegate = self
+//        controller.delegate = self
         try? controller.performFetch()
         return controller
     }()
@@ -96,5 +96,6 @@ final class TrackerCategoryStore: Store {
     }
 }
 
-extension TrackerCategoryStore: NSFetchedResultsControllerDelegate {
-}
+//MARK: - NSFetchedResultsController Delegate
+//extension TrackerCategoryStore: NSFetchedResultsControllerDelegate {
+//}

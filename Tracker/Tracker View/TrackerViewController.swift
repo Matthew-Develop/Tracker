@@ -20,6 +20,7 @@ final class TrackerViewController: UIViewController {
     //MARK: - Properties
     private let trackerStore = TrackerStore()
     private let trackerCategoryStore = TrackerCategoryStore()
+    private let trackerRecordStore = TrackerRecordStore()
     
     var currentDate: Date = Date()
     var currentDayOfWeek: String = "unknown"
@@ -31,15 +32,14 @@ final class TrackerViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         addTapGestureToHideKeyboard()
-        
 //        trackerStore.eraseAllData()
 //        trackerCategoryStore.eraseAllData()
+//        trackerRecordStore.eraseAllData()
         
-        let _ = trackerStore.trackers
         trackerStore.delegate = self
-        
+        let _ = trackerStore.trackers
         categories = trackerCategoryStore.trackerCategories
-        print("\(categories) trackerCategories after initial loading")
+        completedTrackers = trackerRecordStore.trackerRecords
         
         setupView()
         setCurrentDate()
@@ -139,59 +139,28 @@ extension TrackerViewController: TrackerStoreDelegate {
         print("Updated")
         categories = TrackerCategoryStore().trackerCategories
         reloadVisibleTrackers()
-        print("\(categories) after didTrackerStoreUpdate")
     }
 }
 
-//AddTrackerDelegate
-extension TrackerViewController: AddHabitViewControllerDelegate {
-    func addNewHabit(category: TrackerCategory) {
-        
-//        let tempCategories = categories
-//        var tempCategoryTrackers = category.trackers
-//        var result: [TrackerCategory] = []
-        
-//        if tempCategories.filter({ $0.title == category.title }).isEmpty  {
-//            
-//            let newCategory = TrackerCategory(title: category.title, trackers: tempCategoryTrackers)
-//            
-//            result = [newCategory] + tempCategories
-//        } else {
-//            for item in tempCategories {
-//                if item.title == category.title {
-//                    tempCategoryTrackers += item.trackers
-//                    
-//                    let updatedCategory = TrackerCategory(title: item.title, trackers: tempCategoryTrackers)
-//                    
-//                    result.append(updatedCategory)
-//                } else {
-//                    result.append(item)
-//                }
-//            }
-//        }
-        
-        try? trackerStore.addNewTracker(category.trackers[0], to: category.title)
-        
-//        categories = result
-    }
-}
-
-//Cell Delegate
+//MARK: - Cell Delegate
 extension TrackerViewController: TrackerCollectionCellDelegate {
     func addTrackerRecord(to id: UUID, at date: Date) {
-        completedTrackers.append(TrackerRecord(
-            trackerId: id,
-            completeDate: date))
+//        completedTrackers = TrackerRecordStore().trackerRecords
     }
     
     func removeTrackerRecord(to id: UUID, at date: Date) {
-        var records = completedTrackers
-        records.removeAll { $0.trackerId == id && $0.completeDate == date }
-        completedTrackers = records
+//        var records = completedTrackers
+//        records.removeAll { $0.trackerId == id && $0.completeDate == date }
+//        completedTrackers = records
+//        completedTrackers = trackerRecordStore.trackerRecords
+    }
+    
+    func updateTrackerRecord() {
+        completedTrackers = TrackerRecordStore().trackerRecords
     }
 }
 
-//Search Field delegate
+//MARK: - Search Field delegate
 extension TrackerViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
@@ -200,7 +169,7 @@ extension TrackerViewController: UITextFieldDelegate {
     }
 }
 
-//Collection View Data Source and DelegateFlowLayout
+//MARK: - Collection View Data Source and DelegateFlowLayout
 extension TrackerViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return visibleTrackers[section].trackers.count
@@ -262,7 +231,7 @@ extension TrackerViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
-//Setup View
+//MARK: - Setup View
 extension TrackerViewController {
     private func setupView() {
         view.backgroundColor = .ypWhite
