@@ -18,9 +18,11 @@ final class TrackerViewController: UIViewController {
     private var emptyImageView = UIImageView()
     
     //MARK: - Properties
+    private let trackerStore = TrackerStore()
+    private let trackerCategoryStore = TrackerCategoryStore()
+    
     var currentDate: Date = Date()
     var currentDayOfWeek: String = "unknown"
-    
     var categories: [TrackerCategory] = []
     var completedTrackers: [TrackerRecord] = []
     var visibleTrackers: [TrackerCategory] = []
@@ -30,7 +32,14 @@ final class TrackerViewController: UIViewController {
         super.viewDidLoad()
         addTapGestureToHideKeyboard()
         
-        categories = MockData().categories
+//        trackerStore.eraseAllData()
+//        trackerCategoryStore.eraseAllData()
+        
+        let _ = trackerStore.trackers
+        trackerStore.delegate = self
+        
+        categories = trackerCategoryStore.trackerCategories
+        print("\(categories) trackerCategories after initial loading")
         
         setupView()
         setCurrentDate()
@@ -114,6 +123,7 @@ final class TrackerViewController: UIViewController {
         
         reloadIfEmptyView()
         collectionView.reloadData()
+//        print("\(visibleTrackers) visibleTrackers after reloading")
     }
     
     private func reloadIfEmptyView() {
@@ -123,35 +133,46 @@ final class TrackerViewController: UIViewController {
     }
 }
 
+//MARK: - TrackerStore Delegate
+extension TrackerViewController: TrackerStoreDelegate {
+    func didTrackerStoreUpdate(_ update: TrackerStoreUpdate, store: TrackerStore) {
+        print("Updated")
+        categories = TrackerCategoryStore().trackerCategories
+        reloadVisibleTrackers()
+        print("\(categories) after didTrackerStoreUpdate")
+    }
+}
+
 //AddTrackerDelegate
 extension TrackerViewController: AddHabitViewControllerDelegate {
     func addNewHabit(category: TrackerCategory) {
         
-        let tempCategories = categories
-        var tempCategoryTrackers = category.trackers
-        var result: [TrackerCategory] = []
+//        let tempCategories = categories
+//        var tempCategoryTrackers = category.trackers
+//        var result: [TrackerCategory] = []
         
-        if tempCategories.filter({ $0.title == category.title }).isEmpty  {
-            
-            let newCategory = TrackerCategory(title: category.title, trackers: tempCategoryTrackers)
-            
-            result = [newCategory] + tempCategories
-        } else {
-            for item in tempCategories {
-                if item.title == category.title {
-                    tempCategoryTrackers += item.trackers
-                    
-                    let updatedCategory = TrackerCategory(title: item.title, trackers: tempCategoryTrackers)
-                    
-                    result.append(updatedCategory)
-                } else {
-                    result.append(item)
-                }
-            }
-        }
+//        if tempCategories.filter({ $0.title == category.title }).isEmpty  {
+//            
+//            let newCategory = TrackerCategory(title: category.title, trackers: tempCategoryTrackers)
+//            
+//            result = [newCategory] + tempCategories
+//        } else {
+//            for item in tempCategories {
+//                if item.title == category.title {
+//                    tempCategoryTrackers += item.trackers
+//                    
+//                    let updatedCategory = TrackerCategory(title: item.title, trackers: tempCategoryTrackers)
+//                    
+//                    result.append(updatedCategory)
+//                } else {
+//                    result.append(item)
+//                }
+//            }
+//        }
         
-        categories = result
-        reloadVisibleTrackers()
+        try? trackerStore.addNewTracker(category.trackers[0], to: category.title)
+        
+//        categories = result
     }
 }
 

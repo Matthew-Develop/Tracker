@@ -8,15 +8,15 @@
 import UIKit
 import CoreData
 
+enum StoreErrors: Error {
+    case trackersFetchFailed
+    case newTrackerSaveFailed
+    case convertionTrackerFromCoreDataFailed
+    case categoriesFetchFailed
+}
 
 class Store: NSObject {
     let context: NSManagedObjectContext
-    
-    enum StoreErrors: Error {
-        case trackersFetchFailed
-        case newTrackerSaveFailed
-        case convertionTrackerFromCoreDataFailed
-    }
     
     //MARK: - Initializers
     convenience override init() {
@@ -26,6 +26,7 @@ class Store: NSObject {
     
     init(context: NSManagedObjectContext) {
         self.context = context
+        super.init()
     }
     
     //MARK: - Public Functions
@@ -42,10 +43,10 @@ class Store: NSObject {
         }
         
         let convertedTracker = Tracker(
-            title: trackerCoreData.title!,
+            title: title,
             color: color,
             emoji: emoji,
-            schedule: schedule
+            schedule: schedule.components(separatedBy: ", ")
         )
         return convertedTracker
     }
@@ -54,11 +55,38 @@ class Store: NSObject {
         let emojiImageAssetName = tracker.emoji.imageAsset?.value(forKey: "assetName") as? String
         
         let trackerCoreData = TrackerCoreData(context: context)
+        trackerCoreData.id = UUID()
         trackerCoreData.title = tracker.title
         trackerCoreData.colorHex = tracker.color.toHex()
-        trackerCoreData.schedule = tracker.schedule
+        trackerCoreData.schedule = tracker.schedule.joined(separator: ", ")
         trackerCoreData.emoji = emojiImageAssetName
         
         return trackerCoreData
+    }
+    
+    func getTrackerCategory(from trackerCategory: TrackerCategoryCoreData) -> TrackerCategory? {
+        guard let title = trackerCategory.title,
+              let trackers = trackerCategory.trackers
+        else {
+            return nil
+        }
+        
+        var convertedTrackers: [Tracker] = []
+        for tracker in trackers {
+            guard let trackerCoreData = tracker as? TrackerCoreData,
+                  let convertedTracker = getTracker(from: trackerCoreData)
+            else {
+                return nil
+            }
+            convertedTrackers.append(convertedTracker)
+        }
+        return TrackerCategory(title: title, trackers: convertedTrackers)
+    }
+    
+    func getTrackerCategoryCoreData(from trackerCategory: TrackerCategory) -> TrackerCategoryCoreData {
+        let trackerCategoryCoreData = TrackerCategoryCoreData(context: context)
+        trackerCategoryCoreData.title = trackerCategory.title
+        
+        return trackerCategoryCoreData
     }
 }

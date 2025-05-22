@@ -41,6 +41,12 @@ final class CategoryCollectionCell: UICollectionViewCell {
         }
     }
     
+    func setupOneCategoryCell() {
+        layer.masksToBounds = true
+        layer.cornerRadius = 16
+        bottomLine.isHidden = true
+    }
+    
     func setUpCellCorners() {
         layer.masksToBounds = true
         layer.cornerRadius = 16
@@ -54,10 +60,14 @@ final class CategoryCollectionCell: UICollectionViewCell {
     }
     
     func resetCellDownCornersBottomLine() {
+        resetAllCellsCorners()
+        bottomLine.isHidden = false
+    }
+    
+    private func resetAllCellsCorners() {
         layer.masksToBounds = true
         layer.cornerRadius = 0
         layer.maskedCorners = []
-        bottomLine.isHidden = false
     }
 }
 

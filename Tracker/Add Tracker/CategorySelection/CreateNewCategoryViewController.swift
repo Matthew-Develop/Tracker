@@ -21,6 +21,8 @@ final class CreateNewCategoryViewController: UIViewController {
     
     //MARK: - Properties
     weak var delegate: CreateNewCategoryViewControllerDelegate?
+    
+    private var existingCategories: [String] = []
     private var newCategory: String = ""
     
     //MARK: - Lifecycle
@@ -28,6 +30,7 @@ final class CreateNewCategoryViewController: UIViewController {
         super.viewDidLoad()
         addTapGestureToHideKeyboard()
         
+        existingCategories = TrackerCategoryStore().categoryTitles
         setupView()
     }
     
@@ -89,8 +92,8 @@ final class CreateNewCategoryViewController: UIViewController {
         guard let categoryTitle = categoryNameTextField.text
         else { return }
         
-        let isExistingCategory = MockData().categories.contains(where: {
-            $0.title.lowercased() == categoryTitle.lowercased()
+        let isExistingCategory = existingCategories.contains(where: {
+            $0.lowercased() == categoryTitle.lowercased()
         })
         let isValidName = categoryTitle.count < 38 && categoryTitle.count != 0 && !isExistingCategory
         

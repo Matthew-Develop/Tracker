@@ -22,6 +22,7 @@ final class CategorySelectionViewController: UIViewController {
     
     //MARK: - Properties
     weak var delegate: CategorySelectionViewControllerDelegate?
+    
     private var categories: [TrackerCategory] = []
     private var selectedCategory: String
     
@@ -39,7 +40,7 @@ final class CategorySelectionViewController: UIViewController {
         super.viewDidLoad()
         
         setupView()
-        categories = MockData().categories
+        categories = TrackerCategoryStore().trackerCategories
         reloadData()
     }
     
@@ -54,11 +55,15 @@ final class CategorySelectionViewController: UIViewController {
     private func configureCell(cell: CategoryCollectionCell, indexPath: IndexPath) {
         cell.categoryTitle.text = categories[indexPath.row].title
         
-        if indexPath.row == categories.count - 1 {
-            cell.bottomLine.isHidden = true
-            cell.setDownCellCorners()
-        } else if indexPath.row == 0 {
-            cell.setUpCellCorners()
+        if categories.count == 1 {
+            cell.setupOneCategoryCell()
+        } else {
+            if indexPath.row == categories.count - 1 {
+                cell.bottomLine.isHidden = true
+                cell.setDownCellCorners()
+            } else if indexPath.row == 0 {
+                cell.setUpCellCorners()
+            }
         }
         
         if cell.categoryTitle.text == selectedCategory {
@@ -68,7 +73,7 @@ final class CategorySelectionViewController: UIViewController {
     }
     
     private func reloadData() {
-        collectionView.reloadData()
+        collectionView.reloadSections(IndexSet(integer: 0))
         
         let isEmpty = categories.isEmpty
         collectionView.isHidden = isEmpty
@@ -80,23 +85,15 @@ final class CategorySelectionViewController: UIViewController {
 //Create New Category Delegate
 extension CategorySelectionViewController: CreateNewCategoryViewControllerDelegate {
     func addNewCategory(with title: String) {
-        
-        let newCategory = TrackerCategory(title: title, trackers: [])
-        let tempCategories = categories
-        let updatedCategories = tempCategories + [newCategory]
-        let index = IndexPath(row: tempCategories.count, section: 0)
-        
-        categories = updatedCategories
-    
-        collectionView.performBatchUpdates {
-            collectionView.insertItems(at: [index])
+        do {
+            let _ = try TrackerCategoryStore().addNewCategory(with: title)
+        } catch {
+            assertionFailure("ERROR: could not add new category with name: \(title)")
         }
         
-        let preLastCell = collectionView.cellForItem(at: IndexPath(row: index.row - 1, section: 0)) as? CategoryCollectionCell
-        let lastCell = collectionView.cellForItem(at: index) as? CategoryCollectionCell
-        
-        preLastCell?.resetCellDownCornersBottomLine()
-        lastCell?.setDownCellCorners()
+        categories = TrackerCategoryStore().trackerCategories
+        print(categories.count)
+        reloadData()
     }
 }
 
