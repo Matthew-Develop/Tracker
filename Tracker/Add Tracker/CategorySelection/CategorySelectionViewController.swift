@@ -59,21 +59,24 @@ final class CategorySelectionViewController: UIViewController {
             cell.setupOneCategoryCell()
         } else {
             if indexPath.row == categories.count - 1 {
-                cell.bottomLine.isHidden = true
-                cell.setDownCellCorners()
+                cell.setupLastCell()
             } else if indexPath.row == 0 {
-                cell.setUpCellCorners()
+                cell.setupFirstCell()
+            } else {
+                cell.resetCellDownCornersBottomLine()
             }
         }
         
         if cell.categoryTitle.text == selectedCategory {
             self.collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
             cell.toggleCategory()
+        } else {
+            cell.checkmark.isHidden = true
         }
     }
     
     private func reloadData() {
-        collectionView.reloadSections(IndexSet(integer: 0))
+        collectionView.reloadData()
         
         let isEmpty = categories.isEmpty
         collectionView.isHidden = isEmpty
@@ -82,7 +85,7 @@ final class CategorySelectionViewController: UIViewController {
     }
 }
 
-//Create New Category Delegate
+//MARK: - Create New Category Delegate
 extension CategorySelectionViewController: CreateNewCategoryViewControllerDelegate {
     func addNewCategory(with title: String) {
         do {
@@ -97,7 +100,7 @@ extension CategorySelectionViewController: CreateNewCategoryViewControllerDelega
     }
 }
 
-//UICollectionViewDataSource
+//MARK: - UICollectionViewDataSource
 extension CategorySelectionViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         categories.count
@@ -113,7 +116,7 @@ extension CategorySelectionViewController: UICollectionViewDataSource {
     }
 }
 
-//UICollectionViewDelegateFlowLayout
+//MARK: - UICollectionViewDelegateFlowLayout
 extension CategorySelectionViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         CGSize(width: view.frame.width - 32, height: 75)
@@ -148,7 +151,7 @@ extension CategorySelectionViewController: UICollectionViewDelegate {
     }
 }
 
-//Setup View
+//MARK: - Setup View
 private extension CategorySelectionViewController {
     func setupView() {
         view.backgroundColor = .ypWhite

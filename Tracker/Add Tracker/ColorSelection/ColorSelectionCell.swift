@@ -8,7 +8,7 @@
 import UIKit
 
 final class ColorSelectionCell: UICollectionViewCell {
-    //Views
+    //MARK: - Views
     let colorView: UIView = {
         let view = UIView()
         view.layer.cornerRadius = 8
@@ -47,7 +47,7 @@ final class ColorSelectionCell: UICollectionViewCell {
     }
 }
 
-//Setup View 
+//MARK: - Setup View
 private extension ColorSelectionCell {
     func setupView() {
         backgroundColor = .clear
@@ -57,10 +57,6 @@ private extension ColorSelectionCell {
     func setupConstraints() {
         addSubviews(colorView)
         NSLayoutConstraint.activate([
-//            colorView.widthAnchor.constraint(equalToConstant: 40),
-//            colorView.heightAnchor.constraint(equalToConstant: 40),
-//            colorView.centerXAnchor.constraint(equalTo: centerXAnchor),
-//            colorView.centerYAnchor.constraint(equalTo: centerYAnchor),
             colorView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 6),
             colorView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -6),
             colorView.topAnchor.constraint(equalTo: topAnchor, constant: 6),

@@ -107,7 +107,7 @@ final class CreateNewCategoryViewController: UIViewController {
     }
 }
 
-//TextField Delegate
+//MARK: - TextField Delegate
 extension CreateNewCategoryViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
@@ -115,7 +115,7 @@ extension CreateNewCategoryViewController: UITextFieldDelegate {
     }
 }
 
-//Setup View
+//MARK: - Setup View
 private extension CreateNewCategoryViewController {
     func setupView() {
         view.backgroundColor = .ypWhite

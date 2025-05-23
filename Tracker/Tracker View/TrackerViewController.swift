@@ -144,17 +144,6 @@ extension TrackerViewController: TrackerStoreDelegate {
 
 //MARK: - Cell Delegate
 extension TrackerViewController: TrackerCollectionCellDelegate {
-    func addTrackerRecord(to id: UUID, at date: Date) {
-//        completedTrackers = TrackerRecordStore().trackerRecords
-    }
-    
-    func removeTrackerRecord(to id: UUID, at date: Date) {
-//        var records = completedTrackers
-//        records.removeAll { $0.trackerId == id && $0.completeDate == date }
-//        completedTrackers = records
-//        completedTrackers = trackerRecordStore.trackerRecords
-    }
-    
     func updateTrackerRecord() {
         completedTrackers = TrackerRecordStore().trackerRecords
     }

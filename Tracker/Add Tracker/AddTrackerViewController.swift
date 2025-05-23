@@ -35,6 +35,7 @@ final class AddTrackerViewController: UIViewController {
     }
 }
 
+//MARK: - Setup View
 extension AddTrackerViewController {
     
     private func setupView() {

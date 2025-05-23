@@ -40,6 +40,7 @@ final class EmojiCollectionCell: UICollectionViewCell {
     }
 }
 
+//MARK: - Setup View
 private extension EmojiCollectionCell {
     func setupView() {
         backgroundColor = .clear

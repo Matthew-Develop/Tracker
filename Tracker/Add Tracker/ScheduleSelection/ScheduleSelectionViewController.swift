@@ -77,6 +77,7 @@ final class ScheduleSelectionViewController: UIViewController {
     }
 }
 
+//MARK: - Table View DataSource & Delegate
 extension ScheduleSelectionViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         7
@@ -99,6 +100,7 @@ extension ScheduleSelectionViewController: UITableViewDelegate {
     }
 }
 
+//MARK: - Schedule Selection Cell Delegate
 extension ScheduleSelectionViewController: ScheduleSelectionCellDelegate {
     func addDayToSchedule(_ day: String) {
         selectedSchedule[day] = true
@@ -109,7 +111,7 @@ extension ScheduleSelectionViewController: ScheduleSelectionCellDelegate {
     }
 }
 
-//Setup View
+//MARK: - Setup View
 private extension ScheduleSelectionViewController {
     func setupView() {
         view.backgroundColor = .ypWhite

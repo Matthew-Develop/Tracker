@@ -8,8 +8,6 @@
 import UIKit
 
 protocol TrackerCollectionCellDelegate: AnyObject {
-    func addTrackerRecord(to id: UUID, at date: Date)
-    func removeTrackerRecord(to id: UUID, at date: Date)
     func updateTrackerRecord()
 }
 
@@ -136,7 +134,7 @@ final class TrackerCollectionCell: UICollectionViewCell {
     }
 }
 
-//Setup View
+//MARK: - Setup View
 private extension TrackerCollectionCell {
     func setupView() {
         setupCardView()
