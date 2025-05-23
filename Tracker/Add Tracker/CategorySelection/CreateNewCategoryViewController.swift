@@ -21,6 +21,8 @@ final class CreateNewCategoryViewController: UIViewController {
     
     //MARK: - Properties
     weak var delegate: CreateNewCategoryViewControllerDelegate?
+    
+    private var existingCategories: [String] = []
     private var newCategory: String = ""
     
     //MARK: - Lifecycle
@@ -28,15 +30,17 @@ final class CreateNewCategoryViewController: UIViewController {
         super.viewDidLoad()
         addTapGestureToHideKeyboard()
         
+        existingCategories = TrackerCategoryStore().categoryTitles
         setupView()
     }
     
+    //MARK: - Private Functions
     @objc private func doneButtonTapped(_ sender: UIButton) {
         dismiss(animated: true)
         
         guard !newCategory.isEmpty
         else {
-            print("ERROR Creating new category")
+            assertionFailure("ERROR Creating new category")
             return
         }
         delegate?.addNewCategory(with: newCategory)
@@ -47,6 +51,7 @@ final class CreateNewCategoryViewController: UIViewController {
         newCategory = sender.text ?? ""
     }
     
+    //MARK: - UI Updates
     private func disableDoneButton() {
         UIView.animate(withDuration: 0.1) {
             self.doneButton.backgroundColor = .ypGray
@@ -70,11 +75,27 @@ final class CreateNewCategoryViewController: UIViewController {
         symbolLimitWarningLabel.isHidden = true
     }
     
+    private func toggleWarning(_ title: String, name isValidName: Bool, exists isExistingCategory: Bool) {
+        if !isValidName && title.count != 0 {
+            if isExistingCategory {
+                showWarning(with: "Категория уже существует")
+            } else {
+                showWarning(with: "Ограничение  38 символов")
+            }
+            return
+        } else {
+            hideWarning()
+        }
+    }
+    
     private func toggleAddButton() {
         guard let categoryTitle = categoryNameTextField.text
         else { return }
         
-        let isValidName = categoryTitle.count < 38 && categoryTitle.count != 0
+        let isExistingCategory = existingCategories.contains(where: {
+            $0.lowercased() == categoryTitle.lowercased()
+        })
+        let isValidName = categoryTitle.count < 38 && categoryTitle.count != 0 && !isExistingCategory
         
         if isValidName  {
             enableDoneButton()
@@ -82,16 +103,11 @@ final class CreateNewCategoryViewController: UIViewController {
             disableDoneButton()
         }
         
-        if !isValidName && categoryTitle.count != 0 {
-            showWarning(with: "Ограничение  38 символов")
-            return
-        } else {
-            hideWarning()
-        }
+        toggleWarning(categoryTitle, name: isValidName, exists: isExistingCategory)
     }
 }
 
-//TextField Delegate
+//MARK: - TextField Delegate
 extension CreateNewCategoryViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
@@ -99,7 +115,7 @@ extension CreateNewCategoryViewController: UITextFieldDelegate {
     }
 }
 
-//Setup View
+//MARK: - Setup View
 private extension CreateNewCategoryViewController {
     func setupView() {
         view.backgroundColor = .ypWhite

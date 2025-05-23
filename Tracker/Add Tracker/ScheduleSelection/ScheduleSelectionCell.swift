@@ -88,6 +88,7 @@ final class ScheduleSelectionCell: UITableViewCell {
     }
 }
 
+//MARK: - Setup View
 private extension ScheduleSelectionCell {
     func setupView() {
         

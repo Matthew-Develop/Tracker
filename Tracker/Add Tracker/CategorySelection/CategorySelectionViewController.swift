@@ -22,19 +22,29 @@ final class CategorySelectionViewController: UIViewController {
     
     //MARK: - Properties
     weak var delegate: CategorySelectionViewControllerDelegate?
-    private var categories: [TrackerCategory] = []
-    var selectedCategory: String = ""
     
+    private var categories: [TrackerCategory] = []
+    private var selectedCategory: String
+    
+    //MARK: - Initializers
+    init(selectedCategory: String) {
+        self.selectedCategory = selectedCategory
+        super.init(nibName: nil, bundle: nil)
+    }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupView()
-        categories = MockData().categories
+        categories = TrackerCategoryStore().trackerCategories
         reloadData()
     }
     
+    //MARK: - Private Functions
     @objc private func createCategoryButtonTapped(_ sender: UIButton) {
         let createNewCategoryViewController = CreateNewCategoryViewController()
         
@@ -45,16 +55,23 @@ final class CategorySelectionViewController: UIViewController {
     private func configureCell(cell: CategoryCollectionCell, indexPath: IndexPath) {
         cell.categoryTitle.text = categories[indexPath.row].title
         
-        if indexPath.row == categories.count - 1 {
-            cell.bottomLine.isHidden = true
-            cell.setDownCellCorners()
-        } else if indexPath.row == 0 {
-            cell.setUpCellCorners()
+        if categories.count == 1 {
+            cell.setupOneCategoryCell()
+        } else {
+            if indexPath.row == categories.count - 1 {
+                cell.setupLastCell()
+            } else if indexPath.row == 0 {
+                cell.setupFirstCell()
+            } else {
+                cell.resetCellDownCornersBottomLine()
+            }
         }
         
         if cell.categoryTitle.text == selectedCategory {
             self.collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
             cell.toggleCategory()
+        } else {
+            cell.checkmark.isHidden = true
         }
     }
     
@@ -68,30 +85,22 @@ final class CategorySelectionViewController: UIViewController {
     }
 }
 
-//Create New Category Delegate
+//MARK: - Create New Category Delegate
 extension CategorySelectionViewController: CreateNewCategoryViewControllerDelegate {
     func addNewCategory(with title: String) {
-        
-        let newCategory = TrackerCategory(title: title, trackers: [])
-        let tempCategories = categories
-        let updatedCategories = tempCategories + [newCategory]
-        let index = IndexPath(row: tempCategories.count, section: 0)
-        
-        categories = updatedCategories
-    
-        collectionView.performBatchUpdates {
-            collectionView.insertItems(at: [index])
+        do {
+            let _ = try TrackerCategoryStore().addNewCategory(with: title)
+        } catch {
+            assertionFailure("ERROR: could not add new category with name: \(title)")
         }
         
-        let preLastCell = collectionView.cellForItem(at: IndexPath(row: index.row - 1, section: 0)) as? CategoryCollectionCell
-        let lastCell = collectionView.cellForItem(at: index) as? CategoryCollectionCell
-        
-        preLastCell?.resetCellDownCornersBottomLine()
-        lastCell?.setDownCellCorners()
+        categories = TrackerCategoryStore().trackerCategories
+        print(categories.count)
+        reloadData()
     }
 }
 
-//UICollectionViewDataSource
+//MARK: - UICollectionViewDataSource
 extension CategorySelectionViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         categories.count
@@ -107,7 +116,7 @@ extension CategorySelectionViewController: UICollectionViewDataSource {
     }
 }
 
-//UICollectionViewDelegateFlowLayout
+//MARK: - UICollectionViewDelegateFlowLayout
 extension CategorySelectionViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         CGSize(width: view.frame.width - 32, height: 75)
@@ -142,7 +151,7 @@ extension CategorySelectionViewController: UICollectionViewDelegate {
     }
 }
 
-//Setup View
+//MARK: - Setup View
 private extension CategorySelectionViewController {
     func setupView() {
         view.backgroundColor = .ypWhite

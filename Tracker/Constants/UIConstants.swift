@@ -10,4 +10,6 @@ import Foundation
 enum UIConstants {
     static let cornerRadius: CGFloat = 16
     static let stackSpacing: CGFloat = 8
+    static let emojiColorCellSizeBig: CGFloat = 52
+    static let emojiColorCellSizeSmall: CGFloat = 48
 }

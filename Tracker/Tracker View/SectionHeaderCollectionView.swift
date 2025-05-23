@@ -21,6 +21,7 @@ final class SectionHeaderCollectionView: UICollectionReusableView {
     }
 }
 
+//MARK: - Setup View
 extension SectionHeaderCollectionView {
     private func setupView() {
         setupTitleLabel()

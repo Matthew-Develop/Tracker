@@ -6,16 +6,15 @@
 //
 
 import UIKit
+import CoreData
 
 @main
 final class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-
-        return true
+        true
     }
 
     // MARK: UISceneSession Lifecycle
@@ -34,6 +33,30 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
+    }
+    
+    // MARK: - Core Data stack
+    lazy var persistentContainer: NSPersistentContainer = {
+        let container = NSPersistentContainer(name: "DataBase")
+        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+            if let error = error as NSError? {
+                assertionFailure(error.localizedDescription)
+            }
+        })
+        return container
+    }()
+    
+    // MARK: - Core Data Saving support
+    func saveContext () {
+        let context = persistentContainer.viewContext
+        if context.hasChanges {
+            do {
+                try context.save()
+            } catch {
+                let error = error as NSError
+                assertionFailure("ERROR saving Core Data context:\(error.localizedDescription)")
+            }
+        }
     }
 }
 

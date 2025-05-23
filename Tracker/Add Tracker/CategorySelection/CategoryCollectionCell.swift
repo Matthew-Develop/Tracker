@@ -41,27 +41,40 @@ final class CategoryCollectionCell: UICollectionViewCell {
         }
     }
     
-    func setUpCellCorners() {
+    func setupOneCategoryCell() {
         layer.masksToBounds = true
+        layer.cornerRadius = 16
+        bottomLine.isHidden = true
+    }
+    
+    func setupFirstCell() {
+        resetAllCellsCorners()
+        bottomLine.isHidden = false
         layer.cornerRadius = 16
         layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
     }
     
-    func setDownCellCorners() {
-        layer.masksToBounds = true
+    func setupLastCell() {
+        resetAllCellsCorners()
+        bottomLine.isHidden = true
         layer.cornerRadius = 16
         layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
     }
     
     func resetCellDownCornersBottomLine() {
+        resetAllCellsCorners()
+        bottomLine.isHidden = false
+    }
+    
+    //MARK: - Private Functions
+    private func resetAllCellsCorners() {
         layer.masksToBounds = true
         layer.cornerRadius = 0
         layer.maskedCorners = []
-        bottomLine.isHidden = false
     }
 }
 
-//Setup View
+//MARK: - Setup View
 private extension CategoryCollectionCell {
     func setupView() {
         contentView.backgroundColor = .ypBackground
