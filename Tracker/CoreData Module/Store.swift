@@ -14,13 +14,14 @@ private enum StoreErrors: Error {
     case trackerFetchFromIDFailed
     case convertionTrackerFromCoreDataFailed
     case categoriesFetchFailed
+    case recordsFetchFailed
 }
 
 protocol StoreDelegate: AnyObject {
     func didTrackersUpdate()
 }
 
-class Store: NSObject {
+final class Store: NSObject {
     //MARK: - Public Properties
     let context: NSManagedObjectContext
     weak var storeDelegate: StoreDelegate?
@@ -76,50 +77,30 @@ class Store: NSObject {
             assertionFailure(StoreErrors.trackersFetchFailed.localizedDescription)
             return []
         }
-        var convertedTrackers: [Tracker] = []
-        
-        for tracker in trackers {
-            guard let convertedTracker = getTracker(from: tracker) else { return [] }
-            convertedTrackers.append(convertedTracker)
-        }
-        return convertedTrackers
+        return trackers.compactMap { getTracker(from: $0) }
     }
     var trackerCategories: [TrackerCategory] {
-        let trackerCategories = fetchedResultsControllerTrackerCategories.fetchedObjects ?? []
-        var convertedTrackerCategories: [TrackerCategory] = []
-        
-        for category in trackerCategories {
-            guard let convertedCategory = getTrackerCategory(from: category) else { return [] }
-            convertedTrackerCategories.append(convertedCategory)
+        guard let trackerCategories = fetchedResultsControllerTrackerCategories.fetchedObjects
+        else {
+            assertionFailure(StoreErrors.categoriesFetchFailed.localizedDescription)
+            return []
         }
-        
-        return convertedTrackerCategories
-    }
-    var categoryTitles: [String] {
-        var categoryTitles: [String] = []
-        for category in trackerCategories {
-            categoryTitles.append(category.title)
-        }
-        return categoryTitles
+        return trackerCategories.compactMap { getTrackerCategory(from: $0) }
     }
     var trackerRecords: [TrackerRecord] {
         guard let trackerRecords = fetchedResultsControllerTrackerRecord.fetchedObjects
         else {
-            assertionFailure(StoreErrors.trackersFetchFailed.localizedDescription)
+            assertionFailure(StoreErrors.recordsFetchFailed.localizedDescription)
             return []
         }
         
-        var convertedTrackerRecords: [TrackerRecord] = []
-        
-        for record in trackerRecords {
-            guard let convertedRecord = getTrackerRecord(from: record) else { return [] }
-            convertedTrackerRecords.append(convertedRecord)
-        }
-        
-        return convertedTrackerRecords
+        return trackerRecords.compactMap { getTrackerRecord(from: $0)}
+    }
+    var categoryTitles: [String] {
+        trackerCategories.map { $0.title }
     }
     
-    //MARK: - Initializers
+    //MARK: - Init
     convenience override init() {
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         self.init(context: context)
@@ -153,7 +134,7 @@ class Store: NSObject {
         return convertedTracker
     }
     
-    private func getTrackerCoreData(from tracker: Tracker) -> TrackerCoreData {
+    private func makeTrackerCoreData(from tracker: Tracker) -> TrackerCoreData {
         let emojiImageAssetName = tracker.emoji.imageAsset?.value(forKey: "assetName") as? String
         
         let trackerCoreData = TrackerCoreData(context: context)
@@ -185,7 +166,7 @@ class Store: NSObject {
         return TrackerCategory(title: title, trackers: convertedTrackers)
     }
     
-    private func getTrackerCategoryCoreData(from trackerCategory: TrackerCategory) -> TrackerCategoryCoreData {
+    private func makeTrackerCategoryCoreData(from trackerCategory: TrackerCategory) -> TrackerCategoryCoreData {
         let trackerCategoryCoreData = TrackerCategoryCoreData(context: context)
         trackerCategoryCoreData.title = trackerCategory.title
         
@@ -207,13 +188,15 @@ class Store: NSObject {
         eraseTrackersData()
         eraseCategoriesData()
         eraseRecordsData()
+        
+        try? context.save()
     }
 }
 
 //MARK: - Trackers
 extension Store {
     func addNewTracker(_ tracker: Tracker, to categoryName: String) throws {
-        let newTracker = getTrackerCoreData(from: tracker)
+        let newTracker = makeTrackerCoreData(from: tracker)
         guard let trackerCategory = getTrackerCategory(from: categoryName)
         else {
             throw StoreErrors.categoriesFetchFailed
@@ -245,12 +228,14 @@ extension Store {
     
     func eraseTrackersData() {
         let request = TrackerCoreData.fetchRequest()
-        let result = try! context.fetch(request)
+        guard let result = try? context.fetch(request) else {
+            assertionFailure("Failed to fetch trackers")
+            return
+        }
         
         for object in result {
             context.delete(object)
         }
-        try! context.save()
     }
 }
 
@@ -309,12 +294,14 @@ extension Store {
     
     func eraseCategoriesData() {
         let request = TrackerCategoryCoreData.fetchRequest()
-        let result = try! context.fetch(request)
+        guard let result = try? context.fetch(request) else {
+            assertionFailure("Failed to fetch categories")
+            return
+        }
         
         for object in result {
             context.delete(object)
         }
-        try! context.save()
     }
 }
 
@@ -344,18 +331,21 @@ extension Store {
             assertionFailure("ERROR: Could not fetch record to delete")
             return
         }
-
-        context.delete(recordsCoreData[0])
+        
+        guard let recordToDelete = recordsCoreData.first else { return }
+        context.delete(recordToDelete)
         try? context.save()
     }
     
     func eraseRecordsData() {
         let request = TrackerRecordCoreData.fetchRequest()
-        let result = try! context.fetch(request)
+        guard let result = try? context.fetch(request) else {
+            assertionFailure("Failed to fetch records")
+            return
+        }
         
         for object in result {
             context.delete(object)
         }
-        try! context.save()
     }
 }

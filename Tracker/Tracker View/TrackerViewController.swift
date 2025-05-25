@@ -31,6 +31,7 @@ final class TrackerViewController: UIViewController {
         super.viewDidLoad()
         addTapGestureToHideKeyboard()
 //        store.eraseAllData()
+        
         store.storeDelegate = self
         let _ = store.trackers
         categories = store.trackerCategories

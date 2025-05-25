@@ -26,7 +26,7 @@ final class CategorySelectionViewController: UIViewController {
     private var categories: [TrackerCategory] = []
     private var selectedCategory: String
     
-    //MARK: - Initializers
+    //MARK: - Init
     init(selectedCategory: String) {
         self.selectedCategory = selectedCategory
         super.init(nibName: nil, bundle: nil)

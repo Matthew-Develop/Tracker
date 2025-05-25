@@ -22,7 +22,7 @@ final class ScheduleSelectionViewController: UIViewController {
     private var stringSelectedSchedule: [String]
     private var selectedSchedule: [String: Bool] = [ "Пн": false, "Вт": false, "Ср": false, "Чт": false, "Пт": false, "Сб": false, "Вс": false ]
     
-    //MARK: - Initializers
+    //MARK: - Init
     init(selectedSchedule: [String]) {
         self.stringSelectedSchedule = selectedSchedule
         super.init(nibName: nil, bundle: nil)
