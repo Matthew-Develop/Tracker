@@ -22,7 +22,7 @@ final class TrackerCollectionCell: UICollectionViewCell {
     //MARK: - Properties
     static let reuseIdentifier: String = "TrackerCollectionCell"
     weak var delegate: TrackerCollectionCellDelegate?
-    private let trackerRecordStore = TrackerRecordStore()
+    private let store = Store()
     
     var id: UUID = UUID()
     var isCompleted: Bool = false
@@ -96,14 +96,14 @@ final class TrackerCollectionCell: UICollectionViewCell {
             countLabel.text = counterDayCorrection(currentCount + 1)
             currentCount += 1
             
-            trackerRecordStore.addNewRecord(to: id, at: currentDate)
+            store.addNewRecord(to: id, at: currentDate)
             delegate?.updateTrackerRecord()
 
         } else if currentCount > 0 {
             countLabel.text = counterDayCorrection(currentCount - 1)
             currentCount -= 1
             
-            trackerRecordStore.deleteRecord(to: id, at: currentDate)
+            store.deleteRecord(to: id, at: currentDate)
             delegate?.updateTrackerRecord()
         }
     }

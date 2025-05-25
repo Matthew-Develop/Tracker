@@ -30,7 +30,7 @@ final class CreateNewCategoryViewController: UIViewController {
         super.viewDidLoad()
         addTapGestureToHideKeyboard()
         
-        existingCategories = TrackerCategoryStore().categoryTitles
+        existingCategories = Store().categoryTitles
         setupView()
     }
     

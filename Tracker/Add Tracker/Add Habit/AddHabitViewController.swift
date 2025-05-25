@@ -72,7 +72,7 @@ final class AddHabitViewController: UIViewController {
     }()
     
     //MARK: - Properties
-    private let trackerStore = TrackerStore()
+    private let store = Store()
     
     private var selectedCategory: String = ""
     private var selectedSchedule: [String] = []
@@ -95,7 +95,7 @@ final class AddHabitViewController: UIViewController {
         guard let categoryToAdd = configureCategoryToAdd()
         else { return }
         
-        try? trackerStore.addNewTracker(categoryToAdd.trackers[0], to: categoryToAdd.title)
+        try? store.addNewTracker(categoryToAdd.trackers[0], to: categoryToAdd.title)
         dismiss(animated: true)
     }
     

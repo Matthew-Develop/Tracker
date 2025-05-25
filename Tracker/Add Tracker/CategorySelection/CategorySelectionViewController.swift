@@ -40,7 +40,7 @@ final class CategorySelectionViewController: UIViewController {
         super.viewDidLoad()
         
         setupView()
-        categories = TrackerCategoryStore().trackerCategories
+        categories = Store().trackerCategories
         reloadData()
     }
     
@@ -89,12 +89,12 @@ final class CategorySelectionViewController: UIViewController {
 extension CategorySelectionViewController: CreateNewCategoryViewControllerDelegate {
     func addNewCategory(with title: String) {
         do {
-            let _ = try TrackerCategoryStore().addNewCategory(with: title)
+            let _ = try Store().addNewCategory(with: title)
         } catch {
             assertionFailure("ERROR: could not add new category with name: \(title)")
         }
         
-        categories = TrackerCategoryStore().trackerCategories
+        categories = Store().trackerCategories
         print(categories.count)
         reloadData()
     }

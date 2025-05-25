@@ -18,9 +18,7 @@ final class TrackerViewController: UIViewController {
     private var emptyImageView = UIImageView()
     
     //MARK: - Properties
-    private let trackerStore = TrackerStore()
-    private let trackerCategoryStore = TrackerCategoryStore()
-    private let trackerRecordStore = TrackerRecordStore()
+    private let store = Store()
     
     var currentDate: Date = Date()
     var currentDayOfWeek: String = "unknown"
@@ -32,14 +30,11 @@ final class TrackerViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         addTapGestureToHideKeyboard()
-//        trackerStore.eraseAllData()
-//        trackerCategoryStore.eraseAllData()
-//        trackerRecordStore.eraseAllData()
-        
-        trackerStore.delegate = self
-        let _ = trackerStore.trackers
-        categories = trackerCategoryStore.trackerCategories
-        completedTrackers = trackerRecordStore.trackerRecords
+//        store.eraseAllData()
+        store.storeDelegate = self
+        let _ = store.trackers
+        categories = store.trackerCategories
+        completedTrackers = store.trackerRecords
         
         setupView()
         setCurrentDate()
@@ -133,11 +128,11 @@ final class TrackerViewController: UIViewController {
     }
 }
 
-//MARK: - TrackerStore Delegate
-extension TrackerViewController: TrackerStoreDelegate {
-    func didTrackerStoreUpdate(_ update: TrackerStoreUpdate, store: TrackerStore) {
+//MARK: - Store Delegate
+extension TrackerViewController: StoreDelegate {
+    func didTrackersUpdate() {
         print("Updated")
-        categories = TrackerCategoryStore().trackerCategories
+        categories = Store().trackerCategories
         reloadVisibleTrackers()
     }
 }
@@ -145,7 +140,7 @@ extension TrackerViewController: TrackerStoreDelegate {
 //MARK: - Cell Delegate
 extension TrackerViewController: TrackerCollectionCellDelegate {
     func updateTrackerRecord() {
-        completedTrackers = TrackerRecordStore().trackerRecords
+        completedTrackers = Store().trackerRecords
     }
 }
 
