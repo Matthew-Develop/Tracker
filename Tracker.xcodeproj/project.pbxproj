@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3417D8AD2DEB11610010A7BA /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3417D8AC2DEB11610010A7BA /* OnboardingViewController.swift */; };
 		342C70FB2DB64C8C00FBB71C /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 342C70FA2DB64C8C00FBB71C /* TabBarController.swift */; };
 		342C70FE2DB64D2100FBB71C /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 342C70FD2DB64D2100FBB71C /* UIView+Extension.swift */; };
 		342C71022DB64E2300FBB71C /* TrackerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 342C71012DB64E2300FBB71C /* TrackerViewController.swift */; };
@@ -48,6 +49,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3417D8AC2DEB11610010A7BA /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		342C70FA2DB64C8C00FBB71C /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		342C70FD2DB64D2100FBB71C /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		342C71012DB64E2300FBB71C /* TrackerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerViewController.swift; sourceTree = "<group>"; };
@@ -101,6 +103,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3417D8AB2DEB113E0010A7BA /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				3417D8AC2DEB11610010A7BA /* OnboardingViewController.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
 		342C70F92DB64C7700FBB71C /* TabBar */ = {
 			isa = PBXGroup;
 			children = (
@@ -265,6 +275,7 @@
 		34E3A0152DB60B05005E6FD6 /* Tracker */ = {
 			isa = PBXGroup;
 			children = (
+				3417D8AB2DEB113E0010A7BA /* Onboarding */,
 				342C70F92DB64C7700FBB71C /* TabBar */,
 				342C70FF2DB64E0300FBB71C /* Tracker View */,
 				342C71002DB64E0F00FBB71C /* Statistics View */,
@@ -387,6 +398,7 @@
 				3432B03E2DBB73B400AAE9BC /* AddTrackerViewController.swift in Sources */,
 				3432B0412DBB796C00AAE9BC /* AddHabitViewController.swift in Sources */,
 				34C0ECEF2DC789C500FD8A3D /* ScheduleSelectionViewController.swift in Sources */,
+				3417D8AD2DEB11610010A7BA /* OnboardingViewController.swift in Sources */,
 				349085442DD74E37009BAAA4 /* DataBase.xcdatamodeld in Sources */,
 				34AE39182DD0964600506557 /* SelectionArrays.swift in Sources */,
 				349A730B2DDDC4BF00C66D0B /* UIColor+Extension.swift in Sources */,
