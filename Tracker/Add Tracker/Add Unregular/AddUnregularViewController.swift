@@ -86,8 +86,9 @@ final class AddUnregularViewController: UIViewController {
     }
     
     @objc private func showCategorySelection(_ sender: UIGestureRecognizer ) {
-        let categorySelectionViewController = CategorySelectionViewController(selectedCategory: selectedCategory)
-        categorySelectionViewController.delegate = self
+        let categorySelectionViewController = CategorySelectionViewController()
+        //TODO: Инициализация viewModel
+    
         present(categorySelectionViewController, animated: true)
         
         UIView.animate(withDuration: 0.05) {
@@ -132,7 +133,7 @@ final class AddUnregularViewController: UIViewController {
 }
 
 //MARK: - Extensions
-extension AddUnregularViewController: CategorySelectionViewControllerDelegate {
+extension AddUnregularViewController: CategorySelectionDelegate {
     func selectCategory(_ category: String) {
         selectedCategory = category
         categorySelection.setSelectedCategory(selectedCategory)

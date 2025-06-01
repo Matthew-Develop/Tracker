@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		3417D8AD2DEB11610010A7BA /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3417D8AC2DEB11610010A7BA /* OnboardingViewController.swift */; };
+		342782C32DEC4CF90023F136 /* CategorySelectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 342782C22DEC4CF90023F136 /* CategorySelectionViewModel.swift */; };
 		342C70FB2DB64C8C00FBB71C /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 342C70FA2DB64C8C00FBB71C /* TabBarController.swift */; };
 		342C70FE2DB64D2100FBB71C /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 342C70FD2DB64D2100FBB71C /* UIView+Extension.swift */; };
 		342C71022DB64E2300FBB71C /* TrackerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 342C71012DB64E2300FBB71C /* TrackerViewController.swift */; };
@@ -50,6 +51,7 @@
 
 /* Begin PBXFileReference section */
 		3417D8AC2DEB11610010A7BA /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
+		342782C22DEC4CF90023F136 /* CategorySelectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySelectionViewModel.swift; sourceTree = "<group>"; };
 		342C70FA2DB64C8C00FBB71C /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		342C70FD2DB64D2100FBB71C /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		342C71012DB64E2300FBB71C /* TrackerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerViewController.swift; sourceTree = "<group>"; };
@@ -198,6 +200,7 @@
 				349CBEA72DC3705F0043787B /* CategorySelectionViewController.swift */,
 				345E38902DC38EDE006CE659 /* CreateNewCategoryViewController.swift */,
 				34F338CD2DC5EEA0003E3F2B /* CategoryCollectionCell.swift */,
+				342782C22DEC4CF90023F136 /* CategorySelectionViewModel.swift */,
 			);
 			path = CategorySelection;
 			sourceTree = "<group>";
@@ -391,6 +394,7 @@
 				3495A1DA2DC8AE3F00962D02 /* Array+Extension.swift in Sources */,
 				34AE39242DD0B19900506557 /* EmojiCollectionCell.swift in Sources */,
 				3477E6B52DBCF03400996948 /* Tracker.swift in Sources */,
+				342782C32DEC4CF90023F136 /* CategorySelectionViewModel.swift in Sources */,
 				3432B0442DBB821500AAE9BC /* AddUnregularViewController.swift in Sources */,
 				342C71042DB64E2B00FBB71C /* StatisticsViewController.swift in Sources */,
 				34A9FF782DBF89FF00690069 /* MockData.swift in Sources */,

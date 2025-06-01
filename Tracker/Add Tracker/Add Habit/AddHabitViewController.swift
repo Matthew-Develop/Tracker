@@ -104,8 +104,14 @@ final class AddHabitViewController: UIViewController {
     }
     
     @objc private func showCategorySelection(_ sender: UIGestureRecognizer ) {
-        let categorySelectionViewController = CategorySelectionViewController(selectedCategory: selectedCategory)
-        categorySelectionViewController.delegate = self
+        let categorySelectionViewController = CategorySelectionViewController()
+        
+        let viewModel = CategorySelectionViewModel(selectedCategory: selectedCategory)
+        viewModel.delegate = self
+        
+        categorySelectionViewController.viewModel = viewModel
+        categorySelectionViewController.bind()
+        
         present(categorySelectionViewController, animated: true)
         
         UIView.animate(withDuration: 0.05) {
@@ -241,7 +247,7 @@ final class AddHabitViewController: UIViewController {
 }
 
 //MARK: - Category Selection Delegate
-extension AddHabitViewController: CategorySelectionViewControllerDelegate {
+extension AddHabitViewController: CategorySelectionDelegate {
     func selectCategory(_ category: String) {
         selectedCategory = category
         categoryScheduleSelection.setSelectedCategory(selectedCategory)

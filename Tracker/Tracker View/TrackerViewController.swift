@@ -119,7 +119,6 @@ final class TrackerViewController: UIViewController {
         
         reloadIfEmptyView()
         collectionView.reloadData()
-//        print("\(visibleTrackers) visibleTrackers after reloading")
     }
     
     private func reloadIfEmptyView() {

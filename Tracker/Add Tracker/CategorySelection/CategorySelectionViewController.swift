@@ -7,10 +7,6 @@
 
 import UIKit
 
-protocol CategorySelectionViewControllerDelegate: AnyObject {
-    func selectCategory(_ category: String)
-}
-
 final class CategorySelectionViewController: UIViewController {
     //MARK: Views
     private let titleLabel = UILabel()
@@ -19,29 +15,23 @@ final class CategorySelectionViewController: UIViewController {
     private let ifEmptyImage = UIImageView()
     private let ifEmptyTextLabel = UILabel()
     
-    
     //MARK: - Properties
-    weak var delegate: CategorySelectionViewControllerDelegate?
-    
-    private var categories: [TrackerCategory] = []
-    private var selectedCategory: String
-    
-    //MARK: - Init
-    init(selectedCategory: String) {
-        self.selectedCategory = selectedCategory
-        super.init(nibName: nil, bundle: nil)
-    }
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    var viewModel: CategorySelectionViewModel?
     
     //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setupView()
-        categories = Store().trackerCategories
         reloadData()
+    }
+    
+    //MARK: - Public Functions
+    func bind() {
+        guard let viewModel = viewModel else { return }
+        viewModel.categoryTitlesBinding = {[weak self] _ in
+            self?.reloadData()
+            print("Categories changed")
+        }
     }
     
     //MARK: - Private Functions
@@ -52,33 +42,11 @@ final class CategorySelectionViewController: UIViewController {
         present(createNewCategoryViewController, animated: true)
     }
     
-    private func configureCell(cell: CategoryCollectionCell, indexPath: IndexPath) {
-        cell.categoryTitle.text = categories[indexPath.row].title
-        
-        if categories.count == 1 {
-            cell.setupOneCategoryCell()
-        } else {
-            if indexPath.row == categories.count - 1 {
-                cell.setupLastCell()
-            } else if indexPath.row == 0 {
-                cell.setupFirstCell()
-            } else {
-                cell.resetCellDownCornersBottomLine()
-            }
-        }
-        
-        if cell.categoryTitle.text == selectedCategory {
-            self.collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
-            cell.toggleCategory()
-        } else {
-            cell.checkmark.isHidden = true
-        }
-    }
-    
     private func reloadData() {
         collectionView.reloadData()
         
-        let isEmpty = categories.isEmpty
+        guard let viewModel else { return }
+        let isEmpty = viewModel.categoryTitles.isEmpty
         collectionView.isHidden = isEmpty
         ifEmptyImage.isHidden = !isEmpty
         ifEmptyTextLabel.isHidden = !isEmpty
@@ -88,30 +56,23 @@ final class CategorySelectionViewController: UIViewController {
 //MARK: - Create New Category Delegate
 extension CategorySelectionViewController: CreateNewCategoryViewControllerDelegate {
     func addNewCategory(with title: String) {
-        do {
-            let _ = try Store().addNewCategory(with: title)
-        } catch {
-            assertionFailure("ERROR: could not add new category with name: \(title)")
-        }
-        
-        categories = Store().trackerCategories
-        print(categories.count)
-        reloadData()
+        viewModel?.addNewCategory(with: title)
     }
 }
 
 //MARK: - UICollectionViewDataSource
 extension CategorySelectionViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        categories.count
+        guard let viewModel else { return 0 }
+        return viewModel.categoryTitles.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CategoryCollectionCell.reuseIdentifier, for: indexPath) as? CategoryCollectionCell
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CategoryCollectionCell.reuseIdentifier, for: indexPath) as? CategoryCollectionCell,
+              let viewModel
         else { return UICollectionViewCell() }
         
-        configureCell(cell: cell, indexPath: indexPath)
-        
+        viewModel.configureCategoryCollectionCell(cell, indexPath: indexPath)
         return cell
     }
 }
@@ -133,13 +94,13 @@ extension CategorySelectionViewController: UICollectionViewDelegateFlowLayout {
 
 extension CategorySelectionViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let cell = collectionView.cellForItem(at: indexPath) as? CategoryCollectionCell
+        guard let cell = collectionView.cellForItem(at: indexPath) as? CategoryCollectionCell,
+              let viewModel
         else { return }
         
-        selectedCategory = categories[indexPath.row].title
+        viewModel.updateSelectedCategory(indexPath.row)
         cell.toggleCategory()
         cell.animateTap()
-        delegate?.selectCategory(selectedCategory)
         dismiss(animated: true)
     }
     

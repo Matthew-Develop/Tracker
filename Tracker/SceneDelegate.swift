@@ -16,8 +16,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
-//        window?.rootViewController = TabBarController()
-        window?.rootViewController = OnboardingViewController()
+        
+        let onboardingSkipped = UserDefaults.standard.bool(forKey: "onboardingSkipped")
+        let nextVc = onboardingSkipped ? TabBarController() : OnboardingViewController()
+
+        window?.rootViewController = nextVc
         window?.makeKeyAndVisible()
     }
 
