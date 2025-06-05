@@ -11,9 +11,16 @@ final class CategorySelectionViewController: UIViewController {
     //MARK: Views
     private let titleLabel = UILabel()
     private let addCategoryButton = UIButton(type: .system)
-    private let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     private let ifEmptyImage = UIImageView()
     private let ifEmptyTextLabel = UILabel()
+    private lazy var tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.contentInset.top = 24
+        tableView.backgroundColor = .clear
+        tableView.separatorStyle = .none
+        tableView.allowsSelection = true
+        return tableView
+    }()
     
     //MARK: - Properties
     var viewModel: CategorySelectionViewModel?
@@ -43,11 +50,11 @@ final class CategorySelectionViewController: UIViewController {
     }
     
     private func reloadData() {
-        collectionView.reloadData()
+        tableView.reloadData()
         
         guard let viewModel else { return }
         let isEmpty = viewModel.categoryTitles.isEmpty
-        collectionView.isHidden = isEmpty
+        tableView.isHidden = isEmpty
         ifEmptyImage.isHidden = !isEmpty
         ifEmptyTextLabel.isHidden = !isEmpty
     }
@@ -57,44 +64,34 @@ final class CategorySelectionViewController: UIViewController {
 extension CategorySelectionViewController: CreateNewCategoryViewControllerDelegate {
     func addNewCategory(with title: String) {
         viewModel?.addNewCategory(with: title)
+        reloadData()
     }
 }
 
-//MARK: - UICollectionViewDataSource
-extension CategorySelectionViewController: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+//MARK: - TableView DataSource
+extension CategorySelectionViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard let viewModel else { return 0 }
         return viewModel.categoryTitles.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CategoryCollectionCell.reuseIdentifier, for: indexPath) as? CategoryCollectionCell,
-              let viewModel
-        else { return UICollectionViewCell() }
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: CategoryCollectionCell.reuseIdentifier, for: indexPath) as? CategoryCollectionCell
+        else { return UITableViewCell() }
         
-        viewModel.configureCategoryCollectionCell(cell, indexPath: indexPath)
+        viewModel?.configureCategoryCollectionCell(cell, indexPath: indexPath)
         return cell
     }
 }
 
-//MARK: - UICollectionViewDelegateFlowLayout
-extension CategorySelectionViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        CGSize(width: view.frame.width - 32, height: 75)
+//MARK: - TableView Delegate
+extension CategorySelectionViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        75
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        0
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        0
-    }
-}
-
-extension CategorySelectionViewController: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let cell = collectionView.cellForItem(at: indexPath) as? CategoryCollectionCell,
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let cell = tableView.cellForRow(at: indexPath) as? CategoryCollectionCell,
               let viewModel
         else { return }
         
@@ -104,8 +101,8 @@ extension CategorySelectionViewController: UICollectionViewDelegate {
         dismiss(animated: true)
     }
     
-    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        guard let cell = collectionView.cellForItem(at: indexPath) as? CategoryCollectionCell
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        guard let cell = tableView.cellForRow(at: indexPath) as? CategoryCollectionCell
         else { return }
         
         cell.toggleCategory()
@@ -120,7 +117,7 @@ private extension CategorySelectionViewController {
         addViewTitle()
         addCreateCategoryButton()
         addIfEmpty()
-        addCategoriesCollectionView()
+        addTableView()
     }
     
     func addViewTitle() {
@@ -186,23 +183,16 @@ private extension CategorySelectionViewController {
         ])
     }
     
-    func addCategoriesCollectionView() {
-        collectionView.autoResizeOff()
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        
-        collectionView.register(CategoryCollectionCell.self, forCellWithReuseIdentifier: CategoryCollectionCell.reuseIdentifier)
-        collectionView.backgroundColor = .clear
-        collectionView.showsVerticalScrollIndicator = false
-        collectionView.contentInset.top = 24
-        
-        
-        view.addSubview(collectionView)
+    func addTableView() {
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.register(CategoryCollectionCell.self, forCellReuseIdentifier: CategoryCollectionCell.reuseIdentifier)
+        view.addSubviews(tableView)
         NSLayoutConstraint.activate([
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            collectionView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 14),
-            collectionView.bottomAnchor.constraint(equalTo: addCategoryButton.topAnchor, constant: -14)
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            tableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 14),
+            tableView.bottomAnchor.constraint(equalTo: addCategoryButton.topAnchor, constant: -14)
         ])
     }
 }

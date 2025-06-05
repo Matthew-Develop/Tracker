@@ -45,6 +45,7 @@ final class CategorySelectionViewModel {
     func configureCategoryCollectionCell(_ cell: CategoryCollectionCell, indexPath: IndexPath) {
         cell.categoryTitle.text = categoryTitles[indexPath.row]
         
+        
         if categoryTitles.count == 1 {
             cell.setupOneCategoryCell()
         } else {
@@ -58,7 +59,6 @@ final class CategorySelectionViewModel {
         }
         
         if cell.categoryTitle.text == selectedCategory {
-//            self.collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
             cell.toggleCategory()
         } else {
             cell.checkmark.isHidden = true

@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class CategoryCollectionCell: UICollectionViewCell {
+final class CategoryCollectionCell: UITableViewCell {
     //MARK: Views
     let categoryTitle = UILabel()
     let bottomLine = UIView()
@@ -17,13 +17,17 @@ final class CategoryCollectionCell: UICollectionViewCell {
     static let reuseIdentifier = "CategoryCollectionCell"
     
     //MARK: - Lifecycle
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupView()
     }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func prepareForReuse() {
+        resetAllCellsCorners()
     }
     
     //MARK: - Public Functions
@@ -41,23 +45,23 @@ final class CategoryCollectionCell: UICollectionViewCell {
     }
     
     func setupOneCategoryCell() {
-        layer.masksToBounds = true
-        layer.cornerRadius = 16
+        contentView.layer.masksToBounds = true
+        contentView.layer.cornerRadius = 16
         bottomLine.isHidden = true
     }
     
     func setupFirstCell() {
         resetAllCellsCorners()
         bottomLine.isHidden = false
-        layer.cornerRadius = 16
-        layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        contentView.layer.cornerRadius = 16
+        contentView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
     }
     
     func setupLastCell() {
         resetAllCellsCorners()
         bottomLine.isHidden = true
-        layer.cornerRadius = 16
-        layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        contentView.layer.cornerRadius = 16
+        contentView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
     }
     
     func resetCellDownCornersBottomLine() {
@@ -67,9 +71,7 @@ final class CategoryCollectionCell: UICollectionViewCell {
     
     //MARK: - Private Functions
     private func resetAllCellsCorners() {
-        layer.masksToBounds = true
-        layer.cornerRadius = 0
-        layer.maskedCorners = []
+        contentView.layer.cornerRadius = 0
     }
 }
 
@@ -77,6 +79,7 @@ final class CategoryCollectionCell: UICollectionViewCell {
 private extension CategoryCollectionCell {
     func setupView() {
         contentView.backgroundColor = .ypBackground
+        contentView.layer.masksToBounds = true
         
         addCategoryTitle()
         addCheckmark()
@@ -114,11 +117,9 @@ private extension CategoryCollectionCell {
     }
     
     func addBottomLine() {
-        bottomLine.autoResizeOff()
-        
         bottomLine.backgroundColor = .ypGray
         
-        addSubview(bottomLine)
+        addSubviews(bottomLine)
         NSLayoutConstraint.activate([
             bottomLine.heightAnchor.constraint(equalToConstant: 0.5),
             

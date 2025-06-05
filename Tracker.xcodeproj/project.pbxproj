@@ -197,10 +197,10 @@
 		345E388F2DC38EBE006CE659 /* CategorySelection */ = {
 			isa = PBXGroup;
 			children = (
+				342782C22DEC4CF90023F136 /* CategorySelectionViewModel.swift */,
 				349CBEA72DC3705F0043787B /* CategorySelectionViewController.swift */,
 				345E38902DC38EDE006CE659 /* CreateNewCategoryViewController.swift */,
 				34F338CD2DC5EEA0003E3F2B /* CategoryCollectionCell.swift */,
-				342782C22DEC4CF90023F136 /* CategorySelectionViewModel.swift */,
 			);
 			path = CategorySelection;
 			sourceTree = "<group>";
