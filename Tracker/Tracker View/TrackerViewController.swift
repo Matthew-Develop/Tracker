@@ -103,8 +103,21 @@ final class TrackerViewController: UIViewController {
         
         visibleTrackers = categories.compactMap { category in
             let trackers = category.trackers.filter { tracker in
+                let isUnregular = tracker.schedule.first == ""
                 let dateCondition = tracker.schedule.contains(currentDayOfWeek)
                 let searchCondition = searchText.isEmpty || tracker.title.lowercased().contains(searchText)
+                
+                if isUnregular {
+                    let unregularCompletionDate = completedTrackers.filter {
+                        $0.trackerId == tracker.id
+                    }.first?.completeDate
+                    
+                    if let unregularCompletionDate {
+                        return currentDate == unregularCompletionDate ? searchCondition : false
+                    } else {
+                        return searchCondition
+                    }
+                }
                 
                 return dateCondition && searchCondition
             }

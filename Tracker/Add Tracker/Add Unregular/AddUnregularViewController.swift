@@ -112,6 +112,8 @@ final class AddUnregularViewController: UIViewController {
     }()
     
     //MARK: - Properties
+    private let store = Store()
+
     private var selectedCategory: String = ""
     private var selectedEmoji: UIImage?
     private var selectedColor: UIColor?
@@ -129,7 +131,11 @@ final class AddUnregularViewController: UIViewController {
     }
     
     @objc private func createButtonTapped() {
-        //TODO:  Обработка нажатия кнопки создания нерегулярного события
+        guard let categoryToAdd = configureCategoryToAdd()
+        else { return }
+        
+        try? store.addNewTracker(categoryToAdd.trackers[0], to: categoryToAdd.title)
+        dismiss(animated: true)
     }
     
     @objc private func textFieldDidChange(_ sender: UITextField) {
@@ -190,6 +196,32 @@ final class AddUnregularViewController: UIViewController {
                 cell.deselectCell()
             }
         }
+    }
+    
+    private func configureCategoryToAdd() -> TrackerCategory? {
+        guard let trackerTitle = nameTextField.text,
+              let color = selectedColor,
+              let emoji = selectedEmoji
+        else {
+            print("Title text field is empty")
+            dismiss(animated: true)
+            return nil
+        }
+        
+        let newTracker = Tracker(
+            id: UUID(),
+            title: trackerTitle,
+            color: color,
+            emoji: emoji,
+            schedule: []
+        )
+        
+        let categoryToAdd = TrackerCategory(
+            title: selectedCategory,
+            trackers: [newTracker]
+        )
+        
+        return categoryToAdd
     }
     
     //MARK: - UI Updates
