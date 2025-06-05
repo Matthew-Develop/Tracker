@@ -330,8 +330,7 @@ private extension AddHabitViewController {
     }
     
     func addViewTitle() {
-        titleLabel.autoResizeOff()
-        view.addSubview(titleLabel)
+        view.addSubviews(titleLabel)
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 27),
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
@@ -417,7 +416,6 @@ private extension AddHabitViewController {
     }
     
     func setupColorCollectionView() {
-//        view.addSubviews(colorTitle, colorCollectionView)
         stackContentView.setCustomSpacing(40, after: emojiCollectionView)
         stackContentView.addArrangedSubviews(colorTitle, colorCollectionView)
         NSLayoutConstraint.activate([
