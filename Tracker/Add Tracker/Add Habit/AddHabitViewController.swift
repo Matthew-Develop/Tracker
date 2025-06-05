@@ -140,7 +140,7 @@ final class AddHabitViewController: UIViewController {
               let color = selectedColor,
               let emoji = selectedEmoji
         else {
-            print("Title text field is empty")
+            assertionFailure("Title text field is empty")
             dismiss(animated: true)
             return nil
         }

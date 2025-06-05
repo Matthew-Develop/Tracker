@@ -144,7 +144,6 @@ final class TrackerViewController: UIViewController {
 //MARK: - Store Delegate
 extension TrackerViewController: StoreDelegate {
     func didTrackersUpdate() {
-        print("Updated")
         categories = Store().trackerCategories
         reloadVisibleTrackers()
     }

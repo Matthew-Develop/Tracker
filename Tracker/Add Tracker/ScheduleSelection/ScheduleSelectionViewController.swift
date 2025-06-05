@@ -20,7 +20,14 @@ final class ScheduleSelectionViewController: UIViewController {
     //MARK: - Properties
     weak var delegate: ScheduleSelectionViewControllerDelegate?
     private var stringSelectedSchedule: [String]
-    private var selectedSchedule: [String: Bool] = [ "Пн": false, "Вт": false, "Ср": false, "Чт": false, "Пт": false, "Сб": false, "Вс": false ]
+    private var selectedSchedule: [String: Bool] = [
+        "Пн": false,
+        "Вт": false,
+        "Ср": false,
+        "Чт": false,
+        "Пт": false,
+        "Сб": false,
+        "Вс": false ]
     
     //MARK: - Init
     init(selectedSchedule: [String]) {

@@ -213,8 +213,6 @@ extension Store {
     
     func getTracker(from trackerId: UUID) -> TrackerCoreData? {
         let trackerIdString = trackerId.description
-        print(trackerIdString)
-        
         let request = TrackerCoreData.fetchRequest()
         request.returnsObjectsAsFaults = false
         
@@ -288,7 +286,7 @@ extension Store {
         }
         
         let category = result[0]
-        print("Fetched category from categoryName, title: \(category.title ?? "not found")")
+        assertionFailure("Fetched category from categoryName, title: \(category.title ?? "not found")")
         return category
     }
     
