@@ -286,7 +286,6 @@ extension Store {
         }
         
         let category = result[0]
-        assertionFailure("Fetched category from categoryName, title: \(category.title ?? "not found")")
         return category
     }
     
