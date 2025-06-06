@@ -44,7 +44,7 @@ final class EmojiCollectionCell: UICollectionViewCell {
 private extension EmojiCollectionCell {
     func setupView() {
         backgroundColor = .clear
-        layer.cornerRadius = UIConstants.cornerRadius
+        layer.cornerRadius = Constants.cornerRadius
         layer.masksToBounds = true
         isUserInteractionEnabled = true
         emojiImageView.isUserInteractionEnabled = true

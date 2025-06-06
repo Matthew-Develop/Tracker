@@ -8,7 +8,7 @@
 import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
-
+    private let userDefaultsService = UserDefaultsService.shared
     var window: UIWindow?
 
 
@@ -17,7 +17,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
         
-        let onboardingSkipped = UserDefaults.standard.bool(forKey: "onboardingSkipped")
+        let onboardingSkipped = userDefaultsService.isOnboardingSkipped
         let nextVc = onboardingSkipped ? TabBarController() : OnboardingViewController()
 
         window?.rootViewController = nextVc

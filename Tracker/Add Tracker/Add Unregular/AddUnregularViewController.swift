@@ -229,7 +229,7 @@ final class AddUnregularViewController: UIViewController {
         guard let trackerTitle = nameTextField.text
         else { return }
         
-        let isValidName = trackerTitle.count < 38 && trackerTitle.count != 0
+        let isValidName = trackerTitle.count < Constants.symbolLimit && trackerTitle.count != 0
         let isCategorySelected = selectedCategory != ""
         let isEmojiSelected = selectedEmoji != nil
         let isColorSelected = selectedColor != nil
@@ -242,7 +242,7 @@ final class AddUnregularViewController: UIViewController {
         )
         
         if !isValidName && trackerTitle.count != 0 {
-            showWarning(with: "Ограничение  38 символов")
+            showWarning(with: "Ограничение  \(Constants.symbolLimit) символов")
             return
         } else {
             hideWarning()
@@ -300,7 +300,7 @@ extension AddUnregularViewController: UICollectionViewDataSource {
 extension AddUnregularViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
 
-        let side = CGFloat(view.bounds.height < 600 ? UIConstants.emojiColorCellSizeSmall : UIConstants.emojiColorCellSizeBig)
+        let side = CGFloat(view.bounds.height < 600 ? Constants.emojiColorCellSizeSmall : Constants.emojiColorCellSizeBig)
         return CGSize(width: side, height: side)
     }
     
@@ -391,13 +391,13 @@ private extension AddUnregularViewController {
             
             emojiCollectionView.leadingAnchor.constraint(equalTo: stackContentView.leadingAnchor),
             emojiCollectionView.trailingAnchor.constraint(equalTo: stackContentView.trailingAnchor),
-            emojiCollectionView.heightAnchor.constraint(equalToConstant: UIConstants.emojiColorCellSizeBig * 3),
+            emojiCollectionView.heightAnchor.constraint(equalToConstant: Constants.emojiColorCellSizeBig * 3),
             
             colorTitle.topAnchor.constraint(equalTo: emojiCollectionView.bottomAnchor, constant: 40),
             colorTitle.leadingAnchor.constraint(equalTo: stackContentView.leadingAnchor, constant: 12),
             
             colorCollectionView.topAnchor.constraint(equalTo: colorTitle.bottomAnchor, constant: 24),
-            colorCollectionView.heightAnchor.constraint(equalToConstant: UIConstants.emojiColorCellSizeBig * 3),
+            colorCollectionView.heightAnchor.constraint(equalToConstant: Constants.emojiColorCellSizeBig * 3),
 
             colorCollectionView.leadingAnchor.constraint(equalTo: stackContentView.leadingAnchor),
             colorCollectionView.trailingAnchor.constraint(equalTo: stackContentView.trailingAnchor),

@@ -37,6 +37,7 @@ final class OnboardingViewController: UIPageViewController {
         
         return [vc1, vc2]
     }()
+    private let userDefaultsService = UserDefaultsService.shared
     
     //MARK: - Lifecycle
     override init(transitionStyle style: UIPageViewController.TransitionStyle, navigationOrientation: UIPageViewController.NavigationOrientation, options: [UIPageViewController.OptionsKey : Any]? = nil) {
@@ -61,12 +62,11 @@ final class OnboardingViewController: UIPageViewController {
     
     //MARK: - Private Functions
     @objc private func didTapButton(_ sender: UIButton) {
-//        UIApplication.shared.windows.first?.rootViewController = TabBarController()
         let tabBar = TabBarController()
         tabBar.modalPresentationStyle = .fullScreen
         present(tabBar, animated: true)
         
-        UserDefaults.standard.set(true, forKey: "onboardingSkipped")
+        userDefaultsService.isOnboardingSkipped = true
     }
 }
 

@@ -80,7 +80,7 @@ final class CreateNewCategoryViewController: UIViewController {
             if isExistingCategory {
                 showWarning(with: "Категория уже существует")
             } else {
-                showWarning(with: "Ограничение  38 символов")
+                showWarning(with: "Ограничение  \(Constants.symbolLimit) символов")
             }
             return
         } else {
@@ -95,7 +95,7 @@ final class CreateNewCategoryViewController: UIViewController {
         let isExistingCategory = existingCategories.contains(where: {
             $0.lowercased() == categoryTitle.lowercased()
         })
-        let isValidName = categoryTitle.count < 38 && categoryTitle.count != 0 && !isExistingCategory
+        let isValidName = categoryTitle.count < Constants.symbolLimit && categoryTitle.count != 0 && !isExistingCategory
         
         if isValidName  {
             enableDoneButton()
@@ -195,7 +195,7 @@ private extension CreateNewCategoryViewController {
     func addSymbolLimitWarning() {
         symbolLimitWarningLabel.autoResizeOff()
         
-        symbolLimitWarningLabel.text = "Ограничение  38 символов"
+        symbolLimitWarningLabel.text = "Ограничение  \(Constants.symbolLimit) символов"
         symbolLimitWarningLabel.font = .systemFont(ofSize: 17, weight: .regular)
         symbolLimitWarningLabel.textColor = .ypRed
         
