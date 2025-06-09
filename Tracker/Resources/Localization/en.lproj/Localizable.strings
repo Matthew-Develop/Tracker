@@ -1,0 +1,11 @@
+"trackersTabBar.iconTitle" = "Trackers";
+"statisticsTabBar.iconTitle" = "Statistics";
+
+"trackerVC.title" = "Trackers";
+"trackerVC.searchPlaceholder" = "Search";
+
+"addTrackerVC.title" = "Add tracker";
+"addTrackerVC.habitButton" = "Habit";
+"addTrackerVC.unregularButton" = "Unregular event";
+
+//TODO: доделать локализацию

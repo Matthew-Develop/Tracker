@@ -243,7 +243,7 @@ extension TrackerViewController {
     private func setupNavigationBar() {
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: addTrackerButton)
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: datePicker)
-        navigationItem.title = "Трекеры"
+        navigationItem.title = NSLocalizedString("trackerVC.title", comment: "TrackerVC trackers title")
         
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.backgroundColor = .ypWhite
@@ -261,8 +261,7 @@ extension TrackerViewController {
     private func setupDatePicker() {
         datePicker.addTarget(self, action: #selector(dateValueChanged), for: .valueChanged)
         datePicker.datePickerMode = .date
-        datePicker.preferredDatePickerStyle = .compact
-        datePicker.locale = Locale(identifier: "ru_RU")
+        datePicker.locale = Locale.current
         datePicker.tintColor = .ypBlue
         datePicker.date = Date()
         
@@ -280,7 +279,7 @@ extension TrackerViewController {
         
         searchField.backgroundColor = .ypSearchField
         searchField.textColor = .ypBlack
-        searchField.placeholder = "Поиск"
+        searchField.placeholder = NSLocalizedString("trackerVC.searchPlaceholder", comment: "")
         searchField.font = .systemFont(ofSize: 17, weight: .regular)
         searchField.layer.cornerRadius = 10
         searchField.layer.masksToBounds = true

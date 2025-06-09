@@ -48,7 +48,7 @@ extension AddTrackerViewController {
     private func addViewTitle() {
         titleLabel.autoResizeOff()
         
-        titleLabel.text = "Создание трекера"
+        titleLabel.text = NSLocalizedString("addTrackerVC.title", comment: "")
         titleLabel.font = .systemFont(ofSize: 16, weight: .medium)
         titleLabel.textColor = .ypBlack
         
@@ -60,10 +60,14 @@ extension AddTrackerViewController {
     }
     
     private func addButtonsVStack() {
-        let addHabitButton = configureAddButton(withText: "Привычка")
+        let addHabitButton = configureAddButton(
+            withText: NSLocalizedString("addTrackerVC.habitButton", comment: "")
+        )
         addHabitButton.addTarget(self, action: #selector(addHabitButtonTapped), for: .touchUpInside)
         
-        let addUnregularButton = configureAddButton(withText: "Нерегулярное событие")
+        let addUnregularButton = configureAddButton(
+            withText: NSLocalizedString("addTrackerVC.unregularButton", comment: "")
+        )
         addUnregularButton.addTarget(self, action: #selector(addUnregularButtonTapped), for: .touchUpInside)
 
         let vStack = UIStackView(arrangedSubviews: [addHabitButton, addUnregularButton])
