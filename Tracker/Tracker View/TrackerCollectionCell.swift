@@ -109,28 +109,9 @@ final class TrackerCollectionCell: UICollectionViewCell {
     }
     
     private func counterDayCorrection(_ count: Int) -> String {
-        var countString = ""
-        let lastNumber = count.description.last
-        let lastTwoNumber = (count % 100).description
+        let dayStringFormat = NSLocalizedString("daysCompleted", comment: "Plural format with stringsdict")
         
-        if count > 10 {
-            if ["11","12","13","14","15","16","17","18","19"].contains(lastTwoNumber) {
-                
-                 return "\(count.description) дней"
-            }
-        }
-            
-        if lastNumber == "1" {
-            countString = "\(count.description) день"
-            
-        } else if ["0","5","6","7","8","9"].contains(lastNumber) {
-            countString = "\(count.description) дней"
-            
-        } else {
-            countString = "\(count.description) дня"
-        }
-        
-        return countString
+        return String.localizedStringWithFormat(dayStringFormat, count)
     }
 }
 
