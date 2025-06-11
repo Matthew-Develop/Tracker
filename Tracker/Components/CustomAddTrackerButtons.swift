@@ -58,7 +58,7 @@ private extension CustomAddTrackerButtons {
     func addCancelButton() {
         cancelButton.autoResizeOff()
         
-        cancelButton.setTitle("Отменить", for: .normal)
+        cancelButton.setTitle(L10n.Buttons.cancelButton, for: .normal)
         cancelButton.setTitleColor(.ypRed, for: .normal)
         cancelButton.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         
@@ -81,7 +81,7 @@ private extension CustomAddTrackerButtons {
         createButton.autoResizeOff()
         
         createButton.isEnabled = false
-        createButton.setTitle("Создать", for: .normal)
+        createButton.setTitle(L10n.Buttons.createButton, for: .normal)
         createButton.setTitleColor(.ypWhite, for: .normal)
         createButton.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         

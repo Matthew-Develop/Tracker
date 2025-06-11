@@ -9,8 +9,6 @@ import UIKit
 
 final class CustomTextField: UITextField {
     
-    var placeholderText: String = "Введите название трекера"
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -31,7 +29,7 @@ private extension CustomTextField {
         
         self.autoResizeOff()
         
-        placeholder = "Введите название трекера"
+        placeholder = L10n.AddTrackerVC.trackerNamePlaceholder
         backgroundColor = .ypBackground
         textColor = .ypBlack
         leftView = UIView.init(frame: CGRect(x: 0, y: 0, width: 16, height: 75))

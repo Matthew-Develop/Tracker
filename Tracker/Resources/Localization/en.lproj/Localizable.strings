@@ -1,11 +1,64 @@
-"trackersTabBar.iconTitle" = "Trackers";
-"statisticsTabBar.iconTitle" = "Statistics";
+//Onboarding
+"onboarding.button" = "Wow, technologies!";
+"onboarding.vc1.title" = "Track whatever you want";
+"onboarding.vc2.title" = "Even it's not liters of water or yoga";
 
+//TabBar
+"tabBar.trackers.iconTitle" = "Trackers";
+"tabBar.statistics.iconTitle" = "Statistics";
+
+//Main page Tracker View
 "trackerVC.title" = "Trackers";
 "trackerVC.searchPlaceholder" = "Search";
+"trackerVC.ifEmptyText" = "What we will track?";
 
+
+//Add Tracker
 "addTrackerVC.title" = "Add tracker";
 "addTrackerVC.habitButton" = "Habit";
 "addTrackerVC.unregularButton" = "Unregular event";
+"addTrackerVC.trackerNamePlaceholder" = "Enter tracker name";
+"addTrackerVC.emoji.title" = "Emoji";
+"addTrackerVC.colorPallette.title" = "Color";
 
-//TODO: доделать локализацию
+"addHabitVC.title" = "New habit";
+"addUnregularVC.title" = "New unregular event";
+
+//Category selection
+"categoryListVC.title" = "Category";
+"categoryListVC.addCategoryButton" = "Add category";
+"categoryListVC.ifEmptyText" = "Habits and events possible\nto collect into groups";
+
+"newCategoryVC.title" = "New category";
+"newCategoryVC.categoryNamePlaceholder" = "Enter category name";
+
+//Schedule selection
+"scheduleListVC.title" = "Schedule";
+"scheduleListVC.daysOfWeek.monday" = "Monday";
+"scheduleListVC.daysOfWeek.tuesday" = "Tuesday";
+"scheduleListVC.daysOfWeek.wednesday" = "Wednesday";
+"scheduleListVC.daysOfWeek.thursday" = "Thursday";
+"scheduleListVC.daysOfWeek.friday" = "Friday";
+"scheduleListVC.daysOfWeek.saturday" = "Saturday";
+"scheduleListVC.daysOfWeek.sunday" = "Sunday";
+"scheduleListVC.daysOfWeek.monday.short" = "Mon";
+"scheduleListVC.daysOfWeek.tuesday.short" = "Tue";
+"scheduleListVC.daysOfWeek.wednesday.short" = "Wed";
+"scheduleListVC.daysOfWeek.thursday.short" = "Thu";
+"scheduleListVC.daysOfWeek.friday.short" = "Fri";
+"scheduleListVC.daysOfWeek.saturday.short" = "Sat";
+"scheduleListVC.daysOfWeek.sunday.short" = "Sun";
+"scheduleListVC.daysOfWeek.everyDay" = "Every day";
+
+
+//Buttons
+"buttons.doneButton" = "Done";
+"buttons.cancelButton" = "Cancel";
+"buttons.createButton" = "Create";
+"buttons.categorySelectionButton" = "Category";
+"buttons.scheduleSelectionButton" = "Schedule";
+
+//Warnings
+"warnings.symbolLimit" = "Limit %d symbols";
+"warnings.categoryAlreadyExists" = "Category already exists";
+

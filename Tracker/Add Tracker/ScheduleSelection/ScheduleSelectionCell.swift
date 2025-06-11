@@ -49,26 +49,26 @@ final class ScheduleSelectionCell: UITableViewCell {
         
         switch dayNumber {
         case 1:
-            dayLabel.text = "Понедельник"
-            day = "Пн"
+            dayLabel.text = L10n.ScheduleListVC.DaysOfWeek.monday
+            day = L10n.ScheduleListVC.DaysOfWeek.Monday.short
         case 2:
-            dayLabel.text = "Вторник"
-            day = "Вт"
+            dayLabel.text = L10n.ScheduleListVC.DaysOfWeek.tuesday
+            day = L10n.ScheduleListVC.DaysOfWeek.Tuesday.short
         case 3:
-            dayLabel.text = "Среда"
-            day = "Ср"
+            dayLabel.text = L10n.ScheduleListVC.DaysOfWeek.wednesday
+            day = L10n.ScheduleListVC.DaysOfWeek.Wednesday.short
         case 4:
-            dayLabel.text = "Четверг"
-            day = "Чт"
+            dayLabel.text = L10n.ScheduleListVC.DaysOfWeek.thursday
+            day = L10n.ScheduleListVC.DaysOfWeek.Thursday.short
         case 5:
-            dayLabel.text = "Пятница"
-            day = "Пт"
+            dayLabel.text = L10n.ScheduleListVC.DaysOfWeek.friday
+            day = L10n.ScheduleListVC.DaysOfWeek.Friday.short
         case 6:
-            dayLabel.text = "Суббота"
-            day = "Сб"
+            dayLabel.text = L10n.ScheduleListVC.DaysOfWeek.saturday
+            day = L10n.ScheduleListVC.DaysOfWeek.Saturday.short
         case 7:
-            dayLabel.text = "Воскресенье"
-            day = "Вс"
+            dayLabel.text = L10n.ScheduleListVC.DaysOfWeek.sunday
+            day = L10n.ScheduleListVC.DaysOfWeek.Sunday.short
         default:
             dayLabel.text = ""
             day = nil

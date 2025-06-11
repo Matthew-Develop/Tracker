@@ -78,9 +78,9 @@ final class CreateNewCategoryViewController: UIViewController {
     private func toggleWarning(_ title: String, name isValidName: Bool, exists isExistingCategory: Bool) {
         if !isValidName && title.count != 0 {
             if isExistingCategory {
-                showWarning(with: "Категория уже существует")
+                showWarning(with: L10n.Warnings.categoryAlreadyExists)
             } else {
-                showWarning(with: "Ограничение  \(Constants.symbolLimit) символов")
+                showWarning(with: L10n.Warnings.symbolLimit(Constants.symbolLimit))
             }
             return
         } else {
@@ -130,7 +130,7 @@ private extension CreateNewCategoryViewController {
     func addViewTitle() {
         titleLabel.autoResizeOff()
         
-        titleLabel.text = "Новая категория"
+        titleLabel.text = L10n.NewCategoryVC.title
         titleLabel.font = .systemFont(ofSize: 16, weight: .medium)
         titleLabel.textColor = .ypBlack
         
@@ -149,7 +149,7 @@ private extension CreateNewCategoryViewController {
         vStackNameTextField.spacing = 8
         vStackNameTextField.alignment = .center
         
-        categoryNameTextField.changePlaceholder(to: "Введите название категории")
+        categoryNameTextField.changePlaceholder(to: L10n.NewCategoryVC.categoryNamePlaceholder)
         categoryNameTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         categoryNameTextField.delegate = self
         
@@ -173,7 +173,7 @@ private extension CreateNewCategoryViewController {
         
         doneButton.addTarget(self, action: #selector(doneButtonTapped), for: .touchUpInside)
         
-        doneButton.setTitle("Готово", for: .normal)
+        doneButton.setTitle(L10n.Buttons.doneButton, for: .normal)
         doneButton.setTitleColor(.ypWhite, for: .normal)
         doneButton.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         doneButton.backgroundColor = .ypGray
@@ -195,7 +195,7 @@ private extension CreateNewCategoryViewController {
     func addSymbolLimitWarning() {
         symbolLimitWarningLabel.autoResizeOff()
         
-        symbolLimitWarningLabel.text = "Ограничение  \(Constants.symbolLimit) символов"
+        symbolLimitWarningLabel.text = L10n.Warnings.symbolLimit(Constants.symbolLimit)
         symbolLimitWarningLabel.font = .systemFont(ofSize: 17, weight: .regular)
         symbolLimitWarningLabel.textColor = .ypRed
         

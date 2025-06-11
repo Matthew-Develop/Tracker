@@ -70,7 +70,7 @@ private extension CustomCategoryAndScheduleSelection {
         
         let title = UILabel()
         title.autoResizeOff()
-        title.text = "Категория"
+        title.text = L10n.Buttons.categorySelectionButton
         title.textColor = .ypBlack
         title.font = .systemFont(ofSize: 17, weight: .regular)
         
@@ -79,7 +79,7 @@ private extension CustomCategoryAndScheduleSelection {
         
         let arrow = UIImageView()
         arrow.autoResizeOff()
-        arrow.image = UIImage(named: "ArrowCategorySelector")
+        arrow.image = Asset.Images.arrowCategorySelector.image
         
         vStack.addArrangedSubview(title)
         vStack.addArrangedSubview(selectedCategoryLabel)
@@ -117,13 +117,13 @@ private extension CustomCategoryAndScheduleSelection {
         
         let title = UILabel()
         title.autoResizeOff()
-        title.text = "Расписание"
+        title.text = L10n.Buttons.scheduleSelectionButton
         title.textColor = .ypBlack
         title.font = .systemFont(ofSize: 17, weight: .regular)
         
         let arrow = UIImageView()
         arrow.autoResizeOff()
-        arrow.image = UIImage(named: "ArrowCategorySelector")
+        arrow.image = Asset.Images.arrowCategorySelector.image
         
         vStack.addArrangedSubview(title)
         vStack.addArrangedSubview(selectedScheduleLabel)

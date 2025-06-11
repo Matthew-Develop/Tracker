@@ -21,13 +21,13 @@ final class ScheduleSelectionViewController: UIViewController {
     weak var delegate: ScheduleSelectionViewControllerDelegate?
     private var stringSelectedSchedule: [String]
     private var selectedSchedule: [String: Bool] = [
-        "Пн": false,
-        "Вт": false,
-        "Ср": false,
-        "Чт": false,
-        "Пт": false,
-        "Сб": false,
-        "Вс": false ]
+        L10n.ScheduleListVC.DaysOfWeek.Monday.short: false,
+        L10n.ScheduleListVC.DaysOfWeek.Tuesday.short: false,
+        L10n.ScheduleListVC.DaysOfWeek.Wednesday.short: false,
+        L10n.ScheduleListVC.DaysOfWeek.Thursday.short: false,
+        L10n.ScheduleListVC.DaysOfWeek.Friday.short: false,
+        L10n.ScheduleListVC.DaysOfWeek.Saturday.short: false,
+        L10n.ScheduleListVC.DaysOfWeek.Sunday.short: false ]
     
     //MARK: - Init
     init(selectedSchedule: [String]) {
@@ -131,7 +131,7 @@ private extension ScheduleSelectionViewController {
     func addViewTitle() {
         titleLabel.autoResizeOff()
         
-        titleLabel.text = "Расписание"
+        titleLabel.text = L10n.ScheduleListVC.title
         titleLabel.font = .systemFont(ofSize: 16, weight: .medium)
         titleLabel.textColor = .ypBlack
         
@@ -169,7 +169,7 @@ private extension ScheduleSelectionViewController {
         
         doneButton.addTarget(self, action: #selector(doneButtonTapped), for: .touchUpInside)
         
-        doneButton.setTitle("Готово", for: .normal)
+        doneButton.setTitle(L10n.Buttons.doneButton, for: .normal)
         doneButton.setTitleColor(.ypWhite, for: .normal)
         doneButton.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         doneButton.backgroundColor = .ypBlack

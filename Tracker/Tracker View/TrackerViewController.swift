@@ -243,7 +243,7 @@ extension TrackerViewController {
     private func setupNavigationBar() {
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: addTrackerButton)
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: datePicker)
-        navigationItem.title = NSLocalizedString("trackerVC.title", comment: "TrackerVC trackers title")
+        navigationItem.title = L10n.TrackerVC.title
         
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.backgroundColor = .ypWhite
@@ -280,7 +280,7 @@ extension TrackerViewController {
         
         searchField.backgroundColor = .ypSearchField
         searchField.textColor = .ypBlack
-        searchField.placeholder = NSLocalizedString("trackerVC.searchPlaceholder", comment: "")
+        searchField.placeholder = L10n.TrackerVC.searchPlaceholder
         searchField.font = .systemFont(ofSize: 17, weight: .regular)
         searchField.layer.cornerRadius = 10
         searchField.layer.masksToBounds = true
@@ -300,10 +300,10 @@ extension TrackerViewController {
     
     private func setupIfEmptyTrackers() {
         emptyImageView.autoResizeOff()
-        emptyImageView.image = UIImage(named: "IfEmptyTrackers")
+        emptyImageView.image = Asset.Images.ifEmptyTrackers.image
         
         emptyTextLabel.autoResizeOff()
-        emptyTextLabel.text = "Что будем отслеживать?"
+        emptyTextLabel.text = L10n.TrackerVC.ifEmptyText
         emptyTextLabel.font = .systemFont(ofSize: 12, weight: .medium)
         emptyTextLabel.textColor = .ypBlack
         

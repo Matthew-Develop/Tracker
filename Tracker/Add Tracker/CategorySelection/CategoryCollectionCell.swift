@@ -102,7 +102,7 @@ private extension CategoryCollectionCell {
     func addCheckmark() {
         checkmark.autoResizeOff()
         
-        checkmark.image = UIImage(named: "CheckmarkCategorySelected")
+        checkmark.image = Asset.Images.checkmarkCategorySelected.image
         checkmark.tintColor = .ypBlue
         checkmark.isHidden = true
         

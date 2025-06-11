@@ -1,12 +1,62 @@
-"trackersTabBar.iconTitle" = "Трекеры";
-"statisticsTabBar.iconTitle" = "Статистика";
+//Onboarding
+"onboarding.button" = "Вот это технологии!";
+"onboarding.vc1.button" = "Отслеживайте только то, что хотите";
+"onboarding.vc2.button" = "Даже если это не литры воды и йога";
 
+//TabBar
+"tabBar.trackers.iconTitle" = "Трекеры";
+"tabBar.statistics.iconTitle" = "Статистика";
+
+//Main page Tracker View
 "trackerVC.title" = "Трекеры";
 "trackerVC.searchPlaceholder" = "Поиск";
+"trackerVC.ifEmptyText" = "Что будем отслеживать?";
 
+//Add tracker selection
 "addTrackerVC.title" = "Создание трекера";
 "addTrackerVC.habitButton" = "Привычка";
 "addTrackerVC.unregularButton" = "Нерегулярное событие";
+"addTrackerVC.trackerNamePlaceholder" = "Введите название трекера";
+"addTrackerVC.emoji.title" = "Emoji";
+"addTrackerVC.colorPallette.title" = "Цвет";
 
-//TODO: доделать локализацию
+"addHabitVC.title" = "Новая привычка";
+"addUnregularVC.title" = "Новое нерегулярное событие";
 
+//Category selection
+"categoryListVC.title" = "Категория";
+"categoryListVC.addCategoryButton" = "Добавить категорию";
+"categoryListVC.ifEmptyText" = "Привычки и события можно\nобъеденить по смыслу";
+
+"newCategoryVC.title" = "Новая категория";
+"newCategoryVC.categoryNamePlaceholder" = "Введите название категории";
+
+//Schedule selection
+"scheduleListVC.title" = "Расписание";
+"scheduleListVC.daysOfWeek.monday" = "Понедельник";
+"scheduleListVC.daysOfWeek.tuesday" = "Вторник";
+"scheduleListVC.daysOfWeek.wednesday" = "Среда";
+"scheduleListVC.daysOfWeek.thursday" = "Четверг";
+"scheduleListVC.daysOfWeek.friday" = "Пятница";
+"scheduleListVC.daysOfWeek.saturday" = "Суббота";
+"scheduleListVC.daysOfWeek.sunday" = "Воскресенье";
+"scheduleListVC.daysOfWeek.monday.short" = "Пн";
+"scheduleListVC.daysOfWeek.tuesday.short" = "Вт";
+"scheduleListVC.daysOfWeek.wednesday.short" = "Ср";
+"scheduleListVC.daysOfWeek.thursday.short" = "Чт";
+"scheduleListVC.daysOfWeek.friday.short" = "Пт";
+"scheduleListVC.daysOfWeek.saturday.short" = "Сб";
+"scheduleListVC.daysOfWeek.sunday.short" = "Вс";
+"scheduleListVC.daysOfWeek.everyDay" = "Каждый день";
+
+
+//Buttons
+"buttons.doneButton" = "Готово";
+"buttons.cancelButton" = "Отменить";
+"buttons.createButton" = "Создать";
+"buttons.categorySelectionButton" = "Категория";
+"buttons.scheduleSelectionButton" = "Расписание";
+
+//Warnings
+"warnings.symbolLimit" = "Ограничение %d символов";
+"warnings.categoryAlreadyExist" = "Категория уже существует";

@@ -52,7 +52,7 @@ final class TrackerCollectionCell: UICollectionViewCell {
             cardView.backgroundColor = color
             emojiView.image = emoji
             titleLabel.text = title
-            countLabel.text = counterDayCorrection(count)
+            countLabel.text = L10n.daysCompleted(count)
             completeTrackerButton.backgroundColor = color
             
             self.isCompleted = isCompleted
@@ -93,25 +93,19 @@ final class TrackerCollectionCell: UICollectionViewCell {
     
     private func updateCount(toAdd: Bool) {
         if toAdd {
-            countLabel.text = counterDayCorrection(currentCount + 1)
+            countLabel.text = L10n.daysCompleted(currentCount + 1)
             currentCount += 1
             
             store.addNewRecord(to: id, at: currentDate)
             delegate?.updateTrackerRecord()
 
         } else if currentCount > 0 {
-            countLabel.text = counterDayCorrection(currentCount - 1)
+            countLabel.text = L10n.daysCompleted(currentCount - 1)
             currentCount -= 1
             
             store.deleteRecord(to: id, at: currentDate)
             delegate?.updateTrackerRecord()
         }
-    }
-    
-    private func counterDayCorrection(_ count: Int) -> String {
-        let dayStringFormat = NSLocalizedString("daysCompleted", comment: "Plural format with stringsdict")
-        
-        return String.localizedStringWithFormat(dayStringFormat, count)
     }
 }
 

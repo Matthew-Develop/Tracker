@@ -24,7 +24,7 @@ final class AddHabitViewController: UIViewController {
     }()
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Новая привычка"
+        label.text = L10n.AddHabitVC.title
         label.font = .systemFont(ofSize: 16, weight: .medium)
         label.textColor = .ypBlack
         return label
@@ -36,14 +36,14 @@ final class AddHabitViewController: UIViewController {
     private let categoryScheduleSelection = CustomCategoryAndScheduleSelection()
     private lazy var emojiTitle: UILabel = {
         let label = UILabel()
-        label.text = "Emoji"
+        label.text = L10n.AddTrackerVC.Emoji.title
         label.textColor = .ypBlack
         label.font = .systemFont(ofSize: 19, weight: .bold)
         return label
     }()
     private lazy var colorTitle: UILabel = {
         let label = UILabel()
-        label.text = "Цвет"
+        label.text = L10n.AddTrackerVC.ColorPallette.title
         label.textColor = .ypBlack
         label.font = .systemFont(ofSize: 19, weight: .bold)
         return label
@@ -107,6 +107,7 @@ final class AddHabitViewController: UIViewController {
         let categorySelectionViewController = CategorySelectionViewController()
         
         let viewModel = CategorySelectionViewModel(selectedCategory: selectedCategory)
+        print(selectedSchedule)
         viewModel.delegate = self
         
         categorySelectionViewController.viewModel = viewModel
@@ -206,7 +207,7 @@ final class AddHabitViewController: UIViewController {
         )
         
         if !isValidName && trackerTitle.count != 0 {
-            showWarning(with: "Ограничение  \(Constants.symbolLimit) символов")
+            showWarning(with: L10n.Warnings.symbolLimit(Constants.symbolLimit))
             return
         } else {
             hideWarning()
@@ -260,7 +261,7 @@ extension AddHabitViewController: ScheduleSelectionViewControllerDelegate {
     func selectSchedule(_ schedule: [String]) {
         selectedSchedule = schedule
         if schedule.count == 7 {
-            categoryScheduleSelection.setSelectedSchedule(["Каждый день"])
+            categoryScheduleSelection.setSelectedSchedule([L10n.ScheduleListVC.DaysOfWeek.everyDay])
         } else {
             categoryScheduleSelection.setSelectedSchedule(selectedSchedule)
         }
@@ -402,7 +403,6 @@ private extension AddHabitViewController {
     }
     
     func setupEmojiCollectionView() {
-//        view.addSubviews(emojiTitle, emojiCollectionView)
         stackContentView.setCustomSpacing(32, after: categoryScheduleSelection)
         stackContentView.addArrangedSubviews(emojiTitle, emojiCollectionView)
         NSLayoutConstraint.activate([

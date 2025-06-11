@@ -24,7 +24,7 @@ final class AddUnregularViewController: UIViewController {
     }()
     private lazy var titleLabel: UILabel = {
         let title = UILabel()
-        title.text = "Новое нерегулярное событие"
+        title.text = L10n.AddUnregularVC.title
         title.font = .systemFont(ofSize: 16, weight: .medium)
         title.textColor = .ypBlack
         return title
@@ -76,14 +76,14 @@ final class AddUnregularViewController: UIViewController {
     }()
     private lazy var emojiTitle: UILabel = {
         let label = UILabel()
-        label.text = "Emoji"
+        label.text = L10n.AddTrackerVC.Emoji.title
         label.textColor = .ypBlack
         label.font = .systemFont(ofSize: 19, weight: .bold)
         return label
     }()
     private lazy var colorTitle: UILabel = {
         let label = UILabel()
-        label.text = "Цвет"
+        label.text = L10n.AddTrackerVC.ColorPallette.title
         label.textColor = .ypBlack
         label.font = .systemFont(ofSize: 19, weight: .bold)
         return label
@@ -242,7 +242,7 @@ final class AddUnregularViewController: UIViewController {
         )
         
         if !isValidName && trackerTitle.count != 0 {
-            showWarning(with: "Ограничение  \(Constants.symbolLimit) символов")
+            showWarning(with: L10n.Warnings.symbolLimit(Constants.symbolLimit))
             return
         } else {
             hideWarning()

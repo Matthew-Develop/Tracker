@@ -20,7 +20,7 @@ final class OnboardingViewController: UIPageViewController {
     private lazy var nextButton: UIButton = {
         let button = UIButton(type: .system)
         button.backgroundColor = .ypBlack
-        button.setTitle("Вот это технологии!", for: .normal)
+        button.setTitle(L10n.Onboarding.button, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         button.tintColor = .ypWhite
         
@@ -32,8 +32,8 @@ final class OnboardingViewController: UIPageViewController {
     
     //MARK: - Properties
     lazy var pages: [UIViewController] = {
-        let vc1 = makePageViewController("onboarding_1", text: "Отслеживайте только то, что хотите")
-        let vc2 = makePageViewController("onboarding_2", text: "Даже если это не литры воды и йога")
+        let vc1 = makePageViewController("onboarding_1", text: L10n.Onboarding.Vc1.title)
+        let vc2 = makePageViewController("onboarding_2", text: L10n.Onboarding.Vc2.title)
         
         return [vc1, vc2]
     }()

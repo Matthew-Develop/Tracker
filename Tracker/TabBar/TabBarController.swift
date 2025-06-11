@@ -29,7 +29,7 @@ final class TabBarController: UITabBarController {
     private func setTrackerNavigationController() -> UINavigationController {
         let trackerVC = TrackerViewController()
         trackerVC.tabBarItem = UITabBarItem(
-            title: NSLocalizedString("trackersTabBar.iconTitle", comment: ""),
+            title: L10n.TabBar.Trackers.iconTitle,
             image: UIImage(systemName: "record.circle.fill"),
             tag: 1)
         
@@ -39,7 +39,7 @@ final class TabBarController: UITabBarController {
     private func setStatisticsViewController() -> UIViewController{
         let statisticsVC = StatisticsViewController()
         statisticsVC.tabBarItem = UITabBarItem(
-            title: NSLocalizedString("statisticsTabBar.iconTitle", comment: ""),
+            title: L10n.TabBar.Statistics.iconTitle,
             image: UIImage(systemName: "hare.fill"),
             tag: 2)
         

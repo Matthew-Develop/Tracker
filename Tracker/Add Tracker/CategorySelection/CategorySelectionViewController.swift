@@ -123,7 +123,7 @@ private extension CategorySelectionViewController {
     func addViewTitle() {
         titleLabel.autoResizeOff()
         
-        titleLabel.text = "Категория"
+        titleLabel.text = L10n.CategoryListVC.title
         titleLabel.font = .systemFont(ofSize: 16, weight: .medium)
         titleLabel.textColor = .ypBlack
         
@@ -137,11 +137,11 @@ private extension CategorySelectionViewController {
     func addIfEmpty() {
         ifEmptyImage.autoResizeOff()
         
-        ifEmptyImage.image = UIImage(named: "IfEmptyTrackers")
+        ifEmptyImage.image = Asset.Images.ifEmptyTrackers.image
         
         ifEmptyTextLabel.autoResizeOff()
         
-        ifEmptyTextLabel.text = "Привычки и события можно\nобъеденить по смыслу"
+        ifEmptyTextLabel.text = L10n.CategoryListVC.ifEmptyText
         ifEmptyTextLabel.font = .systemFont(ofSize: 12, weight: .medium)
         ifEmptyTextLabel.textColor = .ypBlack
         ifEmptyTextLabel.numberOfLines = 2
@@ -166,7 +166,7 @@ private extension CategorySelectionViewController {
         
         addCategoryButton.addTarget(self, action: #selector(createCategoryButtonTapped), for: .touchUpInside)
         
-        addCategoryButton.setTitle("Добавить категорию", for: .normal)
+        addCategoryButton.setTitle(L10n.CategoryListVC.addCategoryButton, for: .normal)
         addCategoryButton.setTitleColor(.ypWhite, for: .normal)
         addCategoryButton.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         addCategoryButton.backgroundColor = .ypBlack
