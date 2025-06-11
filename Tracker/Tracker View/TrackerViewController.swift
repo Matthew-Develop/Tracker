@@ -248,6 +248,7 @@ extension TrackerViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.backgroundColor = .ypWhite
         navigationController?.navigationBar.largeTitleTextAttributes = [.foregroundColor: UIColor.ypBlack]
+        navigationController?.navigationBar.semanticContentAttribute = .forceLeftToRight
     }
     
     private func setupAddTrackerButton() {

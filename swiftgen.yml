@@ -1,0 +1,15 @@
+strings:
+  inputs:
+    - Tracker/Resources/Localization/en.lproj
+  outputs:
+    - templateName: structured-swift5
+      output: Tracker/Resources/SwiftGen/Strings+Generated.swift
+
+xcassets:
+  inputs:
+    - Tracker/Resources/Assets.xcassets
+  outputs:
+    - templateName: swift5
+      params:
+        forceProvidesNamespaces: true
+      output: Tracker/Resources/SwiftGen/Assets+Generated.swift

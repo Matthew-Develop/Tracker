@@ -21,6 +21,7 @@ final class TabBarController: UITabBarController {
         tabBar.layer.shadowRadius = 0.5
         tabBar.layer.shadowOffset = CGSize(width: 0, height: -0.5)
         tabBar.layer.shadowOpacity = 1
+        tabBar.semanticContentAttribute = .forceLeftToRight
         
         viewControllers = [setTrackerNavigationController(), setStatisticsViewController()]
     }
